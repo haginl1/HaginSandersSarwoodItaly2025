@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Italy Trip 2025 - Hagin Sanders Sarwood</title>
-    <!-- Force refresh for GitHub Pages -->
+    <title>Italy Trip 2025 - Our Italian Adventure</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         body {
@@ -16,372 +15,214 @@
         .header {
             background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
             color: white;
-            padding: 2rem 1rem 1rem 1rem;
+            padding: 2.5rem 1rem;
             text-align: center;
-            font-size: 2rem;
-            font-weight: bold;
-            letter-spacing: 1px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.07);
         }
-        .maps-row {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            align-items: flex-start;
-            margin: 2rem auto;
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .header p {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+        .section {
             max-width: 1400px;
-            flex-wrap: wrap;
-        }
-        .map-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 1rem;
-            flex: 1 1 300px;
-            min-width: 280px;
-            max-width: 420px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .map-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #4299e1;
-        }
-        .map-title.sarwood {
-            color: #48bb78;
-        }
-        .leaflet-container {
-            width: 100% !important;
-            height: 300px !important;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-        }
-        .trip-details {
-            max-width: 1200px;
-            margin: 2rem auto 0 auto;
-            padding: 0 1rem;
-        }
-        .trip-cards {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .trip-card {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 1.5rem 2rem;
-            min-width: 260px;
-            margin-bottom: 1rem;
-            flex: 1 1 260px;
-            text-align: center;
-        }
-        .trip-heading {
-            font-size: 1.2rem;
-            color: #4299e1;
-            margin-bottom: 0.5rem;
-        }
-        .trip-info {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        .trip-sub {
-            color: #718096;
-            font-size: 0.95rem;
-        }
-        .flight-list {
-            margin-top: 0.5rem;
-        }
-        .flight-item {
-            background: #f7fafc;
-            padding: 0.5rem 0.8rem;
-            margin-bottom: 0.3rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
-        .hotels-section {
-            max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
         .section-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             color: #2d3748;
             font-weight: 600;
         }
-        .hotels-grid {
+        .section-subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Map Cards */
+        .map-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .map-card h3 {
+            font-size: 1.5rem;
+            color: #4299e1;
+            margin: 0 0 1rem 0;
+            font-weight: 600;
+        }
+        .leaflet-container {
+            width: 100% !important;
+            height: 400px !important;
+            border-radius: 8px;
+        }
+        
+        /* Flight Info Cards */
+        .flight-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
+            margin-top: 1.5rem;
         }
-        .hotel-card {
-            background: #fff;
+        .flight-card {
+            background: white;
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 1.5rem 2rem;
-            min-width: 200px;
+            padding: 1.5rem;
         }
-        .hotel-card h3 {
+        .flight-card h4 {
             font-size: 1.3rem;
-            color: #4299e1;
-            margin-bottom: 0.8rem;
+            margin: 0 0 1rem 0;
             font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
-        .family-label {
-            background: #e2e8f0;
-            color: #4a5568;
-            padding: 0.2rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        .hotel-info {
-            font-size: 1rem;
-            color: #2d3748;
-            margin-bottom: 0.3rem;
-        }
-        .hotel-details {
-            color: #718096;
-            font-size: 0.95rem;
-        }
-        .itinerary-section {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem 2rem 1rem;
-        }
-        .itinerary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.2rem;
-        }
-        .itinerary-card {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 1.2rem 1.5rem;
-            min-width: 180px;
-        }
-        .itinerary-card h4 {
-            font-size: 1.05rem;
-            color: #4299e1;
+        .flight-card.mary-lisa h4 { color: #ed8936; }
+        .flight-card.keo-karen h4 { color: #9f7aea; }
+        .flight-card .route {
+            background: #f7fafc;
+            padding: 0.75rem;
+            border-radius: 6px;
             margin-bottom: 0.5rem;
-            font-weight: 600;
+            font-size: 1rem;
         }
-        .itinerary-card.hagin-sanders h4 { color: #4299e1; }
-        .itinerary-card.sarwood h4 { color: #48bb78; }
-        .itinerary-card ul {
-            list-style: disc inside;
-            color: #2d3748;
-            font-size: 0.97rem;
-            margin: 0;
-            padding-left: 1rem;
+        .flight-card .route strong {
+            display: block;
+            margin-bottom: 0.25rem;
         }
-        .itinerary-card li {
-            margin-bottom: 0.3rem;
+        .flight-card .arrow {
+            text-align: center;
+            color: #cbd5e0;
+            font-size: 1.5rem;
+            margin: 0.25rem 0;
         }
-        .resources-section {
-            max-width: 1200px;
-            margin: 2rem auto 3rem auto;
-            padding: 0 1rem;
-        }
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.2rem;
-        }
-        .resource-card {
-            background: #fff;
+        
+        /* Trip Details */
+        .trip-info {
+            background: white;
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 1.2rem 1.5rem;
-            min-width: 180px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
         }
-        .resource-card h3 {
-            font-size: 1.05rem;
+        .trip-info h3 {
+            font-size: 1.5rem;
             color: #4299e1;
-            margin-bottom: 0.7rem;
+            margin: 0 0 0.5rem 0;
+        }
+        .trip-info .dates {
+            font-size: 1.3rem;
             font-weight: 600;
-        }
-        .resource-card ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .resource-card li {
             color: #2d3748;
-            font-size: 0.95rem;
-            margin-bottom: 0.4rem;
-            line-height: 1.4;
+            margin-bottom: 0.5rem;
         }
-        .resource-card strong {
-            color: #4299e1;
+        .trip-info .duration {
+            color: #718096;
+            font-size: 1.1rem;
         }
+        
+        /* Responsive */
         @media (max-width: 768px) {
-            .maps-row {
-                flex-direction: column;
-                align-items: center;
+            .header h1 {
+                font-size: 1.8rem;
             }
-            .map-card {
-                max-width: 90%;
+            .header p {
+                font-size: 1rem;
             }
             .leaflet-container {
-                height: 250px !important;
+                height: 300px !important;
+            }
+            .section-title {
+                font-size: 1.6rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        🇮🇹 Italy Trip 2025 - Hagin-Sanders & Sarwood Families
+        <h1>🇮🇹 Italy Trip 2025</h1>
+        <p>Our Italian Adventure - Together in Italy!</p>
     </div>
-    
-    <div class="maps-row">
-        <div class="map-card">
-            <div class="map-title">Hagin-Sanders Family</div>
-            <div id="hagin-sanders-map"></div>
-        </div>
-        <div class="map-card">
-            <div class="map-title sarwood">Sarwood Family</div>
-            <div id="sarwood-map"></div>
+
+    <!-- Trip Dates -->
+    <div class="section">
+        <div class="trip-info">
+            <h3>📅 Trip Dates</h3>
+            <div class="dates">September 23 - October 4, 2025</div>
+            <div class="duration">12 amazing days exploring Italy together!</div>
         </div>
     </div>
 
-    <div class="trip-details">
-        <div class="trip-cards">
-            <div class="trip-card">
-                <h2 class="trip-heading">Trip Dates</h2>
-                <p class="trip-info">September 23 - October 4, 2025</p>
-                <p class="trip-sub">12 amazing days in Italy!</p>
+    <!-- Flight Arrivals Section -->
+    <div class="section">
+        <h2 class="section-title">✈️ Flight Arrivals</h2>
+        <p class="section-subtitle">Two different routes, one amazing destination!</p>
+        
+        <div class="map-card">
+            <h3>Flight Routes to Rome</h3>
+            <div id="flight-arrivals-map"></div>
+        </div>
+
+        <div class="flight-cards">
+            <div class="flight-card mary-lisa">
+                <h4>🧡 Mary & Lisa</h4>
+                <div class="route">
+                    <strong>Route:</strong> Atlanta → Rome
+                </div>
+                <div class="route">
+                    <strong>Flight Details:</strong> TBD
+                </div>
+                <div class="route">
+                    <strong>Arrival:</strong> Sept 23, 2025
+                </div>
             </div>
-            <div class="trip-card">
-                <h2 class="trip-heading">Arrival Flights</h2>
-                <div class="flight-list">
-                    <div class="flight-item"><strong>Hagin-Sanders Family:</strong> TBA</div>
-                    <div class="flight-item"><strong>Sarwood Family:</strong> TBA</div>
+
+            <div class="flight-card keo-karen">
+                <h4>💜 Keo & Karen</h4>
+                <div class="route">
+                    <strong>Route:</strong> Sarasota → Boston → Rome
+                </div>
+                <div class="route">
+                    <strong>Flight Details:</strong> TBD
+                </div>
+                <div class="route">
+                    <strong>Arrival:</strong> Sept 23, 2025
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="hotels-section">
-        <h2 class="section-title">Hotels & Destinations</h2>
-        <div class="hotels-grid">
-            <div class="hotel-card">
-                <h3>Venice <span class="family-label">All Families</span></h3>
-                <div class="hotel-info">Accommodation TBD</div>
-                <div class="hotel-details">St. Mark's Square, Rialto Market, Gondola ride</div>
-            </div>
-            <div class="hotel-card">
-                <h3>Florence <span class="family-label">All Families</span></h3>
-                <div class="hotel-info">Accommodation TBD</div>
-                <div class="hotel-details">Uffizi Gallery, Academia Gallery, Mercato Centrale</div>
-            </div>
-            <div class="hotel-card">
-                <h3>Rome <span class="family-label">All Families</span></h3>
-                <div class="hotel-info">Accommodation TBD</div>
-                <div class="hotel-details">Colosseum, Vatican City, Trevi Fountain</div>
-            </div>
-            <div class="hotel-card">
-                <h3>Tuscany <span class="family-label">All Families</span></h3>
-                <div class="hotel-info">Accommodation TBD</div>
-                <div class="hotel-details">Wine tours, Hill towns, Cooking classes</div>
-            </div>
+    <!-- Shared Italy Itinerary -->
+    <div class="section">
+        <h2 class="section-title">🗺️ Our Italy Itinerary</h2>
+        <p class="section-subtitle">Traveling together through beautiful Italy</p>
+        
+        <div class="map-card">
+            <h3>Italy Travel Route - All Together!</h3>
+            <div id="italy-itinerary-map"></div>
         </div>
-    </div>
 
-    <div class="itinerary-section">
-        <h2 class="section-title">Itinerary Overview</h2>
-        <div class="itinerary-grid">
-            <div class="itinerary-card">
-                <h4>Venice (All Families)</h4>
-                <ul>
-                    <li>Arrival and check-in</li>
-                    <li>St. Mark's Square exploration</li>
-                    <li>Gondola rides</li>
-                    <li>Rialto Market visit</li>
-                </ul>
-            </div>
-            <div class="itinerary-card">
-                <h4>Florence (All Families)</h4>
-                <ul>
-                    <li>Uffizi Gallery tour</li>
-                    <li>Academia Gallery (Michelangelo's David)</li>
-                    <li>Ponte Vecchio</li>
-                    <li>Mercato Centrale food tour</li>
-                </ul>
-            </div>
-            <div class="itinerary-card">
-                <h4>Rome (All Families)</h4>
-                <ul>
-                    <li>Colosseum and Roman Forum</li>
-                    <li>Vatican City tour</li>
-                    <li>Trevi Fountain</li>
-                    <li>Spanish Steps</li>
-                </ul>
-            </div>
-            <div class="itinerary-card hagin-sanders">
-                <h4>Cinque Terre (Hagin-Sanders)</h4>
-                <ul>
-                    <li>Coastal hiking trails</li>
-                    <li>Village exploration</li>
-                    <li>Local seafood dining</li>
-                </ul>
-            </div>
-            <div class="itinerary-card sarwood">
-                <h4>Tuscany Wine Region (Sarwood)</h4>
-                <ul>
-                    <li>Chianti wine tastings</li>
-                    <li>Medieval hill towns</li>
-                    <li>Cooking class experience</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="resources-section">
-        <h2 class="section-title">Resources & Recommendations</h2>
-        <div class="resources-grid">
-            <div class="resource-card">
-                <h3>🍽️ Restaurants</h3>
-                <ul>
-                    <li><strong>Venice:</strong> Osteria Oliva Nera, Antiche Carampane</li>
-                    <li><strong>Florence:</strong> Gusta Pizza, La Giostra</li>
-                    <li><strong>Rome:</strong> Da Enzo al 29, Checchino dal 1887</li>
-                    <li><strong>Tuscany:</strong> Osteria di Passignano</li>
-                </ul>
-            </div>
-            <div class="resource-card">
-                <h3>🛍️ Activities & Shopping</h3>
-                <ul>
-                    <li>Florence: Leather shopping, Mercato Centrale</li>
-                    <li>Rome: Via del Corso, Campo de' Fiori market</li>
-                    <li>Venice: Murano glass shopping</li>
-                    <li>Tuscany: Outlet shopping in The Mall</li>
-                </ul>
-            </div>
-            <div class="resource-card">
-                <h3>🚌 Transportation</h3>
-                <ul>
-                    <li>High-speed trains between major cities</li>
-                    <li>Local public transport passes</li>
-                    <li>Private transfers for groups</li>
-                    <li>Walking tours in city centers</li>
-                </ul>
-            </div>
+        <div class="trip-info" style="margin-top: 2rem;">
+            <p style="color: #718096; font-size: 1rem; line-height: 1.6; margin: 0;">
+                <strong style="color: #4299e1;">💡 Easy Updates:</strong> 
+                This itinerary is connected to Google Sheets! Update destinations, dates, accommodations, 
+                and activities in the spreadsheet and they'll automatically appear on this map.
+            </p>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="script.js"></script>
+    <script src="script-single-sheet.js"></script>
 </body>
 </html>
