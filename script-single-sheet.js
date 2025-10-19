@@ -251,6 +251,61 @@ function createItineraryMap(mapId, itinerary) {
   }
 }
 
+// Create destination cards from itinerary data
+function createDestinationCards(itinerary) {
+  const container = document.getElementById('destination-cards-container');
+  if (!container) return;
+  
+  container.innerHTML = ''; // Clear existing cards
+  
+  itinerary.forEach(destination => {
+    const card = document.createElement('div');
+    card.className = 'destination-card';
+    
+    // Split activities by semicolon or comma
+    const activities = (destination.activities || '')
+      .split(/[;,]/)
+      .map(a => a.trim())
+      .filter(a => a.length > 0);
+    
+    const activitiesHTML = activities.length > 0 
+      ? `<ul class="activities-list">
+           ${activities.map(activity => `<li>${activity}</li>`).join('')}
+         </ul>`
+      : '<p class="info-content">No activities listed yet</p>';
+    
+    card.innerHTML = `
+      <h4>
+        ${destination.name}
+        <span class="order-badge">Stop ${destination.order}</span>
+      </h4>
+      <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
+      
+      ${destination.accommodation ? `
+        <div class="info-section">
+          <div class="info-label">🏨 Accommodation</div>
+          <div class="info-content">${destination.accommodation}</div>
+        </div>
+      ` : ''}
+      
+      ${activities.length > 0 ? `
+        <div class="info-section">
+          <div class="info-label">✨ Activities</div>
+          ${activitiesHTML}
+        </div>
+      ` : ''}
+      
+      ${destination.notes ? `
+        <div class="notes">
+          💡 ${destination.notes}
+        </div>
+      ` : ''}
+    `;
+    
+    container.appendChild(card);
+  });
+}
+
 // Initialize maps when DOM is ready
 document.addEventListener('DOMContentLoaded', async function() {
   console.log('Loading Italy trip data...');
@@ -263,6 +318,10 @@ document.addEventListener('DOMContentLoaded', async function() {
   const itinerary = await fetchItineraryData(GOOGLE_SHEETS_CONFIG.itinerarySheetUrl);
   createItineraryMap('italy-itinerary-map', itinerary);
   console.log('Italy itinerary map loaded');
+  
+  // Create destination cards
+  createDestinationCards(itinerary);
+  console.log('Destination cards created');
   
   console.log('All maps loaded successfully!');
 });
