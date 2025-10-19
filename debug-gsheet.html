@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug: Check Your Google Sheet</title>
+    <style>
+        body {
+            font-family: monospace;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+        .section {
+            background: #252526;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #3e3e42;
+        }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .warning { color: #dcdcaa; }
+        .info { color: #9cdcfe; }
+        pre {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+            border: 1px solid #3e3e42;
+        }
+        button {
+            background: #0e639c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover { background: #1177bb; }
+        .step { margin: 10px 0; padding: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h1>🔍 Google Sheets Debug Tool</h1>
+        <p>This will help us figure out why the data isn't loading.</p>
+        
+        <div class="step">
+            <strong>Your Google Sheet URL:</strong><br>
+            <span class="info">https://docs.google.com/spreadsheets/d/e/2PACX-1vQmSqiviOP7ift7QOMW1b4vOiRv0NKuAhBLgnbcQLRPLWikDFfOsjcBlA-m8gcObWoTtHSnd9_aYljl/pub?gid=1110183056&single=true&output=csv</span>
+        </div>
+
+        <button onclick="testDirect()">Test 1: Direct Fetch</button>
+        <button onclick="testWithProxy()">Test 2: With CORS Proxy</button>
+        <button onclick="openInNewTab()">Test 3: Open in New Tab</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmSqiviOP7ift7QOMW1b4vOiRv0NKuAhBLgnbcQLRPLWikDFfOsjcBlA-m8gcObWoTtHSnd9_aYljl/pub?gid=1110183056&single=true&output=csv';
+
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const color = {
+                'success': 'success',
+                'error': 'error',
+                'warning': 'warning',
+                'info': 'info'
+            }[type];
+            results.innerHTML += `<div class="step ${color}">${message}</div>`;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '<div class="section"><h2>Test Results:</h2></div>';
+        }
+
+        async function testDirect() {
+            clearResults();
+            log('🧪 TEST 1: Direct Fetch from Google Sheets', 'info');
+            log('URL: ' + SHEET_URL, 'info');
+
+            try {
+                log('📡 Attempting fetch...', 'info');
+                const response = await fetch(SHEET_URL);
+                
+                log(`📊 Response Status: ${response.status} ${response.statusText}`, 
+                    response.ok ? 'success' : 'error');
+                
+                if (!response.ok) {
+                    log('❌ Fetch failed - HTTP error', 'error');
+                    log('This usually means the sheet is not published correctly', 'warning');
+                    return;
+                }
+
+                const data = await response.text();
+                log(`✅ Data received: ${data.length} characters`, 'success');
+                log(`<pre>${data.substring(0, 500)}...</pre>`, 'info');
+                
+                const lines = data.split('\n');
+                log(`📋 Total rows: ${lines.length}`, 'success');
+                log(`<strong>Header:</strong> <pre>${lines[0]}</pre>`, 'info');
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                if (error.message.includes('Failed to fetch')) {
+                    log('⚠️ CORS Error - This is the problem!', 'error');
+                    log('Solution: Try Test 2 (CORS Proxy)', 'warning');
+                }
+                console.error('Full error:', error);
+            }
+        }
+
+        async function testWithProxy() {
+            clearResults();
+            log('🧪 TEST 2: Fetch via CORS Proxy', 'info');
+            
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(SHEET_URL)}`;
+            log('Using proxy: api.allorigins.win', 'info');
+
+            try {
+                log('📡 Attempting fetch through proxy...', 'info');
+                const response = await fetch(proxyUrl);
+                
+                log(`📊 Response Status: ${response.status}`, 
+                    response.ok ? 'success' : 'error');
+                
+                if (!response.ok) {
+                    log('❌ Proxy fetch failed', 'error');
+                    return;
+                }
+
+                const data = await response.text();
+                log(`✅ Data received: ${data.length} characters`, 'success');
+                log(`<pre>${data.substring(0, 500)}...</pre>`, 'info');
+                
+                const lines = data.split('\n');
+                log(`📋 Total rows: ${lines.length}`, 'success');
+                log(`✅ SUCCESS! This method works!`, 'success');
+                log(`<strong>Solution:</strong> Use the CORS proxy in your main script`, 'warning');
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                console.error('Full error:', error);
+            }
+        }
+
+        function openInNewTab() {
+            clearResults();
+            log('🧪 TEST 3: Opening Google Sheet URL in new tab...', 'info');
+            log('Check if the new tab shows CSV data or an error', 'info');
+            window.open(SHEET_URL, '_blank');
+            log('✅ New tab opened', 'success');
+            log('What do you see in the new tab?', 'warning');
+            log('- If you see CSV data = Sheet is published correctly ✅', 'info');
+            log('- If you see an error = Sheet not published correctly ❌', 'info');
+        }
+
+        // Auto-run first test
+        window.addEventListener('load', () => {
+            setTimeout(testDirect, 500);
+        });
+    </script>
+</body>
+</html>

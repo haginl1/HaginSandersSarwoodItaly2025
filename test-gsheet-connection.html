@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Connection Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f7fafc;
+        }
+        .test-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        .success { color: #28a745; font-weight: bold; }
+        .error { color: #dc3545; font-weight: bold; }
+        .info { color: #17a2b8; }
+        pre {
+            background: #2d3748;
+            color: #68d391;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        button {
+            background: #4299e1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover { background: #3182ce; }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🧪 Google Sheets Connection Test</h1>
+        <p>This page will test if we can fetch data from your Google Sheet.</p>
+        <button onclick="testConnection()">Test Connection</button>
+        <div id="results" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmSqiviOP7ift7QOMW1b4vOiRv0NKuAhBLgnbcQLRPLWikDFfOsjcBlA-m8gcObWoTtHSnd9_aYljl/pub?gid=1110183056&single=true&output=csv';
+
+        async function testConnection() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p class="info">Testing connection...</p>';
+
+            try {
+                console.log('Fetching from:', SHEET_URL);
+                results.innerHTML += '<p class="info">📡 Fetching from Google Sheets...</p>';
+
+                const response = await fetch(SHEET_URL);
+                
+                results.innerHTML += `<p class="info">📊 Response status: ${response.status}</p>`;
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const csvData = await response.text();
+                console.log('CSV Data:', csvData);
+                
+                results.innerHTML += `<p class="success">✅ SUCCESS! Received ${csvData.length} characters of data</p>`;
+                results.innerHTML += `<h3>Raw CSV Data (first 1000 chars):</h3>`;
+                results.innerHTML += `<pre>${csvData.substring(0, 1000)}</pre>`;
+
+                // Parse CSV
+                const lines = csvData.trim().split('\n');
+                results.innerHTML += `<p class="success">✅ Found ${lines.length} rows</p>`;
+                
+                // Show header
+                results.innerHTML += `<h3>CSV Header:</h3>`;
+                results.innerHTML += `<pre>${lines[0]}</pre>`;
+
+                // Show first data row
+                if (lines.length > 1) {
+                    results.innerHTML += `<h3>First Data Row:</h3>`;
+                    results.innerHTML += `<pre>${lines[1]}</pre>`;
+                }
+
+                results.innerHTML += `<p class="success">🎉 Connection is working! Your Google Sheet is accessible.</p>`;
+
+            } catch (error) {
+                console.error('Error:', error);
+                results.innerHTML += `<p class="error">❌ ERROR: ${error.message}</p>`;
+                results.innerHTML += `<p>Check the browser console (F12) for more details.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

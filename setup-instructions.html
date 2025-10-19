@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheet Setup Instructions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f7fafc;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .step {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #4299e1;
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+        .step-number {
+            background: #4299e1;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+        .code {
+            background: #2d3748;
+            color: #68d391;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+        }
+        .highlight {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        ol {
+            padding-left: 20px;
+        }
+        ol li {
+            margin-bottom: 1rem;
+        }
+        img {
+            max-width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .button {
+            background: #4299e1;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #3182ce;
+        }
+        .template-box {
+            background: #f8f9fa;
+            border: 2px dashed #4299e1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 Google Sheet Setup - Step by Step</h1>
+        <p>Follow these steps to connect your Italy itinerary!</p>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">1</span> Create Your Google Sheet</h2>
+        <ol>
+            <li>Go to <a href="https://sheets.google.com" target="_blank"><strong>Google Sheets</strong></a></li>
+            <li>Click <strong>"+ Blank"</strong> to create a new spreadsheet</li>
+            <li>Name it: <strong>"Italy Trip 2025 Itinerary"</strong></li>
+        </ol>
+        
+        <div class="success">
+            ✅ <strong>Pro Tip:</strong> You can also use the CSV template file I created! 
+            Find <code>italy-itinerary-template.csv</code> in your project folder.
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">2</span> Add Column Headers</h2>
+        <p>In Row 1, add these exact column names (case-sensitive!):</p>
+        
+        <div class="template-box">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="background: #4299e1; color: white;">
+                    <td style="padding: 8px; border: 1px solid white;"><strong>name</strong></td>
+                    <td style="padding: 8px; border: 1px solid white;"><strong>lat</strong></td>
+                    <td style="padding: 8px; border: 1px solid white;"><strong>lng</strong></td>
+                    <td style="padding: 8px; border: 1px solid white;"><strong>order</strong></td>
+                    <td style="padding: 8px; border: 1px solid white;"><strong>dates</strong></td>
+                    <td style="padding: 8px; border: 1px solid white;"><strong>accommodation</strong></td>
+                    <td style="padding: 8px; border: 1px solid white;"><strong>activities</strong></td>
+                    <td style="padding: 8px; border: 1px solid white;"><strong>notes</strong></td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="highlight">
+            ⚠️ <strong>Important:</strong> The first 4 columns (name, lat, lng, order) are REQUIRED. 
+            The others are optional but recommended.
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">3</span> Add Your Italy Destinations</h2>
+        <p>Here's sample data to get you started. Copy and paste into your sheet:</p>
+        
+        <div class="template-box">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <tr style="background: #4299e1; color: white;">
+                    <td style="padding: 6px; border: 1px solid white;"><strong>name</strong></td>
+                    <td style="padding: 6px; border: 1px solid white;"><strong>lat</strong></td>
+                    <td style="padding: 6px; border: 1px solid white;"><strong>lng</strong></td>
+                    <td style="padding: 6px; border: 1px solid white;"><strong>order</strong></td>
+                    <td style="padding: 6px; border: 1px solid white;"><strong>dates</strong></td>
+                    <td style="padding: 6px; border: 1px solid white;"><strong>accommodation</strong></td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 6px; border: 1px solid #ddd;">Rome</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">41.9028</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">12.4964</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">1</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Sept 23-26</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Hotel TBD</td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Florence</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">43.7696</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">11.2558</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">2</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Sept 26-29</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Hotel TBD</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="padding: 6px; border: 1px solid #ddd;">Venice</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">45.4408</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">12.3155</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">3</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Sept 29-Oct 2</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Hotel TBD</td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Tuscany</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">43.4667</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">11.3000</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">4</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Oct 2-4</td>
+                    <td style="padding: 6px; border: 1px solid #ddd;">Villa TBD</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="highlight">
+            💡 <strong>Getting Coordinates:</strong><br>
+            1. Go to <a href="https://www.google.com/maps" target="_blank">Google Maps</a><br>
+            2. Right-click on your location<br>
+            3. Click the coordinates at the top (they copy automatically!)<br>
+            4. Paste into your sheet - first number = lat, second = lng
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">4</span> Publish Your Sheet</h2>
+        <ol>
+            <li>Click <strong>File → Share → Publish to web</strong></li>
+            <li>In the dialog:
+                <ul>
+                    <li>Under "Link", select your sheet tab (usually "Sheet1")</li>
+                    <li>Keep format as <strong>"Web page"</strong> or select <strong>"Comma-separated values (.csv)"</strong></li>
+                </ul>
+            </li>
+            <li>Click <strong>"Publish"</strong> button</li>
+            <li>✅ Make sure <strong>"Automatically republish when changes are made"</strong> is checked</li>
+            <li><strong>IMPORTANT:</strong> Copy the URL that appears - you'll need it!</li>
+        </ol>
+
+        <div class="success">
+            ✅ Your URL should look like:<br>
+            <code style="color: #2d3748; display: block; margin-top: 10px;">
+                https://docs.google.com/spreadsheets/d/1a2b3c4d5e6f7g8h9i0/edit#gid=0
+            </code>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">5</span> Update Your Website Code</h2>
+        <ol>
+            <li>Open the file: <code>script-single-sheet.js</code></li>
+            <li>Find this section near the top (around line 6):</li>
+        </ol>
+
+        <div class="code">
+const GOOGLE_SHEETS_CONFIG = {<br>
+&nbsp;&nbsp;itinerarySheetUrl: '<span style="color: #f39c12;">YOUR_GOOGLE_SHEET_URL</span>',<br>
+&nbsp;&nbsp;useFallbackData: false<br>
+};
+        </div>
+
+        <ol start="3">
+            <li>Replace <code style="color: #f39c12;">YOUR_GOOGLE_SHEET_URL</code> with your actual sheet URL</li>
+            <li>Save the file</li>
+        </ol>
+
+        <div class="highlight">
+            💡 <strong>Example:</strong><br>
+            <code style="color: #2d3748;">
+                itinerarySheetUrl: 'https://docs.google.com/spreadsheets/d/1a2b3c4d5/edit#gid=0'
+            </code>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">6</span> Activate the New Page</h2>
+        <p>Choose one of these options:</p>
+
+        <div class="template-box">
+            <strong>Option A: Rename Files (Recommended)</strong>
+            <ol>
+                <li>Rename <code>index.html</code> to <code>index-old.html</code> (backup)</li>
+                <li>Rename <code>index-new.html</code> to <code>index.html</code></li>
+            </ol>
+        </div>
+
+        <div class="template-box">
+            <strong>Option B: Update Existing File</strong>
+            <ol>
+                <li>Open your current <code>index.html</code></li>
+                <li>Find the line: <code>&lt;script src="script.js"&gt;&lt;/script&gt;</code></li>
+                <li>Change to: <code>&lt;script src="script-single-sheet.js"&gt;&lt;/script&gt;</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">7</span> Test Your Setup!</h2>
+        <ol>
+            <li>Open <code>index.html</code> in your web browser</li>
+            <li>Press <strong>F12</strong> to open Developer Tools</li>
+            <li>Click the <strong>Console</strong> tab</li>
+            <li>Look for these messages:
+                <ul>
+                    <li>"Loading Italy trip data..."</li>
+                    <li>"Loaded X destinations from Google Sheets"</li>
+                    <li>"All maps loaded successfully!"</li>
+                </ul>
+            </li>
+            <li>Check that both maps display correctly</li>
+        </ol>
+
+        <div class="success">
+            ✅ <strong>Success!</strong> You should see:<br>
+            • Flight arrivals map with 2 colored routes<br>
+            • Italy itinerary map with your destinations<br>
+            • Click on map markers to see details!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">8</span> Share & Collaborate</h2>
+        <p>Now that it's working, you can:</p>
+        <ul>
+            <li>📤 Share the Google Sheet with Mary, Keo, and Karen (edit access)</li>
+            <li>🔄 Everyone can update destinations, dates, hotels, activities</li>
+            <li>🌐 Changes automatically appear on the website</li>
+            <li>📱 Edit from any device, anywhere</li>
+        </ul>
+
+        <div class="highlight">
+            💡 To share: In Google Sheets, click <strong>Share</strong> button (top right) 
+            and add their email addresses with "Editor" access.
+        </div>
+    </div>
+
+    <div class="step" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white;">
+        <h2 style="color: white; margin-top: 0;">🎉 You're All Set!</h2>
+        <p style="font-size: 1.1rem;">
+            Your Italy trip website is now connected to Google Sheets. 
+            Update your itinerary anytime and watch the magic happen!
+        </p>
+        <p style="margin-bottom: 0;">
+            <strong>Bookmark your Google Sheet</strong> for easy access while planning and traveling.
+        </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem; padding: 2rem; background: white; border-radius: 10px;">
+        <h3 style="color: #4299e1;">📚 Need Help?</h3>
+        <p>Check these files in your project folder:</p>
+        <p>
+            <code>SINGLE_SHEET_SETUP.md</code> - Detailed instructions<br>
+            <code>QUICK_REFERENCE.md</code> - Quick setup checklist<br>
+            <code>italy-itinerary-template.csv</code> - Copy/paste template
+        </p>
+    </div>
+
+</body>
+</html>

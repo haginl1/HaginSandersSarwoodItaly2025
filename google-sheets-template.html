@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Template - Italy Trip 2025</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f7fafc;
+        }
+        .header {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #4299e1;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #68d391;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+        }
+        .step {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning {
+            background: #fffaf0;
+            border-left: 4px solid #ed8936;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .success {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .copy-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .copy-btn:hover {
+            background: #3182ce;
+        }
+        a {
+            color: #4299e1;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Google Sheets Integration Template</h1>
+        <p>Quick setup guide for your Italy Trip 2025 itinerary</p>
+    </div>
+
+    <div class="section">
+        <h2>🎯 Quick Start Guide</h2>
+        
+        <div class="step">
+            <h3>Step 1: Create Google Sheets</h3>
+            <p>Create two new Google Sheets with these exact column headers:</p>
+        </div>
+
+        <h4>Required Columns:</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Column Name</th>
+                    <th>Required?</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>name</strong></td>
+                    <td>✅ Yes</td>
+                    <td>City or location name</td>
+                    <td>Venice</td>
+                </tr>
+                <tr>
+                    <td><strong>lat</strong></td>
+                    <td>✅ Yes</td>
+                    <td>Latitude (from Google Maps)</td>
+                    <td>45.4408</td>
+                </tr>
+                <tr>
+                    <td><strong>lng</strong></td>
+                    <td>✅ Yes</td>
+                    <td>Longitude (from Google Maps)</td>
+                    <td>12.3155</td>
+                </tr>
+                <tr>
+                    <td><strong>order</strong></td>
+                    <td>✅ Yes</td>
+                    <td>Stop number (1, 2, 3...)</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td><strong>dates</strong></td>
+                    <td>⚪ Optional</td>
+                    <td>Date range for this location</td>
+                    <td>May 15-17</td>
+                </tr>
+                <tr>
+                    <td><strong>accommodation</strong></td>
+                    <td>⚪ Optional</td>
+                    <td>Hotel or lodging name</td>
+                    <td>Hotel Danieli</td>
+                </tr>
+                <tr>
+                    <td><strong>activities</strong></td>
+                    <td>⚪ Optional</td>
+                    <td>Things to do</td>
+                    <td>Gondola ride; Museums</td>
+                </tr>
+                <tr>
+                    <td><strong>notes</strong></td>
+                    <td>⚪ Optional</td>
+                    <td>Additional information</td>
+                    <td>Book ahead</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Sample Data (Copy to your Google Sheet):</h4>
+        <div class="code-block" id="sampleData">
+name,lat,lng,order,dates,accommodation,activities,notes
+Venice,45.4408,12.3155,1,May 15-17,Hotel Danieli,Gondola ride; St Mark's Basilica,Arrive by train
+Florence,43.7696,11.2558,2,May 17-19,Villa Medici,Uffizi Gallery; Duomo,Book Uffizi tickets ahead
+Rome,41.9028,12.4964,3,May 19-22,Hotel Forum,Colosseum; Vatican,Vatican tour Wednesday
+        </div>
+        <button class="copy-btn" onclick="copyToClipboard('sampleData')">Copy Sample Data</button>
+    </div>
+
+    <div class="section">
+        <div class="step">
+            <h3>Step 2: Publish Your Google Sheets</h3>
+            <ol>
+                <li>In Google Sheets, click <strong>File → Share → Publish to web</strong></li>
+                <li>Choose the specific sheet/tab from the dropdown</li>
+                <li>Keep format as "Web page" (or choose CSV)</li>
+                <li>Click <strong>"Publish"</strong></li>
+                <li>Copy the URL that appears</li>
+                <li>✅ Check "Automatically republish when changes are made"</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> The sheet must be published (via File → Share → Publish to web), 
+            but it can remain private for editing. Only published sheets can be read by the website.
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="step">
+            <h3>Step 3: Get Coordinates from Google Maps</h3>
+            <ol>
+                <li>Go to <a href="https://www.google.com/maps" target="_blank">Google Maps</a></li>
+                <li>Search for your location (e.g., "Venice, Italy")</li>
+                <li><strong>Right-click</strong> on the location on the map</li>
+                <li>Click the <strong>coordinates</strong> that appear at the top of the menu</li>
+                <li>The coordinates are copied! (Format: 45.4408, 12.3155)</li>
+                <li>First number = <strong>lat</strong> (latitude)</li>
+                <li>Second number = <strong>lng</strong> (longitude)</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="step">
+            <h3>Step 4: Update Your Code</h3>
+            <p>Open <code>script-sheets.js</code> and update these URLs:</p>
+        </div>
+
+        <div class="code-block">
+const GOOGLE_SHEETS_CONFIG = {
+    haginSandersSheetUrl: 'PASTE_YOUR_HAGIN_SANDERS_SHEET_URL_HERE',
+    sarwoodSheetUrl: 'PASTE_YOUR_SARWOOD_SHEET_URL_HERE'
+};
+        </div>
+
+        <p>Your Google Sheets URL should look like:</p>
+        <div class="code-block">
+https://docs.google.com/spreadsheets/d/1a2b3c4d5e6f7g8h9i0/edit#gid=0
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="step">
+            <h3>Step 5: Update index.html</h3>
+            <p>Change the script reference in your HTML file:</p>
+        </div>
+
+        <p><strong>Find this line:</strong></p>
+        <div class="code-block">
+&lt;script src="script.js"&gt;&lt;/script&gt;
+        </div>
+
+        <p><strong>Replace with:</strong></p>
+        <div class="code-block">
+&lt;script src="script-sheets.js"&gt;&lt;/script&gt;
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="success">
+            <h3>✅ You're Done!</h3>
+            <p>Now you can:</p>
+            <ul>
+                <li>✨ Edit your Google Sheets anytime</li>
+                <li>🔄 Changes appear automatically on your website</li>
+                <li>👥 Share edit access with family members</li>
+                <li>📱 Update from any device</li>
+            </ul>
+        </div>
+
+        <h3>Testing:</h3>
+        <ol>
+            <li>Open your <code>index.html</code> in a browser</li>
+            <li>Press <strong>F12</strong> to open Developer Tools</li>
+            <li>Check the <strong>Console</strong> tab</li>
+            <li>Look for: "Loading trip data..." and "Maps loaded successfully!"</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>🔧 Troubleshooting</h2>
+
+        <h3>Maps still show old data:</h3>
+        <ul>
+            <li>Clear browser cache (Ctrl + Shift + Delete)</li>
+            <li>Wait 5-10 minutes for Google's cache to refresh</li>
+            <li>Make sure "Automatically republish" is enabled in Google Sheets</li>
+        </ul>
+
+        <h3>Console shows errors:</h3>
+        <ul>
+            <li>Verify your Google Sheets URLs are correctly pasted</li>
+            <li>Check that sheets are published to the web</li>
+            <li>Confirm column names match exactly (case-sensitive)</li>
+        </ul>
+
+        <h3>Coordinates not displaying correctly:</h3>
+        <ul>
+            <li>Make sure lat/lng are plain numbers (no degree symbols)</li>
+            <li>Use decimal format: 45.4408, not 45° 26' 27"</li>
+            <li>Check for typos in coordinate values</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>📋 Checklist</h2>
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li>☐ Created Google Sheets with correct column headers</li>
+            <li>☐ Added sample data to test</li>
+            <li>☐ Published sheets to the web (File → Share → Publish to web)</li>
+            <li>☐ Copied sheet URLs</li>
+            <li>☐ Updated GOOGLE_SHEETS_CONFIG in script-sheets.js</li>
+            <li>☐ Changed index.html to use script-sheets.js</li>
+            <li>☐ Tested in browser and checked console for errors</li>
+            <li>☐ Verified maps load with new data</li>
+        </ul>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>

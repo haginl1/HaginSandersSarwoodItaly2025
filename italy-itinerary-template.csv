@@ -1,0 +1,5 @@
+name,lat,lng,order,dates,hotel,hotel_address,hotel_phone,train_info,rental_car,activities,notes
+Rome,41.9028,12.4964,1,Sept 23-26,Hotel Forum,Via Tor de' Conti 25,+39 06 679 2446,N/A - Arrival city,Not needed,Colosseum; Vatican; Trevi Fountain; Roman Forum,Everyone arrives here! Meeting point.
+Florence,43.7696,11.2558,2,Sept 26-29,Hotel TBD,Address TBD,Phone TBD,Rome to Florence - Trenitalia,Not needed,Uffizi Gallery; Duomo; Ponte Vecchio; Academia Gallery,Book Uffizi tickets in advance
+Venice,45.4408,12.3155,3,Sept 29-Oct 2,Hotel TBD,Address TBD,Phone TBD,Florence to Venice - Trenitalia,Not needed,Gondola rides; St Mark's Basilica; Rialto Market; Doge's Palace,No cars allowed - water taxis only
+Tuscany,43.4667,11.3000,4,Oct 2-4,Villa TBD,Address TBD,Phone TBD,Venice to Florence - Trenitalia,Hertz/Enterprise - Pick up in Florence,Wine tasting; Hill towns; Cooking class; Countryside tours,Car rental recommended for flexibility

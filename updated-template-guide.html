@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updated Google Sheet Template - With Hotel, Train & Car Info</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f7fafc;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            display: block;
+        }
+        th {
+            background: #4299e1;
+            color: white;
+            padding: 10px 8px;
+            text-align: left;
+            border: 1px solid white;
+            font-weight: bold;
+        }
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            background: #f8f9fa;
+        }
+        .required { background: #fef5e7; }
+        .optional { background: #e8f5e9; }
+        .new { background: #e3f2fd; border: 2px solid #2196f3; }
+        .highlight {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .code {
+            background: #2d3748;
+            color: #68d391;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .badge-required { background: #f39c12; color: white; }
+        .badge-optional { background: #27ae60; color: white; }
+        .badge-new { background: #2196f3; color: white; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Updated Google Sheet Template</h1>
+        <p>Now with Hotel, Train & Rental Car Information!</p>
+    </div>
+
+    <div class="section">
+        <h2>🎉 What's New?</h2>
+        <p>I've added <strong>5 new columns</strong> to help you track all your travel details:</p>
+        <ul>
+            <li>🏨 <strong>hotel</strong> - Hotel name</li>
+            <li>📍 <strong>hotel_address</strong> - Hotel address</li>
+            <li>📞 <strong>hotel_phone</strong> - Hotel phone number</li>
+            <li>🚄 <strong>train_info</strong> - Train ticket & route information</li>
+            <li>🚗 <strong>rental_car</strong> - Car rental details</li>
+        </ul>
+
+        <div class="success">
+            ✅ <strong>Your map popups will now show:</strong><br>
+            • Hotel name, address, and phone<br>
+            • Train route and booking info<br>
+            • Rental car pickup/return details<br>
+            • All your activities and notes
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📋 Complete Column List</h2>
+        
+        <h3>Required Columns:</h3>
+        <table>
+            <tr>
+                <th>Column Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr class="required">
+                <td><strong>name</strong></td>
+                <td><span class="badge badge-required">REQUIRED</span></td>
+                <td>City or location name</td>
+                <td>Rome</td>
+            </tr>
+            <tr class="required">
+                <td><strong>lat</strong></td>
+                <td><span class="badge badge-required">REQUIRED</span></td>
+                <td>Latitude coordinate</td>
+                <td>41.9028</td>
+            </tr>
+            <tr class="required">
+                <td><strong>lng</strong></td>
+                <td><span class="badge badge-required">REQUIRED</span></td>
+                <td>Longitude coordinate</td>
+                <td>12.4964</td>
+            </tr>
+            <tr class="required">
+                <td><strong>order</strong></td>
+                <td><span class="badge badge-required">REQUIRED</span></td>
+                <td>Stop number (1, 2, 3...)</td>
+                <td>1</td>
+            </tr>
+        </table>
+
+        <h3 style="margin-top: 2rem;">Travel Information Columns:</h3>
+        <table>
+            <tr>
+                <th>Column Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr class="optional">
+                <td><strong>dates</strong></td>
+                <td><span class="badge badge-optional">OPTIONAL</span></td>
+                <td>Date range for this stop</td>
+                <td>Sept 23-26</td>
+            </tr>
+            <tr class="new">
+                <td><strong>hotel</strong></td>
+                <td><span class="badge badge-new">NEW</span></td>
+                <td>Hotel or accommodation name</td>
+                <td>Hotel Forum</td>
+            </tr>
+            <tr class="new">
+                <td><strong>hotel_address</strong></td>
+                <td><span class="badge badge-new">NEW</span></td>
+                <td>Full hotel address</td>
+                <td>Via Tor de' Conti 25, Rome</td>
+            </tr>
+            <tr class="new">
+                <td><strong>hotel_phone</strong></td>
+                <td><span class="badge badge-new">NEW</span></td>
+                <td>Hotel contact number</td>
+                <td>+39 06 679 2446</td>
+            </tr>
+            <tr class="new">
+                <td><strong>train_info</strong></td>
+                <td><span class="badge badge-new">NEW</span></td>
+                <td>Train route, company, booking ref</td>
+                <td>Rome to Florence - Trenitalia #AB123</td>
+            </tr>
+            <tr class="new">
+                <td><strong>rental_car</strong></td>
+                <td><span class="badge badge-new">NEW</span></td>
+                <td>Car rental company, pickup location</td>
+                <td>Hertz - Pick up Florence Station</td>
+            </tr>
+            <tr class="optional">
+                <td><strong>activities</strong></td>
+                <td><span class="badge badge-optional">OPTIONAL</span></td>
+                <td>Things to do (separate with ;)</td>
+                <td>Colosseum; Vatican; Trevi Fountain</td>
+            </tr>
+            <tr class="optional">
+                <td><strong>notes</strong></td>
+                <td><span class="badge badge-optional">OPTIONAL</span></td>
+                <td>Important reminders</td>
+                <td>Book Vatican tickets ahead</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>📝 Sample Data - Copy This Into Your Google Sheet!</h2>
+        
+        <div class="highlight">
+            ⚠️ <strong>Important:</strong> Copy the entire table below, including the header row!
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="font-size: 0.75rem;">
+                <tr>
+                    <th>name</th>
+                    <th>lat</th>
+                    <th>lng</th>
+                    <th>order</th>
+                    <th>dates</th>
+                    <th>hotel</th>
+                    <th>hotel_address</th>
+                    <th>hotel_phone</th>
+                    <th>train_info</th>
+                    <th>rental_car</th>
+                    <th>activities</th>
+                    <th>notes</th>
+                </tr>
+                <tr>
+                    <td>Rome</td>
+                    <td>41.9028</td>
+                    <td>12.4964</td>
+                    <td>1</td>
+                    <td>Sept 23-26</td>
+                    <td>Hotel Forum</td>
+                    <td>Via Tor de' Conti 25</td>
+                    <td>+39 06 679 2446</td>
+                    <td>N/A - Arrival city</td>
+                    <td>Not needed</td>
+                    <td>Colosseum; Vatican; Trevi Fountain</td>
+                    <td>Everyone meets here!</td>
+                </tr>
+                <tr>
+                    <td>Florence</td>
+                    <td>43.7696</td>
+                    <td>11.2558</td>
+                    <td>2</td>
+                    <td>Sept 26-29</td>
+                    <td>Hotel TBD</td>
+                    <td>Address TBD</td>
+                    <td>Phone TBD</td>
+                    <td>Rome to Florence - Trenitalia</td>
+                    <td>Not needed</td>
+                    <td>Uffizi; Duomo; Ponte Vecchio</td>
+                    <td>Book Uffizi ahead</td>
+                </tr>
+                <tr>
+                    <td>Venice</td>
+                    <td>45.4408</td>
+                    <td>12.3155</td>
+                    <td>3</td>
+                    <td>Sept 29-Oct 2</td>
+                    <td>Hotel TBD</td>
+                    <td>Address TBD</td>
+                    <td>Phone TBD</td>
+                    <td>Florence to Venice - Trenitalia</td>
+                    <td>Not needed</td>
+                    <td>Gondola; St Mark's; Rialto Market</td>
+                    <td>No cars allowed!</td>
+                </tr>
+                <tr>
+                    <td>Tuscany</td>
+                    <td>43.4667</td>
+                    <td>11.3000</td>
+                    <td>4</td>
+                    <td>Oct 2-4</td>
+                    <td>Villa TBD</td>
+                    <td>Address TBD</td>
+                    <td>Phone TBD</td>
+                    <td>Venice to Florence - Trenitalia</td>
+                    <td>Hertz - Pick up Florence</td>
+                    <td>Wine tasting; Hill towns; Cooking</td>
+                    <td>Car needed here!</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="success" style="margin-top: 1.5rem;">
+            ✅ <strong>CSV File Ready!</strong><br>
+            I've updated <code>italy-itinerary-template.csv</code> with all the new columns!<br>
+            You can import it directly into Google Sheets.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🎯 How to Use the New Columns</h2>
+
+        <h3>🏨 Hotel Information:</h3>
+        <ul>
+            <li><strong>hotel:</strong> Just the hotel name</li>
+            <li><strong>hotel_address:</strong> Full address for GPS/taxi</li>
+            <li><strong>hotel_phone:</strong> Include country code (+39 for Italy)</li>
+        </ul>
+
+        <h3>🚄 Train Information:</h3>
+        <ul>
+            <li>Format: "From → To - Company"</li>
+            <li>Examples:
+                <ul>
+                    <li>"Rome to Florence - Trenitalia #FR9615"</li>
+                    <li>"Florence to Venice - Italo Train Booking #123456"</li>
+                    <li>"N/A" if not taking train</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>🚗 Rental Car:</h3>
+        <ul>
+            <li>Include company name and pickup location</li>
+            <li>Add confirmation number if you have it</li>
+            <li>Examples:
+                <ul>
+                    <li>"Hertz - Pick up Florence Santa Maria Novella Station"</li>
+                    <li>"Enterprise - Confirmation #AB123456"</li>
+                    <li>"Not needed" if no car rental</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>💡 Example Map Popup</h2>
+        <p>When someone clicks on a location marker, they'll now see:</p>
+
+        <div style="background: white; border: 2px solid #4299e1; border-radius: 8px; padding: 1.5rem; max-width: 400px; margin: 1rem auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <strong style="font-size: 18px; color: #4299e1;">Rome</strong><br>
+            <span style="color: #666;">📅 Sept 23-26</span><br><br>
+            
+            <strong style="color: #ed8936;">🏨 Hotel:</strong><br>
+            <span style="color: #555; font-size: 14px;">Hotel Forum</span><br>
+            <span style="color: #666; font-size: 13px;">📍 Via Tor de' Conti 25</span><br>
+            <span style="color: #666; font-size: 13px;">📞 +39 06 679 2446</span><br><br>
+            
+            <strong style="color: #9f7aea;">🚄 Train:</strong><br>
+            <span style="color: #555; font-size: 14px;">N/A - Arrival city</span><br><br>
+            
+            <strong style="color: #38b2ac;">🚗 Car Rental:</strong><br>
+            <span style="color: #555; font-size: 14px;">Not needed</span><br><br>
+            
+            <strong style="color: #4299e1;">🎯 Activities:</strong><br>
+            <span style="color: #555; font-size: 14px;">Colosseum; Vatican; Trevi Fountain</span><br><br>
+            
+            <em style="font-size: 13px; color: #718096;">💡 Everyone meets here!</em>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Quick Start Steps</h2>
+        <ol>
+            <li><strong>Option A:</strong> Import the CSV file
+                <ul>
+                    <li>Open Google Sheets</li>
+                    <li>File → Import → Upload</li>
+                    <li>Select <code>italy-itinerary-template.csv</code></li>
+                </ul>
+            </li>
+            <li><strong>Option B:</strong> Copy and paste
+                <ul>
+                    <li>Select the entire sample table above</li>
+                    <li>Copy it (Ctrl+C)</li>
+                    <li>Paste into Google Sheets (Ctrl+V)</li>
+                </ul>
+            </li>
+            <li><strong>Customize:</strong> Replace "TBD" with your actual bookings</li>
+            <li><strong>Publish:</strong> File → Share → Publish to web</li>
+            <li><strong>Connect:</strong> Paste URL in <code>script-single-sheet.js</code></li>
+            <li><strong>Test:</strong> Open your website and click map markers!</li>
+        </ol>
+    </div>
+
+    <div class="section" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white;">
+        <h2 style="color: white; margin-top: 0;">✅ You're Ready!</h2>
+        <p style="font-size: 1.1rem;">
+            Your Google Sheet template now has all the columns you need to track hotels, 
+            trains, and rental cars for your Italy adventure!
+        </p>
+        <p style="margin-bottom: 0;">
+            <strong>Files Updated:</strong><br>
+            • <code>italy-itinerary-template.csv</code> (ready to import!)<br>
+            • <code>script-single-sheet.js</code> (handles new columns)<br>
+            • Your map popups will show all this info!
+        </p>
+    </div>
+
+</body>
+</html>
