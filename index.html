@@ -212,6 +212,91 @@
             color: #7d6608;
         }
         
+        /* Transportation Section */
+        .transport-section {
+            margin-bottom: 2rem;
+        }
+        .transport-heading {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        .transport-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .transport-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            border-top: 4px solid #4299e1;
+        }
+        .transport-card.rental-car {
+            border-top-color: #48bb78;
+        }
+        .transport-card.flight-card-mary-lisa {
+            border-top-color: #ed8936;
+        }
+        .transport-card.flight-card-keo-karen {
+            border-top-color: #9f7aea;
+        }
+        .route-header {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .passenger-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .passenger-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: #f7fafc;
+            border-radius: 6px;
+        }
+        .passenger-name {
+            font-weight: 500;
+            color: #2d3748;
+        }
+        .ticket-info {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        .route-details {
+            color: #718096;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .rental-info, .flight-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .rental-detail, .flight-detail {
+            padding: 0.5rem;
+            background: #f7fafc;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        .rental-detail strong, .flight-detail strong {
+            color: #4299e1;
+            margin-right: 0.5rem;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .header h1 {
@@ -305,6 +390,185 @@
         <div id="itinerary-cards" style="margin-top: 3rem;">
             <h3 style="text-align: center; color: #2d3748; font-size: 1.8rem; margin-bottom: 1.5rem;">📍 Destination Details</h3>
             <div id="destination-cards-container"></div>
+        </div>
+    </div>
+
+    <!-- Transportation & Logistics Section -->
+    <div class="section" style="background: #f7fafc; padding: 2rem 1rem;">
+        <h2 class="section-title">🚂 Transportation & Travel Logistics</h2>
+        <p class="section-subtitle">Train tickets, rental car, and departure flights</p>
+        
+        <!-- Train Tickets -->
+        <div class="transport-section">
+            <h3 class="transport-heading">🎫 Italo Train Tickets</h3>
+            <div class="transport-cards">
+                <div class="transport-card">
+                    <div class="route-header">Rome → Verona</div>
+                    <div class="passenger-list">
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Mary</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Lisa</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Keo</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Karen</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                    </div>
+                    <div class="route-details">Date: Nov 22, 2025 | Duration: ~1h 30min</div>
+                </div>
+
+                <div class="transport-card">
+                    <div class="route-header">Verona → Florence</div>
+                    <div class="passenger-list">
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Mary</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Lisa</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Keo</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Karen</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                    </div>
+                    <div class="route-details">Date: Nov 25, 2025 | Duration: ~1h 30min</div>
+                </div>
+
+                <div class="transport-card">
+                    <div class="route-header">Florence → Milan</div>
+                    <div class="passenger-list">
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Mary</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Lisa</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Keo</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Karen</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                    </div>
+                    <div class="route-details">Date: Nov 27, 2025 | Duration: ~2h 45min</div>
+                </div>
+
+                <div class="transport-card">
+                    <div class="route-header">Milan → Airport</div>
+                    <div class="passenger-list">
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Mary</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Lisa</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Keo</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                        <div class="passenger-item">
+                            <span class="passenger-name">👤 Karen</span>
+                            <span class="ticket-info">Ticket #: TBD</span>
+                        </div>
+                    </div>
+                    <div class="route-details">Date: Nov 28, 2025 | Duration: ~30min</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rental Car -->
+        <div class="transport-section" style="margin-top: 2rem;">
+            <h3 class="transport-heading">🚗 Rental Car Information</h3>
+            <div class="transport-cards">
+                <div class="transport-card rental-car">
+                    <div class="route-header">Verona → Sirmione (Lake Garda) → Verona</div>
+                    <div class="rental-info">
+                        <div class="rental-detail">
+                            <strong>📍 Pickup:</strong> Verona (after train arrival)
+                        </div>
+                        <div class="rental-detail">
+                            <strong>📅 Pickup Date:</strong> Nov 22, 2025
+                        </div>
+                        <div class="rental-detail">
+                            <strong>🏞️ Destination:</strong> Sirmione, Lake Garda
+                        </div>
+                        <div class="rental-detail">
+                            <strong>📍 Drop-off:</strong> Verona (before train to Florence)
+                        </div>
+                        <div class="rental-detail">
+                            <strong>📅 Drop-off Date:</strong> Nov 25, 2025
+                        </div>
+                        <div class="rental-detail">
+                            <strong>🚙 Company:</strong> TBD (Recommendation: SIXT or Hertz)
+                        </div>
+                        <div class="rental-detail">
+                            <strong>👥 All Passengers:</strong> Mary, Lisa, Keo, Karen
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Return Flights -->
+        <div class="transport-section" style="margin-top: 2rem;">
+            <h3 class="transport-heading">✈️ Departure Flights</h3>
+            <div class="transport-cards">
+                <div class="transport-card flight-card-mary-lisa">
+                    <div class="route-header">🧡 Mary & Lisa: Milan → Atlanta</div>
+                    <div class="flight-info">
+                        <div class="flight-detail">
+                            <strong>📅 Date:</strong> Nov 28, 2025
+                        </div>
+                        <div class="flight-detail">
+                            <strong>✈️ Flight #:</strong> TBD
+                        </div>
+                        <div class="flight-detail">
+                            <strong>🕐 Departure:</strong> TBD
+                        </div>
+                        <div class="flight-detail">
+                            <strong>🏠 Destination:</strong> Atlanta, GA
+                        </div>
+                    </div>
+                </div>
+
+                <div class="transport-card flight-card-keo-karen">
+                    <div class="route-header">💜 Keo & Karen: Milan → Sarasota</div>
+                    <div class="flight-info">
+                        <div class="flight-detail">
+                            <strong>📅 Date:</strong> Nov 28, 2025
+                        </div>
+                        <div class="flight-detail">
+                            <strong>✈️ Flight #:</strong> TBD (likely via connection)
+                        </div>
+                        <div class="flight-detail">
+                            <strong>🕐 Departure:</strong> TBD
+                        </div>
+                        <div class="flight-detail">
+                            <strong>🏠 Destination:</strong> Sarasota, FL
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
