@@ -38,11 +38,7 @@ const fallbackItinerary = [
     lng: 12.4964, 
     order: 1, 
     dates: 'Sept 23-26', 
-    hotel: 'TBD',
-    hotel_address: '',
-    hotel_phone: '',
-    train_info: 'N/A - Arrival city',
-    rental_car: 'Not needed',
+    accommodation: 'TBD',
     activities: 'Colosseum, Vatican, Trevi Fountain',
     notes: 'Arrival city - everyone meets here!'
   },
@@ -52,11 +48,7 @@ const fallbackItinerary = [
     lng: 11.2558, 
     order: 2, 
     dates: 'Sept 26-29', 
-    hotel: 'TBD',
-    hotel_address: '',
-    hotel_phone: '',
-    train_info: 'Rome to Florence - Trenitalia',
-    rental_car: 'Not needed',
+    accommodation: 'TBD',
     activities: 'Uffizi Gallery, Duomo, Ponte Vecchio',
     notes: 'Book Uffizi tickets in advance'
   },
@@ -66,11 +58,7 @@ const fallbackItinerary = [
     lng: 12.3155, 
     order: 3, 
     dates: 'Sept 29-Oct 2', 
-    hotel: 'TBD',
-    hotel_address: '',
-    hotel_phone: '',
-    train_info: 'Florence to Venice - Trenitalia',
-    rental_car: 'Not needed',
+    accommodation: 'TBD',
     activities: 'Gondola rides, St Marks, Rialto Market',
     notes: 'No cars allowed - water taxis only'
   },
@@ -80,11 +68,7 @@ const fallbackItinerary = [
     lng: 11.3000, 
     order: 4, 
     dates: 'Oct 2-4', 
-    hotel: 'Villa TBD',
-    hotel_address: '',
-    hotel_phone: '',
-    train_info: 'Venice to Florence - Trenitalia',
-    rental_car: 'Pick up in Florence',
+    accommodation: 'TBD',
     activities: 'Wine tasting, Hill towns, Cooking class',
     notes: 'Consider renting a car'
   }
@@ -115,18 +99,14 @@ function convertToItinerary(sheetData) {
       lng: parseFloat(row.lng || row.Lng || row.longitude || row.Longitude),
       order: parseInt(row.order || row.Order) || 1,
       dates: row.dates || row.Dates || '',
-      hotel: row.hotel || row.Hotel || row.accommodation || row.Accommodation || '',
-      hotel_address: row.hotel_address || row.hotel_Address || row['hotel address'] || '',
-      hotel_phone: row.hotel_phone || row.hotel_Phone || row['hotel phone'] || '',
-      train_info: row.train_info || row.train_Info || row['train info'] || row.train || '',
-      rental_car: row.rental_car || row.rental_Car || row['rental car'] || row.car || '',
+      accommodation: row.accommodation || row.Accommodation || row.hotel || row.Hotel || '',
       activities: row.activities || row.Activities || '',
       notes: row.notes || row.Notes || ''
     }))
     .sort((a, b) => a.order - b.order);
 }
 
-// Fetch data from Google Sheets using CORS-friendly method
+// Fetch data from Google Sheets
 async function fetchItineraryData(url) {
   if (GOOGLE_SHEETS_CONFIG.useFallbackData || !url || url.includes('YOUR_')) {
     console.log('Using fallback itinerary data');
@@ -134,39 +114,30 @@ async function fetchItineraryData(url) {
   }
 
   try {
-    // Use the published CSV URL directly (now works through localhost server)
     let csvUrl = url;
-    
-    console.log('Attempting to fetch from Google Sheets...');
-    console.log('URL:', csvUrl);
-    
-    // Direct fetch - should work now that we're on localhost
-    const response = await fetch(csvUrl);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (url.includes('/edit')) {
+      csvUrl = url.replace('/edit#gid=', '/export?format=csv&gid=');
+      csvUrl = csvUrl.replace('/edit?usp=sharing', '/export?format=csv');
+      csvUrl = csvUrl.replace(/\/edit.*$/, '/export?format=csv');
     }
+
+    const response = await fetch(csvUrl);
+    if (!response.ok) throw new Error('Failed to fetch sheet data');
     
     const csvData = await response.text();
-    console.log('Raw CSV data received:', csvData.substring(0, 200) + '...');
-    
     const parsedData = parseCSV(csvData);
-    console.log('Parsed rows:', parsedData.length);
-    
     const itinerary = convertToItinerary(parsedData);
     
     if (itinerary.length === 0) {
-      console.log('⚠️ No valid data in sheet, using fallback');
+      console.log('No valid data in sheet, using fallback');
       return fallbackItinerary;
     }
     
-    console.log(`✅ SUCCESS! Loaded ${itinerary.length} destinations from Google Sheets`);
-    console.log('Destinations:', itinerary.map(loc => loc.name).join(', '));
+    console.log(`Loaded ${itinerary.length} destinations from Google Sheets`);
     return itinerary;
   } catch (error) {
-    console.error('❌ Error fetching sheet data:', error);
-    console.error('Error details:', error.message);
-    console.log('⚠️ Using fallback itinerary data');
+    console.error('Error fetching sheet data:', error);
+    console.log('Using fallback itinerary data');
     return fallbackItinerary;
   }
 }
@@ -235,42 +206,20 @@ function createItineraryMap(mapId, itinerary) {
   itinerary.forEach(location => {
     routeCoordinates.push([location.lat, location.lng]);
     
-    let popupContent = `<div style="min-width: 250px; max-width: 350px;">
+    let popupContent = `<div style="min-width: 220px;">
       <strong style="font-size: 18px; color: ${mainColor};">${location.name}</strong>`;
     
     if (location.dates) {
       popupContent += `<br><span style="color: #666;">📅 ${location.dates}</span>`;
     }
-    
-    // Hotel Information
-    if (location.hotel) {
-      popupContent += `<br><br><strong style="color: #ed8936;">🏨 Hotel:</strong><br><span style="color: #555; font-size: 14px;">${location.hotel}</span>`;
-      if (location.hotel_address) {
-        popupContent += `<br><span style="color: #666; font-size: 13px;">📍 ${location.hotel_address}</span>`;
-      }
-      if (location.hotel_phone) {
-        popupContent += `<br><span style="color: #666; font-size: 13px;">📞 ${location.hotel_phone}</span>`;
-      }
+    if (location.accommodation) {
+      popupContent += `<br><span style="color: #666;">🏨 ${location.accommodation}</span>`;
     }
-    
-    // Train Information
-    if (location.train_info) {
-      popupContent += `<br><br><strong style="color: #9f7aea;">🚄 Train:</strong><br><span style="color: #555; font-size: 14px;">${location.train_info}</span>`;
-    }
-    
-    // Rental Car Information
-    if (location.rental_car) {
-      popupContent += `<br><br><strong style="color: #38b2ac;">🚗 Car Rental:</strong><br><span style="color: #555; font-size: 14px;">${location.rental_car}</span>`;
-    }
-    
-    // Activities
     if (location.activities) {
-      popupContent += `<br><br><strong style="color: #4299e1;">🎯 Activities:</strong><br><span style="color: #555; font-size: 14px;">${location.activities}</span>`;
+      popupContent += `<br><br><strong style="color: #4299e1;">Activities:</strong><br><span style="color: #555; font-size: 14px;">${location.activities}</span>`;
     }
-    
-    // Notes
     if (location.notes) {
-      popupContent += `<br><br><em style="font-size: 13px; color: #718096;">💡 ${location.notes}</em>`;
+      popupContent += `<br><br><em style="font-size: 13px; color: #718096;">${location.notes}</em>`;
     }
     popupContent += `</div>`;
     
