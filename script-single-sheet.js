@@ -101,7 +101,20 @@ function convertToItinerary(sheetData) {
       dates: row.dates || row.Dates || '',
       accommodation: row.accommodation || row.Accommodation || row.hotel || row.Hotel || '',
       activities: row.activities || row.Activities || '',
-      notes: row.notes || row.Notes || ''
+      notes: row.notes || row.Notes || '',
+      // Train ticket information
+      trainInfo: row.train_info || row.Train_Info || '',
+      maryTicket: row.mary_ticket || row.Mary_Ticket || '',
+      lisaTicket: row.lisa_ticket || row.Lisa_Ticket || '',
+      keoTicket: row.keo_ticket || row.Keo_Ticket || '',
+      karenTicket: row.karen_ticket || row.Karen_Ticket || '',
+      // Rental car information
+      rentalCar: row.rental_car || row.Rental_Car || '',
+      // Flight information
+      maryFlight: row.mary_flight || row.Mary_Flight || '',
+      lisaFlight: row.lisa_flight || row.Lisa_Flight || '',
+      keoFlight: row.keo_flight || row.Keo_Flight || '',
+      karenFlight: row.karen_flight || row.Karen_Flight || ''
     }))
     .sort((a, b) => a.order - b.order);
 }
@@ -306,6 +319,105 @@ function createDestinationCards(itinerary) {
   });
 }
 
+// Update train ticket cards with Google Sheets data
+function updateTrainTickets(itinerary) {
+  // Find routes where train_info is specified
+  itinerary.forEach((destination, index) => {
+    if (destination.trainInfo && index > 0) {
+      const prevDestination = itinerary[index - 1];
+      const routeKey = `${prevDestination.name.toLowerCase()}-${destination.name.toLowerCase()}`;
+      
+      // Find the matching transport card
+      const cards = document.querySelectorAll('.transport-card');
+      cards.forEach(card => {
+        const header = card.querySelector('.route-header');
+        if (header && header.textContent.includes(prevDestination.name) && header.textContent.includes(destination.name)) {
+          // Update passenger tickets
+          updatePassengerTicket(card, 'Mary', destination.maryTicket);
+          updatePassengerTicket(card, 'Lisa', destination.lisaTicket);
+          updatePassengerTicket(card, 'Keo', destination.keoTicket);
+          updatePassengerTicket(card, 'Karen', destination.karenTicket);
+          
+          // Update route details if train_info provided
+          const routeDetails = card.querySelector('.route-details');
+          if (routeDetails && destination.trainInfo) {
+            routeDetails.textContent = destination.trainInfo;
+          }
+        }
+      });
+    }
+  });
+}
+
+// Helper function to update individual passenger ticket
+function updatePassengerTicket(card, passengerName, ticketNumber) {
+  if (!ticketNumber) return;
+  
+  const passengers = card.querySelectorAll('.passenger-item');
+  passengers.forEach(item => {
+    const nameSpan = item.querySelector('.passenger-name');
+    if (nameSpan && nameSpan.textContent.includes(passengerName)) {
+      const ticketSpan = item.querySelector('.ticket-info');
+      if (ticketSpan) {
+        ticketSpan.textContent = `Ticket #: ${ticketNumber}`;
+      }
+    }
+  });
+}
+
+// Update rental car info
+function updateRentalCarInfo(itinerary) {
+  const rentalCarCard = document.querySelector('.transport-card.rental-car');
+  if (!rentalCarCard) return;
+  
+  // Look for rental car info in any destination
+  itinerary.forEach(destination => {
+    if (destination.rentalCar) {
+      const rentalInfo = rentalCarCard.querySelector('.rental-info');
+      // You can parse rental_car field to update specific details
+      // For now, we'll add it as a note
+      const existingDetails = rentalInfo.querySelectorAll('.rental-detail');
+      const companyDetail = Array.from(existingDetails).find(d => d.innerHTML.includes('Company:'));
+      if (companyDetail && destination.rentalCar) {
+        companyDetail.innerHTML = `<strong>🚙 Company:</strong> ${destination.rentalCar}`;
+      }
+    }
+  });
+}
+
+// Update flight information
+function updateFlightInfo(itinerary) {
+  // Look for flight info in the last destination
+  const lastDestination = itinerary[itinerary.length - 1];
+  if (!lastDestination) return;
+  
+  // Update Mary & Lisa flight
+  if (lastDestination.maryFlight || lastDestination.lisaFlight) {
+    const maryLisaCard = document.querySelector('.flight-card-mary-lisa');
+    if (maryLisaCard) {
+      const flightDetails = maryLisaCard.querySelectorAll('.flight-detail');
+      flightDetails.forEach(detail => {
+        if (detail.innerHTML.includes('Flight #:') && lastDestination.maryFlight) {
+          detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.maryFlight}`;
+        }
+      });
+    }
+  }
+  
+  // Update Keo & Karen flight
+  if (lastDestination.keoFlight || lastDestination.karenFlight) {
+    const keoKarenCard = document.querySelector('.flight-card-keo-karen');
+    if (keoKarenCard) {
+      const flightDetails = keoKarenCard.querySelectorAll('.flight-detail');
+      flightDetails.forEach(detail => {
+        if (detail.innerHTML.includes('Flight #:') && lastDestination.keoFlight) {
+          detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.keoFlight}`;
+        }
+      });
+    }
+  }
+}
+
 // Initialize maps when DOM is ready
 document.addEventListener('DOMContentLoaded', async function() {
   console.log('Loading Italy trip data...');
@@ -322,6 +434,12 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Create destination cards
   createDestinationCards(itinerary);
   console.log('Destination cards created');
+  
+  // Update transportation information from Google Sheets
+  updateTrainTickets(itinerary);
+  updateRentalCarInfo(itinerary);
+  updateFlightInfo(itinerary);
+  console.log('Transportation info updated from Google Sheets');
   
   console.log('All maps loaded successfully!');
 });
