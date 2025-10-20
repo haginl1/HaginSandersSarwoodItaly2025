@@ -9,6 +9,8 @@
 - `hotel` - Hotel name
 - `hotel_address` - Hotel address
 - `hotel_phone` - Hotel phone
+- `hotel_website` - Hotel website URL
+- `hotel_confirmation` - Booking confirmation number
 - `activities` - Activities (semicolon separated)
 - `notes` - Special notes
 

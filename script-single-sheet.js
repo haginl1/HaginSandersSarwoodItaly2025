@@ -102,6 +102,11 @@ function convertToItinerary(sheetData) {
       accommodation: row.accommodation || row.Accommodation || row.hotel || row.Hotel || '',
       activities: row.activities || row.Activities || '',
       notes: row.notes || row.Notes || '',
+      // Hotel information
+      hotelAddress: row.hotel_address || row.Hotel_Address || '',
+      hotelPhone: row.hotel_phone || row.Hotel_Phone || '',
+      hotelWebsite: row.hotel_website || row.Hotel_Website || row.website || row.Website || '',
+      hotelConfirmation: row.hotel_confirmation || row.Hotel_Confirmation || row.confirmation || row.Confirmation || '',
       // Train ticket information
       trainInfo: row.train_info || row.Train_Info || '',
       maryTicket: row.mary_ticket || row.Mary_Ticket || '',
@@ -326,6 +331,64 @@ function createDestinationCards(itinerary) {
   });
 }
 
+// Create hotel information cards
+function createHotelCards(itinerary) {
+  const container = document.getElementById('hotel-cards-container');
+  if (!container) return;
+  
+  container.innerHTML = ''; // Clear existing cards
+  
+  itinerary.forEach(destination => {
+    const card = document.createElement('div');
+    card.className = 'hotel-card-detail';
+    
+    const hotelName = destination.accommodation || 'Hotel TBD';
+    const hotelAddress = destination.hotelAddress || 'Address TBD';
+    const hotelPhone = destination.hotelPhone || 'Phone TBD';
+    const hotelWebsite = destination.hotelWebsite || '';
+    const hotelConfirmation = destination.hotelConfirmation || '';
+    
+    card.innerHTML = `
+      <h4>
+        <span class="hotel-icon">🏨</span>
+        ${hotelName}
+      </h4>
+      <div class="hotel-city-badge">${destination.name}</div>
+      
+      <div class="hotel-info-item">
+        <strong>📅 Dates:</strong> ${destination.dates || 'Dates TBD'}
+      </div>
+      
+      ${hotelAddress !== 'Address TBD' ? `
+        <div class="hotel-info-item">
+          <strong>📍 Address:</strong> ${hotelAddress}
+        </div>
+      ` : ''}
+      
+      ${hotelPhone !== 'Phone TBD' ? `
+        <div class="hotel-info-item">
+          <strong>📞 Phone:</strong> ${hotelPhone}
+        </div>
+      ` : ''}
+      
+      ${hotelWebsite ? `
+        <div class="hotel-info-item">
+          <strong>🌐 Website:</strong>
+          <a href="${hotelWebsite}" target="_blank" class="hotel-link">${hotelWebsite}</a>
+        </div>
+      ` : ''}
+      
+      ${hotelConfirmation ? `
+        <div class="hotel-confirmation">
+          ✅ <strong>Confirmation:</strong> ${hotelConfirmation}
+        </div>
+      ` : ''}
+    `;
+    
+    container.appendChild(card);
+  });
+}
+
 // Update train ticket cards with Google Sheets data
 function updateTrainTickets(itinerary) {
   // Find routes where train_info is specified
@@ -453,6 +516,10 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Create destination cards
   createDestinationCards(itinerary);
   console.log('Destination cards created');
+  
+  // Create hotel information cards
+  createHotelCards(itinerary);
+  console.log('Hotel cards created');
   
   // Update transportation information from Google Sheets
   updateTrainTickets(itinerary);
