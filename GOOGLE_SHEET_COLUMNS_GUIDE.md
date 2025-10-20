@@ -33,10 +33,15 @@ Add these columns to capture train ticket information for each leg of the journe
 ### Flight Information Columns (Add to LAST row - Milan)
 | Column Name | Description | Example |
 |-------------|-------------|---------|
-| `mary_flight` | Mary's return flight | "DL123 - Departs 2:00pm" |
-| `lisa_flight` | Lisa's return flight | "DL123 - Departs 2:00pm" |
-| `keo_flight` | Keo's return flight | "DL456 - Departs 3:00pm" |
-| `karen_flight` | Karen's return flight | "DL456 - Departs 3:00pm" |
+| `mary_flight` | Mary's return flight number | "DL123" |
+| `lisa_flight` | Lisa's return flight number | "DL123" |
+| `keo_flight` | Keo's return flight number | "DL456" |
+| `karen_flight` | Karen's return flight number | "DL456" |
+| `departure_time` | Shared departure time (if all same) | "2:00 PM" |
+| `mary_departure` | Mary's departure time (if different) | "2:00 PM" |
+| `lisa_departure` | Lisa's departure time (if different) | "2:00 PM" |
+| `keo_departure` | Keo's departure time (if different) | "3:00 PM" |
+| `karen_departure` | Karen's departure time (if different) | "3:00 PM" |
 
 ## How to Fill Out Your Sheet
 
@@ -73,10 +78,12 @@ mary_ticket: IT32345678
 lisa_ticket: IT32345679
 keo_ticket: IT32345680
 karen_ticket: IT32345681
-mary_flight: DL123 to Atlanta - Nov 28, 2:00pm
-lisa_flight: DL123 to Atlanta - Nov 28, 2:00pm
-keo_flight: DL456 to Sarasota - Nov 28, 3:00pm
-karen_flight: DL456 to Sarasota - Nov 28, 3:00pm
+mary_flight: DL123
+lisa_flight: DL123
+keo_flight: DL456
+karen_flight: DL456
+departure_time: 2:00 PM
+(OR use individual times: mary_departure: 2:00 PM, keo_departure: 3:00 PM, etc.)
 ```
 
 ## After Adding Columns

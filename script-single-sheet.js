@@ -114,7 +114,14 @@ function convertToItinerary(sheetData) {
       maryFlight: row.mary_flight || row.Mary_Flight || '',
       lisaFlight: row.lisa_flight || row.Lisa_Flight || '',
       keoFlight: row.keo_flight || row.Keo_Flight || '',
-      karenFlight: row.karen_flight || row.Karen_Flight || ''
+      karenFlight: row.karen_flight || row.Karen_Flight || '',
+      // Flight departure times
+      maryDeparture: row.mary_departure || row.Mary_Departure || '',
+      lisaDeparture: row.lisa_departure || row.Lisa_Departure || '',
+      keoDeparture: row.keo_departure || row.Keo_Departure || '',
+      karenDeparture: row.karen_departure || row.Karen_Departure || '',
+      // Shared departure time (if all same)
+      departureTime: row.departure_time || row.Departure_Time || row.flight_time || row.Flight_Time || ''
     }))
     .sort((a, b) => a.order - b.order);
 }
@@ -392,7 +399,7 @@ function updateFlightInfo(itinerary) {
   if (!lastDestination) return;
   
   // Update Mary & Lisa flight
-  if (lastDestination.maryFlight || lastDestination.lisaFlight) {
+  if (lastDestination.maryFlight || lastDestination.lisaFlight || lastDestination.maryDeparture || lastDestination.departureTime) {
     const maryLisaCard = document.querySelector('.flight-card-mary-lisa');
     if (maryLisaCard) {
       const flightDetails = maryLisaCard.querySelectorAll('.flight-detail');
@@ -400,18 +407,30 @@ function updateFlightInfo(itinerary) {
         if (detail.innerHTML.includes('Flight #:') && lastDestination.maryFlight) {
           detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.maryFlight}`;
         }
+        if (detail.innerHTML.includes('Departure:')) {
+          const depTime = lastDestination.maryDeparture || lastDestination.departureTime;
+          if (depTime) {
+            detail.innerHTML = `<strong>🕐 Departure:</strong> ${depTime}`;
+          }
+        }
       });
     }
   }
   
   // Update Keo & Karen flight
-  if (lastDestination.keoFlight || lastDestination.karenFlight) {
+  if (lastDestination.keoFlight || lastDestination.karenFlight || lastDestination.keoDeparture || lastDestination.departureTime) {
     const keoKarenCard = document.querySelector('.flight-card-keo-karen');
     if (keoKarenCard) {
       const flightDetails = keoKarenCard.querySelectorAll('.flight-detail');
       flightDetails.forEach(detail => {
         if (detail.innerHTML.includes('Flight #:') && lastDestination.keoFlight) {
           detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.keoFlight}`;
+        }
+        if (detail.innerHTML.includes('Departure:')) {
+          const depTime = lastDestination.keoDeparture || lastDestination.departureTime;
+          if (depTime) {
+            detail.innerHTML = `<strong>🕐 Departure:</strong> ${depTime}`;
+          }
         }
       });
     }
