@@ -500,6 +500,49 @@ function updateFlightInfo(itinerary) {
   }
 }
 
+// Update arrival flight information from Rome row (first destination)
+function updateArrivalFlights(itinerary) {
+  // Get the first destination (Rome - arrival city)
+  const arrivalCity = itinerary[0];
+  if (!arrivalCity) return;
+  
+  // Update Mary & Lisa arrival flight card
+  if (arrivalCity.maryFlight || arrivalCity.lisaFlight) {
+    const maryLisaCard = document.querySelector('.flight-card.mary-lisa');
+    if (maryLisaCard) {
+      const routes = maryLisaCard.querySelectorAll('.route');
+      routes.forEach(route => {
+        if (route.innerHTML.includes('Flight Details:') && arrivalCity.maryFlight) {
+          route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.maryFlight}`;
+        }
+        if (route.innerHTML.includes('Arrival:') && arrivalCity.dates) {
+          // Extract first date from the dates field
+          const firstDate = arrivalCity.dates.split('-')[0].trim();
+          route.innerHTML = `<strong>Arrival:</strong> ${firstDate}`;
+        }
+      });
+    }
+  }
+  
+  // Update Keo & Karen arrival flight card
+  if (arrivalCity.keoFlight || arrivalCity.karenFlight) {
+    const keoKarenCard = document.querySelector('.flight-card.keo-karen');
+    if (keoKarenCard) {
+      const routes = keoKarenCard.querySelectorAll('.route');
+      routes.forEach(route => {
+        if (route.innerHTML.includes('Flight Details:') && arrivalCity.keoFlight) {
+          route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.keoFlight}`;
+        }
+        if (route.innerHTML.includes('Arrival:') && arrivalCity.dates) {
+          // Extract first date from the dates field
+          const firstDate = arrivalCity.dates.split('-')[0].trim();
+          route.innerHTML = `<strong>Arrival:</strong> ${firstDate}`;
+        }
+      });
+    }
+  }
+}
+
 // Initialize maps when DOM is ready
 document.addEventListener('DOMContentLoaded', async function() {
   console.log('Loading Italy trip data...');
@@ -520,6 +563,10 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Create hotel information cards
   createHotelCards(itinerary);
   console.log('Hotel cards created');
+  
+  // Update arrival flight information
+  updateArrivalFlights(itinerary);
+  console.log('Arrival flights updated');
   
   // Update transportation information from Google Sheets
   updateTrainTickets(itinerary);

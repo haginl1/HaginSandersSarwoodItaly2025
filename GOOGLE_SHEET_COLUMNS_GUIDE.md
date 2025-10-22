@@ -48,8 +48,19 @@ Add these columns to capture train ticket information for each leg of the journe
 ## How to Fill Out Your Sheet
 
 ### Row 1: Rome (Arrival)
-- No train info needed (arrival city)
-- Leave train ticket columns empty
+Fill in ARRIVAL flight information here:
+```
+name: Rome
+dates: Nov 19-22
+hotel: Hotel Forum
+hotel_address: Via Tor de' Conti 25
+hotel_phone: 39 06 679 2446
+mary_flight: DL0214 ATL-FCO Nov 19, 4:40 PM
+lisa_flight: DL0214 ATL-FCO Nov 19, 4:40 PM
+keo_flight: DL456 SRQ-BOS-FCO Nov 19
+karen_flight: DL456 SRQ-BOS-FCO Nov 19
+(Leave train ticket columns empty - no train to Rome)
+```
 
 ### Row 2: Verona
 Fill in train info from Rome → Verona:
@@ -73,20 +84,34 @@ karen_ticket: IT22345681
 ```
 
 ### Row 4: Milan (Departure)
-Fill in train info from Florence → Milan AND flight info:
+Fill in train info from Florence → Milan AND DEPARTURE flight info:
 ```
 train_info: "Florence to Milan - Italo, Departs 3:00pm, Arrives 5:45pm"
 mary_ticket: IT32345678
 lisa_ticket: IT32345679
 keo_ticket: IT32345680
 karen_ticket: IT32345681
-mary_flight: DL123
-lisa_flight: DL123
-keo_flight: DL456
-karen_flight: DL456
+mary_flight: DL214 (return flight to Atlanta)
+lisa_flight: DL214 (return flight to Atlanta)
+keo_flight: DL456 (return flight to Sarasota)
+karen_flight: DL456 (return flight to Sarasota)
 departure_time: 2:00 PM
 (OR use individual times: mary_departure: 2:00 PM, keo_departure: 3:00 PM, etc.)
 ```
+
+## 📝 Summary: Which Row for Which Flights?
+
+### ✈️ **ARRIVAL Flights to Italy** → Use **Rome Row (Row 1)**
+- Mary's inbound flight
+- Lisa's inbound flight  
+- Keo's inbound flight
+- Karen's inbound flight
+
+### ✈️ **DEPARTURE Flights from Italy** → Use **Milan Row (Row 4)**
+- Mary's outbound flight
+- Lisa's outbound flight
+- Keo's outbound flight
+- Karen's outbound flight
 
 ## After Adding Columns
 
