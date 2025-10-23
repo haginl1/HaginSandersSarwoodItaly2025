@@ -9,24 +9,48 @@ const GOOGLE_SHEETS_CONFIG = {
   useFallbackData: false
 };
 
-// Flight arrival routes (hardcoded - these don't change)
+// Flight routes (hardcoded - these don't change)
 const flightRoutes = {
-  maryLisa: {
-    name: 'Mary & Lisa',
-    color: '#ed8936',
-    route: [
-      { name: 'Atlanta, GA', lat: 33.6407, lng: -84.4277, order: 1 },
-      { name: 'Rome, Italy', lat: 41.9028, lng: 12.4964, order: 2 }
-    ]
+  // Arrival routes
+  arrival: {
+    maryLisa: {
+      name: 'Mary & Lisa - Arrival',
+      color: '#ed8936',
+      route: [
+        { name: 'Atlanta, GA', lat: 33.6407, lng: -84.4277, order: 1 },
+        { name: 'Rome, Italy', lat: 41.9028, lng: 12.4964, order: 2 }
+      ]
+    },
+    keoKaren: {
+      name: 'Keo & Karen - Arrival',
+      color: '#9f7aea',
+      route: [
+        { name: 'Sarasota, FL', lat: 27.3364, lng: -82.5307, order: 1 },
+        { name: 'Boston, MA', lat: 42.3656, lng: -71.0096, order: 2 },
+        { name: 'Rome, Italy', lat: 41.9028, lng: 12.4964, order: 3 }
+      ]
+    }
   },
-  keoKaren: {
-    name: 'Keo & Karen',
-    color: '#9f7aea',
-    route: [
-      { name: 'Sarasota, FL', lat: 27.3364, lng: -82.5307, order: 1 },
-      { name: 'Boston, MA', lat: 42.3656, lng: -71.0096, order: 2 },
-      { name: 'Rome, Italy', lat: 41.9028, lng: 12.4964, order: 3 }
-    ]
+  // Departure routes
+  departure: {
+    maryLisa: {
+      name: 'Mary & Lisa - Departure',
+      color: '#38a169',
+      route: [
+        { name: 'Milan, Italy', lat: 45.4642, lng: 9.1900, order: 1 },
+        { name: 'New York JFK', lat: 40.6413, lng: -73.7781, order: 2 },
+        { name: 'Atlanta, GA', lat: 33.6407, lng: -84.4277, order: 3 }
+      ]
+    },
+    keoKaren: {
+      name: 'Keo & Karen - Departure',
+      color: '#4299e1',
+      route: [
+        { name: 'Milan, Italy', lat: 45.4642, lng: 9.1900, order: 1 },
+        { name: 'New York JFK', lat: 40.6413, lng: -73.7781, order: 2 },
+        { name: 'Orlando, FL', lat: 28.4294, lng: -81.3089, order: 3 }
+      ]
+    }
   }
 };
 
@@ -260,8 +284,8 @@ function createFlightMap(mapId) {
 
   const allCoordinates = [];
 
-  // Add both flight routes
-  Object.values(flightRoutes).forEach(flight => {
+  // Add arrival routes
+  Object.values(flightRoutes.arrival).forEach(flight => {
     const routeCoords = [];
     
     flight.route.forEach(stop => {
@@ -286,7 +310,7 @@ function createFlightMap(mapId) {
       marker.bindPopup(popupContent);
     });
 
-    // Draw flight path
+    // Draw arrival flight path (dashed)
     L.polyline(routeCoords, {
       color: flight.color,
       weight: 3,
@@ -295,6 +319,148 @@ function createFlightMap(mapId) {
       lineCap: 'round'
     }).addTo(map);
   });
+
+  // Add departure routes
+  Object.values(flightRoutes.departure).forEach(flight => {
+    const routeCoords = [];
+    
+    flight.route.forEach(stop => {
+      routeCoords.push([stop.lat, stop.lng]);
+      allCoordinates.push([stop.lat, stop.lng]);
+      
+      const popupContent = `<div style="min-width: 150px;">
+        <strong style="font-size: 16px; color: ${flight.color};">${stop.name}</strong>
+        <br><span style="color: #666;">${flight.name}</span>
+        <br><em style="font-size: 13px;">Stop ${stop.order}</em>
+      </div>`;
+      
+      const marker = L.marker([stop.lat, stop.lng], {
+        icon: L.divIcon({
+          html: `<div style="background: ${flight.color}; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">${stop.order}</div>`,
+          className: 'custom-div-icon',
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        })
+      }).addTo(map);
+      
+      marker.bindPopup(popupContent);
+    });
+
+    // Draw departure flight path (solid)
+    L.polyline(routeCoords, {
+      color: flight.color,
+      weight: 3,
+      opacity: 0.7,
+      lineCap: 'round'
+    }).addTo(map);
+  });
+
+  // Fit map to show all locations
+  if (allCoordinates.length > 0) {
+    map.fitBounds(allCoordinates, { padding: [50, 50] });
+  }
+}
+
+// Create individual flight map for a specific traveler group
+function createIndividualFlightMap(mapId, travelerGroup) {
+  const map = L.map(mapId).setView([45.0, -10.0], 3);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  const allCoordinates = [];
+  const arrivalLetters = ['A', 'B', 'C'];
+
+  // Add arrival route for this group
+  const arrivalFlight = flightRoutes.arrival[travelerGroup];
+  if (arrivalFlight) {
+    const routeCoords = [];
+    
+    arrivalFlight.route.forEach((stop, index) => {
+      routeCoords.push([stop.lat, stop.lng]);
+      allCoordinates.push([stop.lat, stop.lng]);
+      
+      const popupContent = `<div style="min-width: 150px;">
+        <strong style="font-size: 16px; color: ${arrivalFlight.color};">${stop.name}</strong>
+        <br><span style="color: #666;">${arrivalFlight.name}</span>
+        <br><em style="font-size: 13px;">Arrival Stop ${arrivalLetters[index]}</em>
+      </div>`;
+      
+      const marker = L.marker([stop.lat, stop.lng], {
+        icon: L.divIcon({
+          html: `<div style="background: ${arrivalFlight.color}; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">${arrivalLetters[index]}</div>`,
+          className: 'custom-div-icon',
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        })
+      }).addTo(map);
+      
+      marker.bindPopup(popupContent);
+    });
+
+    // Draw arrival flight path (dashed)
+    L.polyline(routeCoords, {
+      color: arrivalFlight.color,
+      weight: 3,
+      opacity: 0.7,
+      dashArray: '10, 10',
+      lineCap: 'round'
+    }).addTo(map);
+  }
+
+  // Add departure route for this group
+  const departureFlight = flightRoutes.departure[travelerGroup];
+  if (departureFlight) {
+    const routeCoords = [];
+    
+    departureFlight.route.forEach(stop => {
+      // Use original coordinates for polyline
+      routeCoords.push([stop.lat, stop.lng]);
+      allCoordinates.push([stop.lat, stop.lng]);
+      
+      // Add small offset to marker if it overlaps with arrival route
+      let markerLat = stop.lat;
+      let markerLng = stop.lng;
+      
+      // Check if this location exists in arrival route (same coordinates)
+      if (arrivalFlight) {
+        const overlaps = arrivalFlight.route.some(
+          arrivalStop => Math.abs(arrivalStop.lat - stop.lat) < 0.01 && 
+                         Math.abs(arrivalStop.lng - stop.lng) < 0.01
+        );
+        if (overlaps) {
+          // Offset the marker slightly to the right and down
+          markerLat += 0.3;
+          markerLng += 0.5;
+        }
+      }
+      
+      const popupContent = `<div style="min-width: 150px;">
+        <strong style="font-size: 16px; color: ${departureFlight.color};">${stop.name}</strong>
+        <br><span style="color: #666;">${departureFlight.name}</span>
+        <br><em style="font-size: 13px;">Departure Stop ${stop.order}</em>
+      </div>`;
+      
+      const marker = L.marker([markerLat, markerLng], {
+        icon: L.divIcon({
+          html: `<div style="background: ${departureFlight.color}; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">${stop.order}</div>`,
+          className: 'custom-div-icon',
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        })
+      }).addTo(map);
+      
+      marker.bindPopup(popupContent);
+    });
+
+    // Draw departure flight path (solid)
+    L.polyline(routeCoords, {
+      color: departureFlight.color,
+      weight: 3,
+      opacity: 0.7,
+      lineCap: 'round'
+    }).addTo(map);
+  }
 
   // Fit map to show all locations
   if (allCoordinates.length > 0) {
@@ -912,9 +1078,12 @@ function updateArrivalFlights(itinerary) {
 document.addEventListener('DOMContentLoaded', async function() {
   console.log('Loading Italy trip data...');
   
-  // Create flight arrival map
-  createFlightMap('flight-arrivals-map');
-  console.log('Flight arrival map loaded');
+  // Create individual flight maps for each group
+  createIndividualFlightMap('mary-lisa-flight-map', 'maryLisa');
+  console.log('Mary & Lisa flight map loaded');
+  
+  createIndividualFlightMap('keo-karen-flight-map', 'keoKaren');
+  console.log('Keo & Karen flight map loaded');
   
   // Fetch and create shared itinerary map
   const itinerary = await fetchItineraryData(GOOGLE_SHEETS_CONFIG.itinerarySheetUrl);

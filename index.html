@@ -65,8 +65,53 @@
         }
         .leaflet-container {
             width: 100% !important;
-            height: 400px !important;
+            height: 450px !important;
             border-radius: 8px;
+        }
+        
+        /* Flight Maps Grid - Side by Side */
+        .flight-maps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Mobile Responsive - Stack on smaller screens */
+        @media (max-width: 768px) {
+            .flight-maps-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .header p {
+                font-size: 1rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .section-subtitle {
+                font-size: 1rem;
+            }
+            .map-card {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            .map-card h3 {
+                font-size: 1.2rem;
+            }
+            .leaflet-container {
+                height: 300px !important;
+            }
+        }
+        
+        /* Tablet - Medium screens */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .leaflet-container {
+                height: 380px !important;
+            }
         }
         
         /* Flight Info Cards */
@@ -468,14 +513,57 @@
         </div>
     </div>
 
-    <!-- Flight Arrivals Section -->
+    <!-- Flight Routes Section -->
     <div class="section">
-        <h2 class="section-title">✈️ Flight Arrivals</h2>
-        <p class="section-subtitle">Two different routes, one amazing destination!</p>
+        <h2 class="section-title">✈️ Complete Flight Journey</h2>
+        <p class="section-subtitle">Round-trip flight routes for each traveler group</p>
         
-        <div class="map-card">
-            <h3>Flight Routes to Rome</h3>
-            <div id="flight-arrivals-map"></div>
+        <div class="flight-maps-grid">
+            <!-- Mary & Lisa Flight Map -->
+            <div class="map-card">
+                <h3>🧡 Mary & Lisa - Flight Routes</h3>
+                <div id="mary-lisa-flight-map"></div>
+                
+                <!-- Legend -->
+                <div style="margin-top: 1.5rem; padding: 1rem; background: #f7fafc; border-radius: 8px;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 30px; height: 3px; background: #ed8936; border-top: 2px dashed #ed8936;"></div>
+                            <span style="font-size: 0.85rem; color: #2d3748;">Arrival (A, B)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 30px; height: 3px; background: #38a169;"></div>
+                            <span style="font-size: 0.85rem; color: #2d3748;">Departure (1, 2, 3)</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #718096; text-align: center;">
+                        A: Atlanta → B: Rome | 1: Milan → 2: JFK → 3: Atlanta
+                    </div>
+                </div>
+            </div>
+
+            <!-- Keo & Karen Flight Map -->
+            <div class="map-card">
+                <h3>💜 Keo & Karen - Flight Routes</h3>
+                <div id="keo-karen-flight-map"></div>
+                
+                <!-- Legend -->
+                <div style="margin-top: 1.5rem; padding: 1rem; background: #f7fafc; border-radius: 8px;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 30px; height: 3px; background: #9f7aea; border-top: 2px dashed #9f7aea;"></div>
+                            <span style="font-size: 0.85rem; color: #2d3748;">Arrival (A, B, C)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 30px; height: 3px; background: #4299e1;"></div>
+                            <span style="font-size: 0.85rem; color: #2d3748;">Departure (1, 2, 3)</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #718096; text-align: center;">
+                        A: Sarasota → B: Boston → C: Rome | 1: Milan → 2: JFK → 3: Orlando
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="flight-cards">
