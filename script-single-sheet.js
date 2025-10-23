@@ -145,6 +145,7 @@ function convertToItinerary(sheetData) {
       hotelConfirmation: row.hotel_confirmation || row.Hotel_Confirmation || row.confirmation || row.Confirmation || '',
       // Train ticket information
       trainInfo: row.train_info || row.Train_Info || '',
+      trainStation: row.train_station || row.Train_Station || '',
       maryTicket: row.mary_ticket || row.Mary_Ticket || '',
       lisaTicket: row.lisa_ticket || row.Lisa_Ticket || '',
       keoTicket: row.keo_ticket || row.Keo_Ticket || '',
@@ -393,6 +394,41 @@ function createItineraryMap(mapId, itinerary) {
           activityMarker.bindPopup(activityPopup);
         }
       });
+    }
+    
+    // Add train station marker if train station info exists
+    if (location.trainStation) {
+      // Train station popup content
+      let stationPopup = `<div style="min-width: 220px;">
+        <strong style="font-size: 16px; color: #38a169;">🚂 Train Station</strong>
+        <br><span style="color: #888; font-size: 13px;">${location.name}</span>`;
+      
+      // Create Google Maps link for the station
+      const encodedStation = encodeURIComponent(location.trainStation);
+      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedStation}`;
+      stationPopup += `<br><br><a href="${googleMapsUrl}" target="_blank" style="color: #4299e1; text-decoration: none; font-size: 13px;">📍 ${location.trainStation}</a>`;
+      
+      // Add train info if available
+      if (location.trainInfo) {
+        stationPopup += `<br><br><span style="color: #666; font-size: 12px;">ℹ️ ${location.trainInfo}</span>`;
+      }
+      
+      stationPopup += `</div>`;
+      
+      // Add train station marker with distinct green style, offset slightly
+      const stationOffsetLat = location.lat + 0.008;
+      const stationOffsetLng = location.lng - 0.008;
+      
+      const stationMarker = L.marker([stationOffsetLat, stationOffsetLng], {
+        icon: L.divIcon({
+          html: `<div style="background: linear-gradient(135deg, #38a169 0%, #2f855a 100%); color: white; border-radius: 6px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">🚂</div>`,
+          className: 'train-station-marker-icon',
+          iconSize: [30, 30],
+          iconAnchor: [15, 15]
+        })
+      }).addTo(map);
+      
+      stationMarker.bindPopup(stationPopup);
     }
   });
 

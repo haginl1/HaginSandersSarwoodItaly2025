@@ -24,6 +24,7 @@ Add these columns to capture train ticket information for each leg of the journe
 | Column Name | Description | Example |
 |-------------|-------------|---------|
 | `train_info` | Train route details | "Rome to Verona - Italo, Departs 9:30am, Arrives 11:00am" |
+| `train_station` | Train station name/address | "Roma Termini, Piazza dei Cinquecento, Rome" |
 | `mary_ticket` | Mary's ticket number | "IT12345678" |
 | `lisa_ticket` | Lisa's ticket number | "IT12345679" |
 | `keo_ticket` | Keo's ticket number | "IT12345680" |
