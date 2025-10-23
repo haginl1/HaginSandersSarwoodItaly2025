@@ -12,6 +12,8 @@
 - `hotel_website` - Hotel website URL
 - `hotel_confirmation` - Booking confirmation number
 - `activities` - Activities (semicolon separated)
+- `activity_links` - Activity company website URLs (semicolon separated, matches activities order)
+- `activity_locations` - Activity meeting locations/addresses (semicolon separated, matches activities order)
 - `notes` - Special notes
 
 ## NEW COLUMNS TO ADD - Train Tickets
@@ -63,6 +65,34 @@ Add these columns to capture train ticket information for each leg of the journe
 | `lisa_departure` | Lisa's departure time (if different) | "12:00 PM" |
 | `keo_departure` | Keo's departure time (if different) | "1:00 PM" |
 | `karen_departure` | Karen's departure time (if different) | "1:00 PM" |
+
+## 📋 Activity Booking Information
+
+### NEW COLUMNS - Activity Links & Locations
+When you book activities, add these columns to make them clickable and show meeting locations:
+
+| Column Name | Description | Example |
+|-------------|-------------|---------|
+| `activity_links` | Company website URLs (semicolon separated) | "https://colosseum.com; https://vaticanmuseum.va" |
+| `activity_locations` | Meeting addresses (semicolon separated) | "Piazza del Colosseo, Rome; Vatican Museums entrance" |
+
+**Important:** 
+- The order must match your `activities` column
+- Use semicolons (;) to separate multiple entries
+- Leave blank if you don't have booking info yet
+
+**Example for Rome:**
+```
+activities: Colosseum Tour; Vatican Museums; Cooking Class
+activity_links: https://colosseum.com; https://vaticanmuseum.va; https://cookingrome.com
+activity_locations: Piazza del Colosseo 1; Viale Vaticano; Via dei Coronari 35
+```
+
+On the website, this will display as:
+- ✓ **Colosseum Tour** (clickable link)
+  📍 Piazza del Colosseo 1 (opens in Google Maps)
+- ✓ **Vatican Museums** (clickable link)
+  📍 Viale Vaticano (opens in Google Maps)
 
 ## How to Fill Out Your Sheet
 

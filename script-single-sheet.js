@@ -135,6 +135,8 @@ function convertToItinerary(sheetData) {
       dates: row.dates || row.Dates || '',
       accommodation: row.accommodation || row.Accommodation || row.hotel || row.Hotel || '',
       activities: row.activities || row.Activities || '',
+      activityLinks: row.activity_links || row.Activity_Links || '',
+      activityLocations: row.activity_locations || row.Activity_Locations || '',
       notes: row.notes || row.Notes || '',
       // Hotel information
       hotelAddress: row.hotel_address || row.Hotel_Address || '',
@@ -381,11 +383,47 @@ function createDestinationCards(itinerary) {
       .map(a => a.trim())
       .filter(a => a.length > 0);
     
-    const activitiesHTML = activities.length > 0 
-      ? `<ul class="activities-list">
-           ${activities.map(activity => `<li>${activity}</li>`).join('')}
-         </ul>`
-      : '<p class="info-content">No activities listed yet</p>';
+    // Split activity links and locations (same delimiter)
+    const activityLinks = (destination.activityLinks || '')
+      .split(/[;,]/)
+      .map(a => a.trim())
+      .filter(a => a.length > 0);
+    
+    const activityLocations = (destination.activityLocations || '')
+      .split(/[;,]/)
+      .map(a => a.trim())
+      .filter(a => a.length > 0);
+    
+    // Create activities HTML with optional links and locations
+    let activitiesHTML = '';
+    if (activities.length > 0) {
+      activitiesHTML = '<ul class="activities-list">';
+      activities.forEach((activity, index) => {
+        const link = activityLinks[index] || '';
+        const location = activityLocations[index] || '';
+        
+        let activityItem = '';
+        
+        // If there's a link, make the activity name clickable
+        if (link) {
+          activityItem = `<a href="${link}" target="_blank" class="activity-link" rel="noopener noreferrer">${activity}</a>`;
+        } else {
+          activityItem = activity;
+        }
+        
+        // Add location with Google Maps link if available
+        if (location) {
+          const encodedLocation = encodeURIComponent(location);
+          const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+          activityItem += `<br><small class="activity-location">📍 <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer">${location}</a></small>`;
+        }
+        
+        activitiesHTML += `<li>${activityItem}</li>`;
+      });
+      activitiesHTML += '</ul>';
+    } else {
+      activitiesHTML = '<p class="info-content">No activities listed yet</p>';
+    }
     
     card.innerHTML = `
       <h4>
@@ -547,16 +585,19 @@ function updateRentalCarInfo(itinerary) {
   const rentalCarCard = document.querySelector('.transport-card.rental-car');
   if (!rentalCarCard) return;
   
-  // Look for rental car info in any destination
+  // Look for rental car info in any destination (usually Verona)
   itinerary.forEach(destination => {
-    if (destination.rentalCar) {
+    if (destination.rentalCar && destination.rentalCar !== '-') {
       const rentalInfo = rentalCarCard.querySelector('.rental-info');
-      // You can parse rental_car field to update specific details
-      // For now, we'll add it as a note
-      const existingDetails = rentalInfo.querySelectorAll('.rental-detail');
-      const companyDetail = Array.from(existingDetails).find(d => d.innerHTML.includes('Company:'));
-      if (companyDetail && destination.rentalCar) {
-        companyDetail.innerHTML = `<strong>🚙 Company:</strong> ${destination.rentalCar}`;
+      if (rentalInfo) {
+        const existingDetails = rentalInfo.querySelectorAll('.rental-detail');
+        
+        // Find and update the Company detail
+        existingDetails.forEach(detail => {
+          if (detail.innerHTML.includes('Company:')) {
+            detail.innerHTML = `<strong>🚙 Company:</strong> ${destination.rentalCar}`;
+          }
+        });
       }
     }
   });
