@@ -1076,37 +1076,49 @@ function updateArrivalFlights(itinerary) {
 
 // Initialize maps when DOM is ready
 document.addEventListener('DOMContentLoaded', async function() {
-  console.log('Loading Italy trip data...');
+  console.log('DOM loaded, initializing maps...');
   
-  // Create individual flight maps for each group
-  createIndividualFlightMap('mary-lisa-flight-map', 'maryLisa');
-  console.log('Mary & Lisa flight map loaded');
+  // Wait for Leaflet to be loaded
+  if (typeof L === 'undefined') {
+    console.error('Leaflet library not loaded!');
+    return;
+  }
   
-  createIndividualFlightMap('keo-karen-flight-map', 'keoKaren');
-  console.log('Keo & Karen flight map loaded');
-  
-  // Fetch and create shared itinerary map
-  const itinerary = await fetchItineraryData(GOOGLE_SHEETS_CONFIG.itinerarySheetUrl);
-  createItineraryMap('italy-itinerary-map', itinerary);
-  console.log('Italy itinerary map loaded');
-  
-  // Create destination cards
-  createDestinationCards(itinerary);
-  console.log('Destination cards created');
-  
-  // Create hotel information cards
-  createHotelCards(itinerary);
-  console.log('Hotel cards created');
-  
-  // Update arrival flight information
-  updateArrivalFlights(itinerary);
-  console.log('Arrival flights updated');
-  
-  // Update transportation information from Google Sheets
-  updateTrainTickets(itinerary);
-  updateRentalCarInfo(itinerary);
-  updateFlightInfo(itinerary);
-  console.log('Transportation info updated from Google Sheets');
-  
-  console.log('All maps loaded successfully!');
+  try {
+    console.log('Loading Italy trip data...');
+    
+    // Create individual flight maps for each group
+    createIndividualFlightMap('mary-lisa-flight-map', 'maryLisa');
+    console.log('Mary & Lisa flight map loaded');
+    
+    createIndividualFlightMap('keo-karen-flight-map', 'keoKaren');
+    console.log('Keo & Karen flight map loaded');
+    
+    // Fetch and create shared itinerary map
+    const itinerary = await fetchItineraryData(GOOGLE_SHEETS_CONFIG.itinerarySheetUrl);
+    createItineraryMap('italy-itinerary-map', itinerary);
+    console.log('Italy itinerary map loaded');
+    
+    // Create destination cards
+    createDestinationCards(itinerary);
+    console.log('Destination cards created');
+    
+    // Create hotel information cards
+    createHotelCards(itinerary);
+    console.log('Hotel cards created');
+    
+    // Update arrival flight information
+    updateArrivalFlights(itinerary);
+    console.log('Arrival flights updated');
+    
+    // Update transportation information from Google Sheets
+    updateTrainTickets(itinerary);
+    updateRentalCarInfo(itinerary);
+    updateFlightInfo(itinerary);
+    console.log('Transportation info updated from Google Sheets');
+    
+    console.log('All maps loaded successfully!');
+  } catch (error) {
+    console.error('Error initializing page:', error);
+  }
 });
