@@ -157,25 +157,49 @@ function convertToItinerary(sheetData) {
       karenSeat: row.karen_seat || row.Karen_Seat || '',
       // Rental car information
       rentalCar: row.rental_car || row.Rental_Car || '',
-      // Flight information
+      // Flight information - Inbound
       maryFlight: row.mary_flight || row.Mary_Flight || '',
       lisaFlight: row.lisa_flight || row.Lisa_Flight || '',
       keoFlight: row.keo_flight || row.Keo_Flight || '',
       karenFlight: row.karen_flight || row.Karen_Flight || '',
-      // Flight arrival times (for inbound flights)
+      // Flight departure dates from USA
+      maryDepartDate: row.mary_depart_date || row.Mary_Depart_Date || '',
+      lisaDepartDate: row.lisa_depart_date || row.Lisa_Depart_Date || '',
+      keoDepartDate: row.keo_depart_date || row.Keo_Depart_Date || '',
+      karenDepartDate: row.karen_depart_date || row.Karen_Depart_Date || '',
+      // Shared depart date (if all same)
+      departDate: row.depart_date || row.Depart_Date || '',
+      // Flight arrival times in Italy
       maryArrival: row.mary_arrival || row.Mary_Arrival || '',
       lisaArrival: row.lisa_arrival || row.Lisa_Arrival || '',
       keoArrival: row.keo_arrival || row.Keo_Arrival || '',
       karenArrival: row.karen_arrival || row.Karen_Arrival || '',
-      // Shared arrival time (if all same)
+      // Flight arrival dates in Italy
+      maryArrivalDate: row.mary_arrival_date || row.Mary_Arrival_Date || '',
+      lisaArrivalDate: row.lisa_arrival_date || row.Lisa_Arrival_Date || '',
+      keoArrivalDate: row.keo_arrival_date || row.Keo_Arrival_Date || '',
+      karenArrivalDate: row.karen_arrival_date || row.Karen_Arrival_Date || '',
+      // Shared arrival time/date (if all same)
       arrivalTime: row.arrival_time || row.Arrival_Time || '',
-      // Flight departure times (for outbound flights)
+      arrivalDate: row.arrival_date || row.Arrival_Date || '',
+      // Flight connections
+      maryConnection: row.mary_connection || row.Mary_Connection || '',
+      lisaConnection: row.lisa_connection || row.Lisa_Connection || '',
+      keoConnection: row.keo_connection || row.Keo_Connection || '',
+      karenConnection: row.karen_connection || row.Karen_Connection || '',
+      // Flight departure times from Italy (for outbound flights)
       maryDeparture: row.mary_departure || row.Mary_Departure || '',
       lisaDeparture: row.lisa_departure || row.Lisa_Departure || '',
       keoDeparture: row.keo_departure || row.Keo_Departure || '',
       karenDeparture: row.karen_departure || row.Karen_Departure || '',
       // Shared departure time (if all same)
-      departureTime: row.departure_time || row.Departure_Time || row.flight_time || row.Flight_Time || ''
+      departureTime: row.departure_time || row.Departure_Time || row.flight_time || row.Flight_Time || '',
+      // Departure dates from Italy
+      maryDepartureDate: row.mary_departure_date || row.Mary_Departure_Date || '',
+      lisaDepartureDate: row.lisa_departure_date || row.Lisa_Departure_Date || '',
+      keoDepartureDate: row.keo_departure_date || row.Keo_Departure_Date || '',
+      karenDepartureDate: row.karen_departure_date || row.Karen_Departure_Date || '',
+      departureDate: row.departure_date || row.Departure_Date || ''
     };
   })
     .sort((a, b) => a.order - b.order);
@@ -416,8 +440,9 @@ function createItineraryMap(mapId, itinerary) {
       stationPopup += `</div>`;
       
       // Add train station marker with distinct green style, offset slightly
-      const stationOffsetLat = location.lat + 0.008;
-      const stationOffsetLng = location.lng - 0.008;
+      // Roma Termini is slightly south (-0.002 lat) and east (+0.0065 lng) of city center
+      const stationOffsetLat = location.lat - 0.002;
+      const stationOffsetLng = location.lng + 0.0065;
       
       const stationMarker = L.marker([stationOffsetLat, stationOffsetLng], {
         icon: L.divIcon({
@@ -742,19 +767,36 @@ function updateArrivalFlights(itinerary) {
     if (maryLisaCard) {
       const routes = maryLisaCard.querySelectorAll('.route');
       routes.forEach(route => {
-        if (route.innerHTML.includes('Flight Details:') && arrivalCity.maryFlight) {
-          // Use specific arrival time if available, otherwise use shared arrival_time
-          const arrivalTime = arrivalCity.maryArrival || arrivalCity.arrivalTime || '';
-          if (arrivalTime) {
-            route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.maryFlight} - Arrives ${arrivalTime}`;
-          } else {
-            route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.maryFlight}`;
+        if (route.innerHTML.includes('Flight Details:')) {
+          if (arrivalCity.maryFlight) {
+            // Build detailed flight info
+            let flightInfo = `<strong>Flight:</strong> ${arrivalCity.maryFlight}`;
+            
+            // Add connection if available
+            if (arrivalCity.maryConnection) {
+              flightInfo += `<br><strong>Via:</strong> ${arrivalCity.maryConnection}`;
+            }
+            
+            route.innerHTML = flightInfo;
           }
         }
-        if (route.innerHTML.includes('Arrival:') && arrivalCity.dates) {
-          // Extract first date from the dates field
-          const firstDate = arrivalCity.dates.split('-')[0].trim();
-          route.innerHTML = `<strong>Arrival:</strong> ${firstDate}`;
+        if (route.innerHTML.includes('Arrival:')) {
+          // Use specific arrival date/time or shared values
+          const arrivalTime = arrivalCity.maryArrival || arrivalCity.arrivalTime || '';
+          const arrivalDate = arrivalCity.maryArrivalDate || arrivalCity.arrivalDate || arrivalCity.dates.split('-')[0].trim();
+          
+          let arrivalInfo = `<strong>Arrival:</strong> ${arrivalDate}`;
+          if (arrivalTime) {
+            arrivalInfo += ` at ${arrivalTime}`;
+          }
+          route.innerHTML = arrivalInfo;
+        }
+        // Add departure info if needed
+        if (route.innerHTML.includes('Departs:')) {
+          const departDate = arrivalCity.maryDepartDate || arrivalCity.departDate || '';
+          if (departDate) {
+            route.innerHTML = `<strong>Departs USA:</strong> ${departDate}`;
+          }
         }
       });
     }
@@ -766,19 +808,36 @@ function updateArrivalFlights(itinerary) {
     if (keoKarenCard) {
       const routes = keoKarenCard.querySelectorAll('.route');
       routes.forEach(route => {
-        if (route.innerHTML.includes('Flight Details:') && arrivalCity.keoFlight) {
-          // Use specific arrival time if available, otherwise use shared arrival_time
-          const arrivalTime = arrivalCity.keoArrival || arrivalCity.arrivalTime || '';
-          if (arrivalTime) {
-            route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.keoFlight} - Arrives ${arrivalTime}`;
-          } else {
-            route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.keoFlight}`;
+        if (route.innerHTML.includes('Flight Details:')) {
+          if (arrivalCity.keoFlight) {
+            // Build detailed flight info
+            let flightInfo = `<strong>Flight:</strong> ${arrivalCity.keoFlight}`;
+            
+            // Add connection if available
+            if (arrivalCity.keoConnection) {
+              flightInfo += `<br><strong>Via:</strong> ${arrivalCity.keoConnection}`;
+            }
+            
+            route.innerHTML = flightInfo;
           }
         }
-        if (route.innerHTML.includes('Arrival:') && arrivalCity.dates) {
-          // Extract first date from the dates field
-          const firstDate = arrivalCity.dates.split('-')[0].trim();
-          route.innerHTML = `<strong>Arrival:</strong> ${firstDate}`;
+        if (route.innerHTML.includes('Arrival:')) {
+          // Use specific arrival date/time or shared values
+          const arrivalTime = arrivalCity.keoArrival || arrivalCity.arrivalTime || '';
+          const arrivalDate = arrivalCity.keoArrivalDate || arrivalCity.arrivalDate || arrivalCity.dates.split('-')[0].trim();
+          
+          let arrivalInfo = `<strong>Arrival:</strong> ${arrivalDate}`;
+          if (arrivalTime) {
+            arrivalInfo += ` at ${arrivalTime}`;
+          }
+          route.innerHTML = arrivalInfo;
+        }
+        // Add departure info if needed
+        if (route.innerHTML.includes('Departs:')) {
+          const departDate = arrivalCity.keoDepartDate || arrivalCity.departDate || '';
+          if (departDate) {
+            route.innerHTML = `<strong>Departs USA:</strong> ${departDate}`;
+          }
         }
       });
     }

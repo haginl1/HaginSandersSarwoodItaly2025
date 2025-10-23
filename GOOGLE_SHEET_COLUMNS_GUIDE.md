@@ -44,23 +44,48 @@ Add these columns to capture train ticket information for each leg of the journe
 #### For ARRIVAL flights (Add to FIRST row - Rome):
 | Column Name | Description | Example |
 |-------------|-------------|---------|
-| `mary_flight` | Mary's arrival flight number | "DL0214 ATL-FCO Nov 20" |
-| `lisa_flight` | Lisa's arrival flight number | "DL0214 ATL-FCO Nov 20" |
-| `keo_flight` | Keo's arrival flight number | "DL456 SRQ-BOS-FCO Nov 20" |
-| `karen_flight` | Karen's arrival flight number | "DL456 SRQ-BOS-FCO Nov 20" |
+| **Flight Numbers** | | |
+| `mary_flight` | Mary's arrival flight number | "DL0214" |
+| `lisa_flight` | Lisa's arrival flight number | "DL0214" |
+| `keo_flight` | Keo's arrival flight number | "DL456" |
+| `karen_flight` | Karen's arrival flight number | "DL456" |
+| **Departure from USA** | | |
+| `depart_date` | Shared depart date (if all same) | "Nov 19" |
+| `mary_depart_date` | Mary's depart date (if different) | "Nov 19" |
+| `lisa_depart_date` | Lisa's depart date (if different) | "Nov 19" |
+| `keo_depart_date` | Keo's depart date (if different) | "Nov 19" |
+| `karen_depart_date` | Karen's depart date (if different) | "Nov 19" |
+| **Connections/Layovers** | | |
+| `mary_connection` | Mary's connection city | "Direct" |
+| `lisa_connection` | Lisa's connection city | "Direct" |
+| `keo_connection` | Keo's connection city | "Boston" |
+| `karen_connection` | Karen's connection city | "Boston" |
+| **Arrival in Italy** | | |
+| `arrival_date` | Shared arrival date (if all same) | "Nov 20" |
+| `mary_arrival_date` | Mary's arrival date (if different) | "Nov 20" |
+| `lisa_arrival_date` | Lisa's arrival date (if different) | "Nov 20" |
+| `keo_arrival_date` | Keo's arrival date (if different) | "Nov 20" |
+| `karen_arrival_date` | Karen's arrival date (if different) | "Nov 20" |
 | `arrival_time` | Shared arrival time (if all same) | "7:55 AM" |
 | `mary_arrival` | Mary's arrival time (if different) | "7:55 AM" |
 | `lisa_arrival` | Lisa's arrival time (if different) | "7:55 AM" |
-| `keo_arrival` | Keo's arrival time (if different) | "8:30 AM" |
-| `karen_arrival` | Karen's arrival time (if different) | "8:30 AM" |
+| `keo_arrival` | Keo's arrival time (if different) | "10:30 AM" |
+| `karen_arrival` | Karen's arrival time (if different) | "10:30 AM" |
 
 #### For DEPARTURE flights (Add to LAST row - Milan):
 | Column Name | Description | Example |
 |-------------|-------------|---------|
-| `mary_flight` | Mary's departure flight number | "DL0185 MXP-JFK-ATL Nov 28" |
-| `lisa_flight` | Lisa's departure flight number | "DL0185 MXP-JFK-ATL Nov 28" |
-| `keo_flight` | Keo's departure flight number | "DL789 MXP-BOS-SRQ Nov 28" |
-| `karen_flight` | Karen's departure flight number | "DL789 MXP-BOS-SRQ Nov 28" |
+| **Flight Numbers** | | |
+| `mary_flight` | Mary's departure flight number | "DL0185" |
+| `lisa_flight` | Lisa's departure flight number | "DL0185" |
+| `keo_flight` | Keo's departure flight number | "DL789" |
+| `karen_flight` | Karen's departure flight number | "DL789" |
+| **Departure from Italy** | | |
+| `departure_date` | Shared departure date (if all same) | "Nov 28" |
+| `mary_departure_date` | Mary's departure date (if different) | "Nov 28" |
+| `lisa_departure_date` | Lisa's departure date (if different) | "Nov 28" |
+| `keo_departure_date` | Keo's departure date (if different) | "Nov 28" |
+| `karen_departure_date` | Karen's departure date (if different) | "Nov 28" |
 | `departure_time` | Shared departure time (if all same) | "12:00 PM" |
 | `mary_departure` | Mary's departure time (if different) | "12:00 PM" |
 | `lisa_departure` | Lisa's departure time (if different) | "12:00 PM" |
@@ -101,16 +126,37 @@ On the website, this will display as:
 Fill in ARRIVAL flight information here:
 ```
 name: Rome
-dates: Nov 19-22
+dates: Nov 20-22
+
+# Hotel info
 hotel: Hotel Forum
 hotel_address: Via Tor de' Conti 25
 hotel_phone: 39 06 679 2446
-mary_flight: DL0214 ATL-FCO Nov 20
-lisa_flight: DL0214 ATL-FCO Nov 20
-keo_flight: DL456 SRQ-BOS-FCO Nov 20
-karen_flight: DL456 SRQ-BOS-FCO Nov 20
-arrival_time: 7:55 AM
-(Or use mary_arrival, lisa_arrival, keo_arrival, karen_arrival if different times)
+
+# Mary & Lisa (Direct flight from Atlanta)
+mary_flight: DL214
+lisa_flight: DL214
+mary_depart_date: Nov 19
+lisa_depart_date: Nov 19
+mary_connection: Direct
+lisa_connection: Direct
+mary_arrival_date: Nov 20
+lisa_arrival_date: Nov 20
+mary_arrival: 7:55 AM
+lisa_arrival: 7:55 AM
+
+# Keo & Karen (Connection through Boston)
+keo_flight: DL456
+karen_flight: DL456
+keo_depart_date: Nov 19
+karen_depart_date: Nov 19
+keo_connection: Boston
+karen_connection: Boston
+keo_arrival_date: Nov 20
+karen_arrival_date: Nov 20
+keo_arrival: 10:30 AM
+karen_arrival: 10:30 AM
+
 (Leave train ticket columns empty - no train to Rome)
 ```
 
