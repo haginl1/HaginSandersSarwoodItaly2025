@@ -26,6 +26,10 @@ Add these columns to capture train ticket information for each leg of the journe
 | `lisa_ticket` | Lisa's ticket number | "IT12345679" |
 | `keo_ticket` | Keo's ticket number | "IT12345680" |
 | `karen_ticket` | Karen's ticket number | "IT12345681" |
+| `mary_seat` | Mary's seat number | "12A" |
+| `lisa_seat` | Lisa's seat number | "12B" |
+| `keo_seat` | Keo's seat number | "13A" |
+| `karen_seat` | Karen's seat number | "13B" |
 
 ### Rental Car Column
 | Column Name | Description | Example |

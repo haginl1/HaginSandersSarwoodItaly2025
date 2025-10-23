@@ -147,6 +147,11 @@ function convertToItinerary(sheetData) {
       lisaTicket: row.lisa_ticket || row.Lisa_Ticket || '',
       keoTicket: row.keo_ticket || row.Keo_Ticket || '',
       karenTicket: row.karen_ticket || row.Karen_Ticket || '',
+      // Train seat information
+      marySeat: row.mary_seat || row.Mary_Seat || '',
+      lisaSeat: row.lisa_seat || row.Lisa_Seat || '',
+      keoSeat: row.keo_seat || row.Keo_Seat || '',
+      karenSeat: row.karen_seat || row.Karen_Seat || '',
       // Rental car information
       rentalCar: row.rental_car || row.Rental_Car || '',
       // Flight information
@@ -273,6 +278,7 @@ function createItineraryMap(mapId, itinerary) {
   itinerary.forEach(location => {
     routeCoordinates.push([location.lat, location.lng]);
     
+    // Destination popup content
     let popupContent = `<div style="min-width: 220px;">
       <strong style="font-size: 18px; color: ${mainColor};">${location.name}</strong>`;
     
@@ -290,6 +296,7 @@ function createItineraryMap(mapId, itinerary) {
     }
     popupContent += `</div>`;
     
+    // Add numbered destination marker
     const marker = L.marker([location.lat, location.lng], {
       icon: L.divIcon({
         html: `<div style="background: linear-gradient(135deg, ${mainColor} 0%, #3182ce 100%); color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);">${location.order}</div>`,
@@ -300,6 +307,45 @@ function createItineraryMap(mapId, itinerary) {
     }).addTo(map);
     
     marker.bindPopup(popupContent);
+    
+    // Add hotel marker if accommodation exists
+    if (location.accommodation && location.accommodation !== 'Hotel TBD') {
+      // Hotel popup content
+      let hotelPopup = `<div style="min-width: 250px;">
+        <strong style="font-size: 16px; color: #f39c12;">🏨 ${location.accommodation}</strong>
+        <br><span style="color: #888; font-size: 13px;">${location.name}</span>`;
+      
+      if (location.hotelAddress && location.hotelAddress !== 'Address TBD') {
+        // Create Google Maps link with encoded address
+        const encodedAddress = encodeURIComponent(location.hotelAddress);
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+        hotelPopup += `<br><br><a href="${googleMapsUrl}" target="_blank" style="color: #4299e1; text-decoration: none; font-weight: 500;">📍 ${location.hotelAddress}</a>`;
+      }
+      if (location.hotelPhone && location.hotelPhone !== 'Phone TBD') {
+        // Make phone number clickable with tel: link
+        const phoneNumber = location.hotelPhone.replace(/\s+/g, '');
+        hotelPopup += `<br><a href="tel:+${phoneNumber}" style="color: #555; text-decoration: none;">📞 ${location.hotelPhone}</a>`;
+      }
+      if (location.hotelWebsite) {
+        hotelPopup += `<br><br><a href="${location.hotelWebsite}" target="_blank" style="color: #4299e1; text-decoration: none; font-weight: 600;">Visit Website →</a>`;
+      }
+      if (location.hotelConfirmation) {
+        hotelPopup += `<br><br><span style="color: #38b2ac; font-size: 13px;">✅ Confirmation: ${location.hotelConfirmation}</span>`;
+      }
+      hotelPopup += `</div>`;
+      
+      // Add hotel marker with distinct style
+      const hotelMarker = L.marker([location.lat, location.lng], {
+        icon: L.divIcon({
+          html: `<div style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transform: translate(20px, -20px);">🏨</div>`,
+          className: 'hotel-marker-icon',
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        })
+      }).addTo(map);
+      
+      hotelMarker.bindPopup(hotelPopup);
+    }
   });
 
   // Draw route path
@@ -403,13 +449,22 @@ function createHotelCards(itinerary) {
       
       ${hotelAddress !== 'Address TBD' ? `
         <div class="hotel-info-item">
-          <strong>📍 Address:</strong> ${hotelAddress}
+          <strong>📍 Address:</strong> 
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotelAddress)}" 
+             target="_blank" 
+             class="hotel-address-link"
+             rel="noopener noreferrer">
+            ${hotelAddress} →
+          </a>
         </div>
       ` : ''}
       
       ${hotelPhone !== 'Phone TBD' ? `
         <div class="hotel-info-item">
-          <strong>📞 Phone:</strong> ${hotelPhone}
+          <strong>📞 Phone:</strong> 
+          <a href="tel:+${hotelPhone.replace(/\s+/g, '')}" class="hotel-phone-link">
+            ${hotelPhone}
+          </a>
         </div>
       ` : ''}
       
@@ -446,11 +501,11 @@ function updateTrainTickets(itinerary) {
       cards.forEach(card => {
         const header = card.querySelector('.route-header');
         if (header && header.textContent.includes(prevDestination.name) && header.textContent.includes(destination.name)) {
-          // Update passenger tickets
-          updatePassengerTicket(card, 'Mary', destination.maryTicket);
-          updatePassengerTicket(card, 'Lisa', destination.lisaTicket);
-          updatePassengerTicket(card, 'Keo', destination.keoTicket);
-          updatePassengerTicket(card, 'Karen', destination.karenTicket);
+          // Update passenger tickets and seats
+          updatePassengerInfo(card, 'Mary', destination.maryTicket, destination.marySeat);
+          updatePassengerInfo(card, 'Lisa', destination.lisaTicket, destination.lisaSeat);
+          updatePassengerInfo(card, 'Keo', destination.keoTicket, destination.keoSeat);
+          updatePassengerInfo(card, 'Karen', destination.karenTicket, destination.karenSeat);
           
           // Update route details if train_info provided
           const routeDetails = card.querySelector('.route-details');
@@ -463,17 +518,25 @@ function updateTrainTickets(itinerary) {
   });
 }
 
-// Helper function to update individual passenger ticket
-function updatePassengerTicket(card, passengerName, ticketNumber) {
-  if (!ticketNumber) return;
-  
+// Helper function to update individual passenger ticket and seat
+function updatePassengerInfo(card, passengerName, ticketNumber, seatNumber) {
   const passengers = card.querySelectorAll('.passenger-item');
   passengers.forEach(item => {
     const nameSpan = item.querySelector('.passenger-name');
     if (nameSpan && nameSpan.textContent.includes(passengerName)) {
-      const ticketSpan = item.querySelector('.ticket-info');
-      if (ticketSpan) {
-        ticketSpan.textContent = `Ticket #: ${ticketNumber}`;
+      // Update ticket number
+      if (ticketNumber) {
+        const ticketSpan = item.querySelector('.ticket-info');
+        if (ticketSpan) {
+          ticketSpan.textContent = `Ticket #: ${ticketNumber}`;
+        }
+      }
+      // Update seat number
+      if (seatNumber) {
+        const seatSpan = item.querySelector('.seat-info');
+        if (seatSpan) {
+          seatSpan.textContent = `Seat: ${seatNumber}`;
+        }
       }
     }
   });

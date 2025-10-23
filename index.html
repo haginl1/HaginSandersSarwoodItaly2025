@@ -259,8 +259,9 @@
             margin-bottom: 1rem;
         }
         .passenger-item {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 1rem;
             align-items: center;
             padding: 0.5rem;
             background: #f7fafc;
@@ -273,6 +274,14 @@
         .ticket-info {
             color: #718096;
             font-size: 0.9rem;
+        }
+        .seat-info {
+            color: #4299e1;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #ebf8ff;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
         }
         .route-details {
             color: #718096;
@@ -368,6 +377,29 @@
             background: #bee3f8;
             border-color: #90cdf4;
             transform: translateX(2px);
+        }
+        .hotel-address-link {
+            color: #4299e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .hotel-address-link:hover {
+            color: #2c5282;
+            text-decoration: underline;
+        }
+        .hotel-phone-link {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .hotel-phone-link:hover {
+            color: #4299e1;
+            text-decoration: underline;
         }
         .hotel-confirmation {
             background: #e6fffa;
@@ -496,18 +528,22 @@
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Mary</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Lisa</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Keo</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Karen</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                     </div>
                     <div class="route-details">Date: Nov 22, 2025 | Duration: ~1h 30min</div>
@@ -519,18 +555,22 @@
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Mary</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Lisa</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Keo</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Karen</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                     </div>
                     <div class="route-details">Date: Nov 25, 2025 | Duration: ~1h 30min</div>
@@ -542,18 +582,22 @@
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Mary</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Lisa</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Keo</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Karen</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                     </div>
                     <div class="route-details">Date: Nov 27, 2025 | Duration: ~2h 45min</div>
@@ -565,18 +609,22 @@
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Mary</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Lisa</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Keo</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                         <div class="passenger-item">
                             <span class="passenger-name">👤 Karen</span>
                             <span class="ticket-info">Ticket #: TBD</span>
+                            <span class="seat-info">Seat: TBD</span>
                         </div>
                     </div>
                     <div class="route-details">Date: Nov 28, 2025 | Duration: ~30min</div>
