@@ -199,7 +199,17 @@ function convertToItinerary(sheetData) {
       lisaDepartureDate: row.lisa_departure_date || row.Lisa_Departure_Date || '',
       keoDepartureDate: row.keo_departure_date || row.Keo_Departure_Date || '',
       karenDepartureDate: row.karen_departure_date || row.Karen_Departure_Date || '',
-      departureDate: row.departure_date || row.Departure_Date || ''
+      departureDate: row.departure_date || row.Departure_Date || '',
+      // Departure connections (return flights)
+      maryDepartureConnection: row.mary_departure_connection || row.Mary_Departure_Connection || '',
+      lisaDepartureConnection: row.lisa_departure_connection || row.Lisa_Departure_Connection || '',
+      keoDepartureConnection: row.keo_departure_connection || row.Keo_Departure_Connection || '',
+      karenDepartureConnection: row.karen_departure_connection || row.Karen_Departure_Connection || '',
+      // Final destinations (for return flights)
+      maryFinalDestination: row.mary_final_destination || row.Mary_Final_Destination || '',
+      lisaFinalDestination: row.lisa_final_destination || row.Lisa_Final_Destination || '',
+      keoFinalDestination: row.keo_final_destination || row.Keo_Final_Destination || '',
+      karenFinalDestination: row.karen_final_destination || row.Karen_Final_Destination || ''
     };
   })
     .sort((a, b) => a.order - b.order);
@@ -724,7 +734,19 @@ function updateFlightInfo(itinerary) {
       flightDetails.forEach(detail => {
         if (detail.innerHTML.includes('Flight #:')) {
           if (lastDestination.maryFlight) {
-            detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.maryFlight}`;
+            let flightInfo = `<strong>✈️ Flight #:</strong> ${lastDestination.maryFlight}`;
+            
+            // Add connection if available
+            if (lastDestination.maryDepartureConnection) {
+              flightInfo += `<br><strong>Via:</strong> ${lastDestination.maryDepartureConnection}`;
+            }
+            
+            // Add final destination if available
+            if (lastDestination.maryFinalDestination) {
+              flightInfo += `<br><strong>To:</strong> ${lastDestination.maryFinalDestination}`;
+            }
+            
+            detail.innerHTML = flightInfo;
           }
         }
         if (detail.innerHTML.includes('Departure:')) {
@@ -758,7 +780,19 @@ function updateFlightInfo(itinerary) {
       flightDetails.forEach(detail => {
         if (detail.innerHTML.includes('Flight #:')) {
           if (lastDestination.keoFlight) {
-            detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.keoFlight}`;
+            let flightInfo = `<strong>✈️ Flight #:</strong> ${lastDestination.keoFlight}`;
+            
+            // Add connection if available
+            if (lastDestination.keoDepartureConnection) {
+              flightInfo += `<br><strong>Via:</strong> ${lastDestination.keoDepartureConnection}`;
+            }
+            
+            // Add final destination if available
+            if (lastDestination.keoFinalDestination) {
+              flightInfo += `<br><strong>To:</strong> ${lastDestination.keoFinalDestination}`;
+            }
+            
+            detail.innerHTML = flightInfo;
           }
         }
         if (detail.innerHTML.includes('Departure:')) {

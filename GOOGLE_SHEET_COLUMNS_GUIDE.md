@@ -76,8 +76,8 @@ Add these columns to capture train ticket information for each leg of the journe
 | Column Name | Description | Example |
 |-------------|-------------|---------|
 | **Flight Numbers** | | |
-| `mary_flight` | Mary's departure flight number | "DL0185" |
-| `lisa_flight` | Lisa's departure flight number | "DL0185" |
+| `mary_flight` | Mary's departure flight number | "DL185" |
+| `lisa_flight` | Lisa's departure flight number | "DL185" |
 | `keo_flight` | Keo's departure flight number | "DL789" |
 | `karen_flight` | Karen's departure flight number | "DL789" |
 | **Departure from Italy** | | |
@@ -88,6 +88,19 @@ Add these columns to capture train ticket information for each leg of the journe
 | `karen_departure_date` | Karen's departure date (if different) | "Nov 28" |
 | `departure_time` | Shared departure time (if all same) | "12:00 PM" |
 | `mary_departure` | Mary's departure time (if different) | "12:00 PM" |
+| `lisa_departure` | Lisa's departure time (if different) | "12:00 PM" |
+| `keo_departure` | Keo's departure time (if different) | "1:00 PM" |
+| `karen_departure` | Karen's departure time (if different) | "1:00 PM" |
+| **Connections/Layovers (Return)** | | |
+| `mary_departure_connection` | Mary's connection city | "JFK" |
+| `lisa_departure_connection` | Lisa's connection city | "JFK" |
+| `keo_departure_connection` | Keo's connection city | "JFK" |
+| `karen_departure_connection` | Karen's connection city | "JFK" |
+| **Final Destinations (USA)** | | |
+| `mary_final_destination` | Mary's final destination | "Atlanta" |
+| `lisa_final_destination` | Lisa's final destination | "Atlanta" |
+| `keo_final_destination` | Keo's final destination | "Orlando" |
+| `karen_final_destination` | Karen's final destination | "Orlando" |
 | `lisa_departure` | Lisa's departure time (if different) | "12:00 PM" |
 | `keo_departure` | Keo's departure time (if different) | "1:00 PM" |
 | `karen_departure` | Karen's departure time (if different) | "1:00 PM" |
@@ -191,15 +204,29 @@ lisa_ticket: IT32345679
 keo_ticket: IT32345680
 karen_ticket: IT32345681
 
-# Mary & Lisa (Direct flight to Atlanta)
+# Mary & Lisa (Via JFK to Atlanta)
 mary_flight: DL185
 lisa_flight: DL185
 mary_departure_date: Nov 28
 lisa_departure_date: Nov 28
 mary_departure: 12:00 PM
 lisa_departure: 12:00 PM
+mary_departure_connection: JFK
+lisa_departure_connection: JFK
+mary_final_destination: Atlanta
+lisa_final_destination: Atlanta
 
-# Keo & Karen (Connection through Boston)
+# Keo & Karen (Via JFK to Orlando)
+keo_flight: DL789
+karen_flight: DL789
+keo_departure_date: Nov 28
+karen_departure_date: Nov 28
+keo_departure: 12:00 PM
+karen_departure: 12:00 PM
+keo_departure_connection: JFK
+karen_departure_connection: JFK
+keo_final_destination: Orlando
+karen_final_destination: Orlando
 keo_flight: DL789
 karen_flight: DL789
 keo_departure_date: Nov 28
