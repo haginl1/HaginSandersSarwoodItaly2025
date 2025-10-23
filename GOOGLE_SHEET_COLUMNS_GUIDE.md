@@ -184,30 +184,47 @@ karen_ticket: IT22345681
 ### Row 4: Milan (Departure)
 Fill in train info from Florence → Milan AND DEPARTURE flight info:
 ```
+# Train info
 train_info: "Florence to Milan - Italo, Departs 3:00pm, Arrives 5:45pm"
 mary_ticket: IT32345678
 lisa_ticket: IT32345679
 keo_ticket: IT32345680
 karen_ticket: IT32345681
-mary_flight: DL0185 MXP-JFK-ATL Nov 28
-lisa_flight: DL0185 MXP-JFK-ATL Nov 28
-keo_flight: DL789 MXP-BOS-SRQ Nov 28
-karen_flight: DL789 MXP-BOS-SRQ Nov 28
-departure_time: 12:00 PM
-(OR use individual times: mary_departure: 12:00 PM, keo_departure: 1:00 PM, etc.)
+
+# Mary & Lisa (Direct flight to Atlanta)
+mary_flight: DL185
+lisa_flight: DL185
+mary_departure_date: Nov 28
+lisa_departure_date: Nov 28
+mary_departure: 12:00 PM
+lisa_departure: 12:00 PM
+
+# Keo & Karen (Connection through Boston)
+keo_flight: DL789
+karen_flight: DL789
+keo_departure_date: Nov 28
+karen_departure_date: Nov 28
+keo_departure: 1:00 PM
+karen_departure: 1:00 PM
+
+# OR if everyone has same departure time, use:
+# departure_date: Nov 28
+# departure_time: 12:00 PM
 ```
 
 ## 📝 Summary: Which Row for Which Flights?
 
 ### ✈️ **ARRIVAL Flights to Italy** → Use **Rome Row (Row 1)**
-- Add flight numbers in: `mary_flight`, `lisa_flight`, `keo_flight`, `karen_flight`
-- Add arrival times in: `arrival_time` (if all arrive same time) OR individual `mary_arrival`, `lisa_arrival`, `keo_arrival`, `karen_arrival` (if different)
-- Example: mary_flight="DL0214 ATL-FCO Nov 20", arrival_time="7:55 AM"
+- Add flight numbers: `mary_flight`, `lisa_flight`, `keo_flight`, `karen_flight`
+- Add depart dates from USA: `depart_date` OR individual `mary_depart_date`, etc.
+- Add connections: `mary_connection`, `keo_connection` (e.g., "Direct" or "Boston")
+- Add arrival dates in Italy: `arrival_date` OR individual `mary_arrival_date`, etc.
+- Add arrival times: `arrival_time` OR individual `mary_arrival`, `keo_arrival`, etc.
 
 ### ✈️ **DEPARTURE Flights from Italy** → Use **Milan Row (Row 4)**
-- Add flight numbers in: `mary_flight`, `lisa_flight`, `keo_flight`, `karen_flight`
-- Add departure times in: `departure_time` (if all depart same time) OR individual `mary_departure`, `lisa_departure`, `keo_departure`, `karen_departure` (if different)
-- Example: mary_flight="DL0185 MXP-JFK-ATL Nov 28", departure_time="12:00 PM"
+- Add flight numbers: `mary_flight`, `lisa_flight`, `keo_flight`, `karen_flight`
+- Add departure dates from Italy: `departure_date` OR individual `mary_departure_date`, etc.
+- Add departure times: `departure_time` OR individual `mary_departure`, `keo_departure`, etc.
 
 ## After Adding Columns
 

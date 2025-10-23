@@ -710,44 +710,74 @@ function updateRentalCarInfo(itinerary) {
   });
 }
 
-// Update flight information
+// Update departure flight information from Milan row (last destination)
 function updateFlightInfo(itinerary) {
-  // Look for flight info in the last destination
+  // Look for flight info in the last destination (Milan)
   const lastDestination = itinerary[itinerary.length - 1];
   if (!lastDestination) return;
   
-  // Update Mary & Lisa flight
-  if (lastDestination.maryFlight || lastDestination.lisaFlight || lastDestination.maryDeparture || lastDestination.departureTime) {
+  // Update Mary & Lisa departure flight card
+  if (lastDestination.maryFlight || lastDestination.lisaFlight) {
     const maryLisaCard = document.querySelector('.flight-card-mary-lisa');
     if (maryLisaCard) {
       const flightDetails = maryLisaCard.querySelectorAll('.flight-detail');
       flightDetails.forEach(detail => {
-        if (detail.innerHTML.includes('Flight #:') && lastDestination.maryFlight) {
-          detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.maryFlight}`;
+        if (detail.innerHTML.includes('Flight #:')) {
+          if (lastDestination.maryFlight) {
+            detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.maryFlight}`;
+          }
         }
         if (detail.innerHTML.includes('Departure:')) {
-          const depTime = lastDestination.maryDeparture || lastDestination.departureTime;
-          if (depTime) {
-            detail.innerHTML = `<strong>🕐 Departure:</strong> ${depTime}`;
+          // Use specific departure date/time
+          const departureTime = lastDestination.maryDeparture || lastDestination.departureTime || '';
+          const departureDate = lastDestination.maryDepartureDate || lastDestination.departureDate || '';
+          
+          let departureInfo = '';
+          if (departureDate) {
+            departureInfo = `<strong>🕐 Departure:</strong> ${departureDate}`;
+            if (departureTime) {
+              departureInfo += ` at ${departureTime}`;
+            }
+          } else if (departureTime) {
+            departureInfo = `<strong>🕐 Departure:</strong> ${departureTime}`;
+          }
+          
+          if (departureInfo) {
+            detail.innerHTML = departureInfo;
           }
         }
       });
     }
   }
   
-  // Update Keo & Karen flight
-  if (lastDestination.keoFlight || lastDestination.karenFlight || lastDestination.keoDeparture || lastDestination.departureTime) {
+  // Update Keo & Karen departure flight card
+  if (lastDestination.keoFlight || lastDestination.karenFlight) {
     const keoKarenCard = document.querySelector('.flight-card-keo-karen');
     if (keoKarenCard) {
       const flightDetails = keoKarenCard.querySelectorAll('.flight-detail');
       flightDetails.forEach(detail => {
-        if (detail.innerHTML.includes('Flight #:') && lastDestination.keoFlight) {
-          detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.keoFlight}`;
+        if (detail.innerHTML.includes('Flight #:')) {
+          if (lastDestination.keoFlight) {
+            detail.innerHTML = `<strong>✈️ Flight #:</strong> ${lastDestination.keoFlight}`;
+          }
         }
         if (detail.innerHTML.includes('Departure:')) {
-          const depTime = lastDestination.keoDeparture || lastDestination.departureTime;
-          if (depTime) {
-            detail.innerHTML = `<strong>🕐 Departure:</strong> ${depTime}`;
+          // Use specific departure date/time
+          const departureTime = lastDestination.keoDeparture || lastDestination.departureTime || '';
+          const departureDate = lastDestination.keoDepartureDate || lastDestination.departureDate || '';
+          
+          let departureInfo = '';
+          if (departureDate) {
+            departureInfo = `<strong>🕐 Departure:</strong> ${departureDate}`;
+            if (departureTime) {
+              departureInfo += ` at ${departureTime}`;
+            }
+          } else if (departureTime) {
+            departureInfo = `<strong>🕐 Departure:</strong> ${departureTime}`;
+          }
+          
+          if (departureInfo) {
+            detail.innerHTML = departureInfo;
           }
         }
       });
