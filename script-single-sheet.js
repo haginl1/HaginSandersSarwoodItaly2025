@@ -348,6 +348,52 @@ function createItineraryMap(mapId, itinerary) {
       
       hotelMarker.bindPopup(hotelPopup);
     }
+    
+    // Add activity location markers if available
+    if (location.activityLocations) {
+      const activities = (location.activities || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0);
+      const activityLocations = (location.activityLocations || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0);
+      const activityLinks = (location.activityLinks || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0);
+      
+      activityLocations.forEach((activityLocation, index) => {
+        if (activityLocation) {
+          const activityName = activities[index] || `Activity ${index + 1}`;
+          const activityLink = activityLinks[index] || '';
+          
+          // Activity popup content
+          let activityPopup = `<div style="min-width: 200px;">
+            <strong style="font-size: 15px; color: #9f7aea;">🎯 ${activityName}</strong>
+            <br><span style="color: #888; font-size: 12px;">${location.name}</span>`;
+          
+          if (activityLocation) {
+            const encodedLocation = encodeURIComponent(activityLocation);
+            const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+            activityPopup += `<br><br><a href="${googleMapsUrl}" target="_blank" style="color: #4299e1; text-decoration: none; font-size: 13px;">📍 ${activityLocation}</a>`;
+          }
+          
+          if (activityLink) {
+            activityPopup += `<br><br><a href="${activityLink}" target="_blank" style="color: #9f7aea; text-decoration: none; font-weight: 600; font-size: 13px;">Visit Website →</a>`;
+          }
+          
+          activityPopup += `</div>`;
+          
+          // Add activity marker with distinct purple style, offset to avoid overlap
+          const offsetLat = location.lat + (Math.random() - 0.5) * 0.02;
+          const offsetLng = location.lng + (Math.random() - 0.5) * 0.02;
+          
+          const activityMarker = L.marker([offsetLat, offsetLng], {
+            icon: L.divIcon({
+              html: `<div style="background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%); color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 16px; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">🎯</div>`,
+              className: 'activity-marker-icon',
+              iconSize: [28, 28],
+              iconAnchor: [14, 14]
+            })
+          }).addTo(map);
+          
+          activityMarker.bindPopup(activityPopup);
+        }
+      });
+    }
   });
 
   // Draw route path
