@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Parse Test</title>
+</head>
+<body>
+    <h1>CSV Parser Test</h1>
+    <div id="output"></div>
+
+    <script>
+        // Parse a single CSV line handling quoted fields with commas
+        function parseCSVLine(line) {
+          const result = [];
+          let current = '';
+          let inQuotes = false;
+          
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            const nextChar = line[i + 1];
+            
+            if (char === '"') {
+              if (inQuotes && nextChar === '"') {
+                // Escaped quote
+                current += '"';
+                i++; // Skip next quote
+              } else {
+                // Toggle quote mode
+                inQuotes = !inQuotes;
+              }
+            } else if (char === ',' && !inQuotes) {
+              // End of field
+              result.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          
+          // Add last field
+          result.push(current.trim());
+          return result;
+        }
+
+        // Fetch and parse the CSV
+        fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQmSqiviOP7ift7QOMW1b4vOiRv0NKuAhBLgnbcQLRPLWikDFfOsjcBlA-m8gcObWoTtHSnd9_aYljl/pub?gid=1110183056&single=true&output=csv')
+          .then(response => response.text())
+          .then(csv => {
+            const lines = csv.trim().split('\n');
+            const headers = parseCSVLine(lines[0]);
+            
+            console.log('Headers:', headers);
+            console.log('Number of headers:', headers.length);
+            
+            let output = '<h2>Headers (' + headers.length + '):</h2><ol>';
+            headers.forEach((h, i) => {
+              output += `<li>${i}: "${h}"</li>`;
+            });
+            output += '</ol>';
+            
+            // Parse first data row (Rome)
+            const romeData = parseCSVLine(lines[1]);
+            output += '<h2>Rome Row Data (' + romeData.length + ' fields):</h2><ol>';
+            headers.forEach((header, index) => {
+              output += `<li><strong>${header}:</strong> "${romeData[index]}"</li>`;
+            });
+            output += '</ol>';
+            
+            document.getElementById('output').innerHTML = output;
+            
+            // Also log to console
+            const romeObj = {};
+            headers.forEach((header, index) => {
+              romeObj[header] = romeData[index] || '';
+            });
+            console.log('Rome object:', romeObj);
+          })
+          .catch(err => {
+            document.getElementById('output').innerHTML = '<p style="color:red;">Error: ' + err.message + '</p>';
+          });
+    </script>
+</body>
+</html>

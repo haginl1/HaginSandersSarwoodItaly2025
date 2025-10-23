@@ -32,18 +32,33 @@ Add these columns to capture train ticket information for each leg of the journe
 |-------------|-------------|---------|
 | `rental_car` | Rental car company and confirmation | "SIXT - Conf# ABC123" |
 
-### Flight Information Columns (Add to LAST row - Milan)
+### Flight Information Columns
+
+#### For ARRIVAL flights (Add to FIRST row - Rome):
 | Column Name | Description | Example |
 |-------------|-------------|---------|
-| `mary_flight` | Mary's return flight number | "DL123" |
-| `lisa_flight` | Lisa's return flight number | "DL123" |
-| `keo_flight` | Keo's return flight number | "DL456" |
-| `karen_flight` | Karen's return flight number | "DL456" |
-| `departure_time` | Shared departure time (if all same) | "2:00 PM" |
-| `mary_departure` | Mary's departure time (if different) | "2:00 PM" |
-| `lisa_departure` | Lisa's departure time (if different) | "2:00 PM" |
-| `keo_departure` | Keo's departure time (if different) | "3:00 PM" |
-| `karen_departure` | Karen's departure time (if different) | "3:00 PM" |
+| `mary_flight` | Mary's arrival flight number | "DL0214 ATL-FCO Nov 20" |
+| `lisa_flight` | Lisa's arrival flight number | "DL0214 ATL-FCO Nov 20" |
+| `keo_flight` | Keo's arrival flight number | "DL456 SRQ-BOS-FCO Nov 20" |
+| `karen_flight` | Karen's arrival flight number | "DL456 SRQ-BOS-FCO Nov 20" |
+| `arrival_time` | Shared arrival time (if all same) | "7:55 AM" |
+| `mary_arrival` | Mary's arrival time (if different) | "7:55 AM" |
+| `lisa_arrival` | Lisa's arrival time (if different) | "7:55 AM" |
+| `keo_arrival` | Keo's arrival time (if different) | "8:30 AM" |
+| `karen_arrival` | Karen's arrival time (if different) | "8:30 AM" |
+
+#### For DEPARTURE flights (Add to LAST row - Milan):
+| Column Name | Description | Example |
+|-------------|-------------|---------|
+| `mary_flight` | Mary's departure flight number | "DL0185 MXP-JFK-ATL Nov 28" |
+| `lisa_flight` | Lisa's departure flight number | "DL0185 MXP-JFK-ATL Nov 28" |
+| `keo_flight` | Keo's departure flight number | "DL789 MXP-BOS-SRQ Nov 28" |
+| `karen_flight` | Karen's departure flight number | "DL789 MXP-BOS-SRQ Nov 28" |
+| `departure_time` | Shared departure time (if all same) | "12:00 PM" |
+| `mary_departure` | Mary's departure time (if different) | "12:00 PM" |
+| `lisa_departure` | Lisa's departure time (if different) | "12:00 PM" |
+| `keo_departure` | Keo's departure time (if different) | "1:00 PM" |
+| `karen_departure` | Karen's departure time (if different) | "1:00 PM" |
 
 ## How to Fill Out Your Sheet
 
@@ -55,10 +70,12 @@ dates: Nov 19-22
 hotel: Hotel Forum
 hotel_address: Via Tor de' Conti 25
 hotel_phone: 39 06 679 2446
-mary_flight: DL0214 ATL-FCO Nov 19, 4:40 PM
-lisa_flight: DL0214 ATL-FCO Nov 19, 4:40 PM
-keo_flight: DL456 SRQ-BOS-FCO Nov 19
-karen_flight: DL456 SRQ-BOS-FCO Nov 19
+mary_flight: DL0214 ATL-FCO Nov 20
+lisa_flight: DL0214 ATL-FCO Nov 20
+keo_flight: DL456 SRQ-BOS-FCO Nov 20
+karen_flight: DL456 SRQ-BOS-FCO Nov 20
+arrival_time: 7:55 AM
+(Or use mary_arrival, lisa_arrival, keo_arrival, karen_arrival if different times)
 (Leave train ticket columns empty - no train to Rome)
 ```
 
@@ -91,27 +108,25 @@ mary_ticket: IT32345678
 lisa_ticket: IT32345679
 keo_ticket: IT32345680
 karen_ticket: IT32345681
-mary_flight: DL214 (return flight to Atlanta)
-lisa_flight: DL214 (return flight to Atlanta)
-keo_flight: DL456 (return flight to Sarasota)
-karen_flight: DL456 (return flight to Sarasota)
-departure_time: 2:00 PM
-(OR use individual times: mary_departure: 2:00 PM, keo_departure: 3:00 PM, etc.)
+mary_flight: DL0185 MXP-JFK-ATL Nov 28
+lisa_flight: DL0185 MXP-JFK-ATL Nov 28
+keo_flight: DL789 MXP-BOS-SRQ Nov 28
+karen_flight: DL789 MXP-BOS-SRQ Nov 28
+departure_time: 12:00 PM
+(OR use individual times: mary_departure: 12:00 PM, keo_departure: 1:00 PM, etc.)
 ```
 
 ## 📝 Summary: Which Row for Which Flights?
 
 ### ✈️ **ARRIVAL Flights to Italy** → Use **Rome Row (Row 1)**
-- Mary's inbound flight
-- Lisa's inbound flight  
-- Keo's inbound flight
-- Karen's inbound flight
+- Add flight numbers in: `mary_flight`, `lisa_flight`, `keo_flight`, `karen_flight`
+- Add arrival times in: `arrival_time` (if all arrive same time) OR individual `mary_arrival`, `lisa_arrival`, `keo_arrival`, `karen_arrival` (if different)
+- Example: mary_flight="DL0214 ATL-FCO Nov 20", arrival_time="7:55 AM"
 
 ### ✈️ **DEPARTURE Flights from Italy** → Use **Milan Row (Row 4)**
-- Mary's outbound flight
-- Lisa's outbound flight
-- Keo's outbound flight
-- Karen's outbound flight
+- Add flight numbers in: `mary_flight`, `lisa_flight`, `keo_flight`, `karen_flight`
+- Add departure times in: `departure_time` (if all depart same time) OR individual `mary_departure`, `lisa_departure`, `keo_departure`, `karen_departure` (if different)
+- Example: mary_flight="DL0185 MXP-JFK-ATL Nov 28", departure_time="12:00 PM"
 
 ## After Adding Columns
 

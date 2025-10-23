@@ -74,13 +74,13 @@ const fallbackItinerary = [
   }
 ];
 
-// Parse CSV data from Google Sheets
+// Parse CSV data from Google Sheets with proper handling of quoted fields
 function parseCSV(csv) {
   const lines = csv.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.trim());
+  const headers = parseCSVLine(lines[0]);
   
   return lines.slice(1).map(line => {
-    const values = line.split(',').map(v => v.trim());
+    const values = parseCSVLine(line);
     const obj = {};
     headers.forEach((header, index) => {
       obj[header] = values[index] || '';
@@ -89,11 +89,45 @@ function parseCSV(csv) {
   }).filter(row => row.name || row.Name); // Filter out empty rows
 }
 
+// Parse a single CSV line handling quoted fields with commas
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const nextChar = line[i + 1];
+    
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        // Escaped quote
+        current += '"';
+        i++; // Skip next quote
+      } else {
+        // Toggle quote mode
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      // End of field
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  
+  // Add last field
+  result.push(current.trim());
+  return result;
+}
+
 // Convert Google Sheets data to itinerary format
 function convertToItinerary(sheetData) {
   return sheetData
     .filter(row => (row.name || row.Name) && (row.lat || row.Lat) && (row.lng || row.Lng))
-    .map(row => ({
+    .map(row => {
+      return {
       name: row.name || row.Name || row.location || row.Location,
       lat: parseFloat(row.lat || row.Lat || row.latitude || row.Latitude),
       lng: parseFloat(row.lng || row.Lng || row.longitude || row.Longitude),
@@ -120,14 +154,22 @@ function convertToItinerary(sheetData) {
       lisaFlight: row.lisa_flight || row.Lisa_Flight || '',
       keoFlight: row.keo_flight || row.Keo_Flight || '',
       karenFlight: row.karen_flight || row.Karen_Flight || '',
-      // Flight departure times
+      // Flight arrival times (for inbound flights)
+      maryArrival: row.mary_arrival || row.Mary_Arrival || '',
+      lisaArrival: row.lisa_arrival || row.Lisa_Arrival || '',
+      keoArrival: row.keo_arrival || row.Keo_Arrival || '',
+      karenArrival: row.karen_arrival || row.Karen_Arrival || '',
+      // Shared arrival time (if all same)
+      arrivalTime: row.arrival_time || row.Arrival_Time || '',
+      // Flight departure times (for outbound flights)
       maryDeparture: row.mary_departure || row.Mary_Departure || '',
       lisaDeparture: row.lisa_departure || row.Lisa_Departure || '',
       keoDeparture: row.keo_departure || row.Keo_Departure || '',
       karenDeparture: row.karen_departure || row.Karen_Departure || '',
       // Shared departure time (if all same)
       departureTime: row.departure_time || row.Departure_Time || row.flight_time || row.Flight_Time || ''
-    }))
+    };
+  })
     .sort((a, b) => a.order - b.order);
 }
 
@@ -374,7 +416,9 @@ function createHotelCards(itinerary) {
       ${hotelWebsite ? `
         <div class="hotel-info-item">
           <strong>🌐 Website:</strong>
-          <a href="${hotelWebsite}" target="_blank" class="hotel-link">${hotelWebsite}</a>
+          <a href="${hotelWebsite}" target="_blank" class="hotel-link" rel="noopener noreferrer">
+            Visit Hotel Website →
+          </a>
         </div>
       ` : ''}
       
@@ -513,7 +557,13 @@ function updateArrivalFlights(itinerary) {
       const routes = maryLisaCard.querySelectorAll('.route');
       routes.forEach(route => {
         if (route.innerHTML.includes('Flight Details:') && arrivalCity.maryFlight) {
-          route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.maryFlight}`;
+          // Use specific arrival time if available, otherwise use shared arrival_time
+          const arrivalTime = arrivalCity.maryArrival || arrivalCity.arrivalTime || '';
+          if (arrivalTime) {
+            route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.maryFlight} - Arrives ${arrivalTime}`;
+          } else {
+            route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.maryFlight}`;
+          }
         }
         if (route.innerHTML.includes('Arrival:') && arrivalCity.dates) {
           // Extract first date from the dates field
@@ -531,7 +581,13 @@ function updateArrivalFlights(itinerary) {
       const routes = keoKarenCard.querySelectorAll('.route');
       routes.forEach(route => {
         if (route.innerHTML.includes('Flight Details:') && arrivalCity.keoFlight) {
-          route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.keoFlight}`;
+          // Use specific arrival time if available, otherwise use shared arrival_time
+          const arrivalTime = arrivalCity.keoArrival || arrivalCity.arrivalTime || '';
+          if (arrivalTime) {
+            route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.keoFlight} - Arrives ${arrivalTime}`;
+          } else {
+            route.innerHTML = `<strong>Flight Details:</strong> ${arrivalCity.keoFlight}`;
+          }
         }
         if (route.innerHTML.includes('Arrival:') && arrivalCity.dates) {
           // Extract first date from the dates field
