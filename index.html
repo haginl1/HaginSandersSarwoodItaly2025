@@ -481,6 +481,91 @@
             color: #234e52;
         }
         
+        /* Calendar Styles */
+        .calendar-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .calendar-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        .calendar-day {
+            background: #f7fafc;
+            border-left: 4px solid #4299e1;
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .calendar-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .calendar-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .calendar-date {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .calendar-day-number {
+            background: #4299e1;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .calendar-location {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #4299e1;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .calendar-hotel {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+        .calendar-hotel-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+        .calendar-activities {
+            margin-top: 0.75rem;
+        }
+        .calendar-activity {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #ed8936;
+        }
+        .calendar-activity-time {
+            font-weight: 600;
+            color: #ed8936;
+            font-size: 0.9rem;
+        }
+        .calendar-activity-name {
+            color: #2d3748;
+            margin-top: 0.25rem;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .header h1 {
@@ -494,6 +579,9 @@
             }
             .section-title {
                 font-size: 1.6rem;
+            }
+            .calendar-container {
+                padding: 1rem;
             }
         }
     </style>
@@ -599,6 +687,16 @@
                     <strong>Arrival:</strong> Nov 20, 2025
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Trip Calendar -->
+    <div class="section">
+        <h2 class="section-title">📅 Daily Itinerary Calendar</h2>
+        <p class="section-subtitle">Hotels, stays, and scheduled activities</p>
+        
+        <div class="calendar-container">
+            <div class="calendar-grid" id="trip-calendar"></div>
         </div>
     </div>
 

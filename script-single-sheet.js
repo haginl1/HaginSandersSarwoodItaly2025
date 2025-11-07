@@ -1074,6 +1074,174 @@ function updateArrivalFlights(itinerary) {
   }
 }
 
+// Create calendar view of the trip
+function createTripCalendar(itinerary) {
+  const calendarContainer = document.getElementById('trip-calendar');
+  if (!calendarContainer || !itinerary || itinerary.length === 0) return;
+
+  // Parse dates and create calendar entries
+  const calendarDays = [];
+  const tripStartDate = new Date('2025-11-19');
+  const tripEndDate = new Date('2025-11-28');
+  
+  // Create a map of locations by date range
+  itinerary.forEach(location => {
+    if (location.dates) {
+      const dates = location.dates.split('-').map(d => d.trim());
+      if (dates.length >= 1) {
+        const startDate = dates[0];
+        const endDate = dates.length > 1 ? dates[1] : dates[0];
+        
+        // Parse the dates (assuming format like "Nov 20" or "November 20")
+        const startDateObj = parseShortDate(startDate, 2025);
+        const endDateObj = parseShortDate(endDate, 2025);
+        
+        if (startDateObj && endDateObj) {
+          // Add entry for each day in the range
+          let currentDate = new Date(startDateObj);
+          while (currentDate <= endDateObj) {
+            calendarDays.push({
+              date: new Date(currentDate),
+              location: location.name,
+              hotel: location.accommodation,
+              hotelConfirmation: location.hotelConfirmation,
+              activities: location.activities,
+              activityLinks: location.activityLinks
+            });
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        }
+      }
+    }
+  });
+  
+  // Sort by date
+  calendarDays.sort((a, b) => a.date - b.date);
+  
+  // Group consecutive days at same location
+  const groupedDays = [];
+  let currentGroup = null;
+  
+  calendarDays.forEach(day => {
+    if (!currentGroup || currentGroup.location !== day.location) {
+      if (currentGroup) groupedDays.push(currentGroup);
+      currentGroup = {
+        location: day.location,
+        hotel: day.hotel,
+        hotelConfirmation: day.hotelConfirmation,
+        startDate: day.date,
+        endDate: day.date,
+        days: 1,
+        activities: day.activities,
+        activityLinks: day.activityLinks
+      };
+    } else {
+      currentGroup.endDate = day.date;
+      currentGroup.days++;
+    }
+  });
+  if (currentGroup) groupedDays.push(currentGroup);
+  
+  // Render calendar
+  calendarContainer.innerHTML = '';
+  let dayCounter = 1;
+  
+  groupedDays.forEach(group => {
+    const dayElement = document.createElement('div');
+    dayElement.className = 'calendar-day';
+    
+    const startDateStr = formatDate(group.startDate);
+    const endDateStr = group.days > 1 ? formatDate(group.endDate) : '';
+    const dateRange = endDateStr ? `${startDateStr} - ${endDateStr}` : startDateStr;
+    const nightsText = group.days > 1 ? `${group.days} nights` : '1 night';
+    
+    let html = `
+      <div class="calendar-day-header">
+        <div class="calendar-date">${dateRange}</div>
+        <div class="calendar-day-number">Day ${dayCounter}${group.days > 1 ? `-${dayCounter + group.days - 1}` : ''}</div>
+      </div>
+      <div class="calendar-location">
+        📍 ${group.location}
+        <span style="font-size: 0.9rem; color: #718096; font-weight: normal;">(${nightsText})</span>
+      </div>
+    `;
+    
+    if (group.hotel) {
+      html += `
+        <div class="calendar-hotel">
+          <div class="calendar-hotel-name">🏨 ${group.hotel}</div>
+          ${group.hotelConfirmation ? `<div style="font-size: 0.85rem; color: #718096;">Confirmation: ${group.hotelConfirmation}</div>` : ''}
+        </div>
+      `;
+    }
+    
+    if (group.activities) {
+      const activities = group.activities.split('\n').filter(a => a.trim());
+      const links = group.activityLinks ? group.activityLinks.split('\n').filter(l => l.trim()) : [];
+      
+      if (activities.length > 0) {
+        html += '<div class="calendar-activities">';
+        activities.forEach((activity, index) => {
+          // Try to parse time from activity (looking for patterns like "10:00 AM", "2:30 PM", etc.)
+          const timeMatch = activity.match(/(\d{1,2}:\d{2}\s*(?:AM|PM|am|pm))/);
+          const time = timeMatch ? timeMatch[1] : '';
+          const activityName = time ? activity.replace(time, '').trim() : activity.trim();
+          const link = links[index] || '';
+          
+          html += `
+            <div class="calendar-activity">
+              ${time ? `<div class="calendar-activity-time">🕐 ${time}</div>` : ''}
+              <div class="calendar-activity-name">
+                ${link ? `<a href="${link}" target="_blank" style="color: #4299e1; text-decoration: none;">${activityName} 🔗</a>` : activityName}
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+      }
+    }
+    
+    dayElement.innerHTML = html;
+    calendarContainer.appendChild(dayElement);
+    
+    dayCounter += group.days;
+  });
+}
+
+// Helper function to parse short dates like "Nov 20" or "November 20"
+function parseShortDate(dateStr, year) {
+  const months = {
+    'jan': 0, 'january': 0,
+    'feb': 1, 'february': 1,
+    'mar': 2, 'march': 2,
+    'apr': 3, 'april': 3,
+    'may': 4,
+    'jun': 5, 'june': 5,
+    'jul': 6, 'july': 6,
+    'aug': 7, 'august': 7,
+    'sep': 8, 'september': 8,
+    'oct': 9, 'october': 9,
+    'nov': 10, 'november': 10,
+    'dec': 11, 'december': 11
+  };
+  
+  const parts = dateStr.trim().toLowerCase().match(/([a-z]+)\s+(\d+)/);
+  if (parts && parts.length === 3) {
+    const month = months[parts[1]];
+    const day = parseInt(parts[2]);
+    if (month !== undefined && day) {
+      return new Date(year, month, day);
+    }
+  }
+  return null;
+}
+
+// Helper function to format date
+function formatDate(date) {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[date.getMonth()]} ${date.getDate()}`;
+}
+
 // Initialize maps when DOM is ready
 document.addEventListener('DOMContentLoaded', async function() {
   console.log('DOM loaded, initializing maps...');
@@ -1106,6 +1274,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Create hotel information cards
     createHotelCards(itinerary);
     console.log('Hotel cards created');
+    
+    // Create trip calendar
+    createTripCalendar(itinerary);
+    console.log('Trip calendar created');
     
     // Update arrival flight information
     updateArrivalFlights(itinerary);
