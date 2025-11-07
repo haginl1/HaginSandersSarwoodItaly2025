@@ -17,6 +17,17 @@ export const GOOGLE_SHEETS_CONFIG = {
   cacheTimeout: 300000
 };
 
+// Google Photos Configuration
+// To display photos from Google Photos:
+// 1. Create a shared Google Photos album for your Italy trip
+// 2. Add photos to the album from your phone during the trip
+// 3. Get the shareable link: Open album → Share → Create link → Copy
+// 4. Paste the link below
+window.GOOGLE_PHOTOS_CONFIG = {
+  albumUrl: '' // Paste your Google Photos album share link here
+  // Example: 'https://photos.app.goo.gl/yourAlbumLinkHere'
+};
+
 /* 
  * SETUP INSTRUCTIONS:
  * 

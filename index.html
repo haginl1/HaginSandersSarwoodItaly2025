@@ -1296,38 +1296,42 @@
                 <p class="section-subtitle" style="text-align: center; color: #4a5568; margin-bottom: 2rem;">Memories from our Italy adventure</p>
                 
                 <div class="photos-gallery" id="photos-gallery">
-                    <!-- Photo upload section -->
-                    <div class="upload-section" style="text-align: center; margin-bottom: 2rem; padding: 2rem; background: #f7fafc; border-radius: 12px; border: 2px dashed #cbd5e0;">
-                        <p style="color: #4a5568; font-size: 1rem; margin-bottom: 1rem;">📷 Upload your trip photos here!</p>
-                        <p style="color: #718096; font-size: 0.9rem;">You can add photos to the <strong>images/photos/</strong> folder in your repository</p>
+                    <!-- Instructions for Google Photos -->
+                    <div class="upload-section" style="text-align: center; margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+                        <h3 style="margin: 0 0 1rem 0; font-size: 1.3rem;">� How to Add Photos from Your Trip</h3>
+                        <ol style="text-align: left; max-width: 600px; margin: 0 auto; line-height: 1.8;">
+                            <li><strong>Create a Google Photos album</strong> for your Italy trip</li>
+                            <li><strong>Upload photos from your phone</strong> throughout the trip</li>
+                            <li><strong>Get the shareable link</strong> from the album</li>
+                            <li><strong>Add the link</strong> to the config below and your photos will appear here automatically!</li>
+                        </ol>
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.2); border-radius: 8px;">
+                            <p style="margin: 0; font-size: 0.9rem;">💡 <strong>Pro Tip:</strong> Everyone can add photos to the same shared Google Photos album during the trip!</p>
+                        </div>
                     </div>
                     
-                    <!-- Photo grid - will be populated with images -->
+                    <!-- Configuration Section -->
+                    <div style="background: #f7fafc; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border-left: 4px solid #4299e1;">
+                        <h4 style="margin: 0 0 1rem 0; color: #2d3748;">🔧 Google Photos Album Configuration</h4>
+                        <p style="color: #718096; margin-bottom: 1rem; font-size: 0.9rem;">
+                            To display your photos, update the <code>GOOGLE_PHOTOS_ALBUM_URL</code> in the script section below, 
+                            or create a shared Google Photos album and paste the link in <strong>config.js</strong>
+                        </p>
+                        <div style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <code style="color: #e53e3e; font-size: 0.9rem;">
+                                // In config.js, add:<br>
+                                GOOGLE_PHOTOS_ALBUM_URL: 'YOUR_ALBUM_SHARE_LINK_HERE'
+                            </code>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo grid - will be populated dynamically -->
                     <div class="photo-grid" id="photo-grid">
-                        <!-- Example placeholder - replace with actual photos -->
-                        <div class="photo-card">
-                            <div class="photo-placeholder">
-                                <span style="font-size: 3rem;">🏛️</span>
-                                <p>Rome</p>
-                            </div>
-                        </div>
-                        <div class="photo-card">
-                            <div class="photo-placeholder">
-                                <span style="font-size: 3rem;">🌊</span>
-                                <p>Lake Garda</p>
-                            </div>
-                        </div>
-                        <div class="photo-card">
-                            <div class="photo-placeholder">
-                                <span style="font-size: 3rem;">🎨</span>
-                                <p>Florence</p>
-                            </div>
-                        </div>
-                        <div class="photo-card">
-                            <div class="photo-placeholder">
-                                <span style="font-size: 3rem;">👗</span>
-                                <p>Milan</p>
-                            </div>
+                        <!-- Loading message -->
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #718096;">
+                            <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">� Waiting for photos...</p>
+                            <p style="font-size: 0.9rem;">Add your Google Photos album link to display photos here</p>
+                            <p style="font-size: 0.85rem; margin-top: 1rem; color: #a0aec0;">Or upload photos directly to <strong>images/photos/</strong> folder</p>
                         </div>
                     </div>
                 </div>
@@ -1384,6 +1388,91 @@
                         }
                     }, 100);
                 });
+            });
+            
+            // Load photos from images/photos folder
+            async function loadPhotos() {
+                const photoGrid = document.getElementById('photo-grid');
+                
+                // Check if Google Photos album URL is configured in config.js
+                if (window.GOOGLE_PHOTOS_CONFIG && window.GOOGLE_PHOTOS_CONFIG.albumUrl) {
+                    photoGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                            <iframe src="${window.GOOGLE_PHOTOS_CONFIG.albumUrl}" 
+                                    width="100%" 
+                                    height="600" 
+                                    frameborder="0"
+                                    style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                            </iframe>
+                            <p style="margin-top: 1rem; color: #718096; font-size: 0.9rem;">
+                                <a href="${window.GOOGLE_PHOTOS_CONFIG.albumUrl}" target="_blank" style="color: #4299e1; text-decoration: none;">
+                                    📱 Open in Google Photos →
+                                </a>
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Try to load from local images/photos folder
+                const photoFileNames = [
+                    // Add your photo filenames here, or they will be auto-detected if available
+                    'rome-1.jpg', 'rome-2.jpg', 'rome-3.jpg',
+                    'lake-garda-1.jpg', 'lake-garda-2.jpg',
+                    'florence-1.jpg', 'florence-2.jpg',
+                    'milan-1.jpg', 'milan-2.jpg'
+                ];
+                
+                // Check if any photos exist
+                let photosLoaded = false;
+                photoGrid.innerHTML = ''; // Clear loading message
+                
+                for (const fileName of photoFileNames) {
+                    const img = new Image();
+                    img.src = `images/photos/${fileName}`;
+                    
+                    img.onload = function() {
+                        photosLoaded = true;
+                        const photoCard = document.createElement('div');
+                        photoCard.className = 'photo-card';
+                        photoCard.innerHTML = `
+                            <img src="images/photos/${fileName}" alt="${fileName.replace(/\.[^/.]+$/, '').replace(/-/g, ' ')}">
+                            <div class="photo-caption">
+                                <h4>${fileName.replace(/\.[^/.]+$/, '').replace(/-/g, ' ').toUpperCase()}</h4>
+                            </div>
+                        `;
+                        photoCard.onclick = function() {
+                            window.open(`images/photos/${fileName}`, '_blank');
+                        };
+                        photoGrid.appendChild(photoCard);
+                    };
+                    
+                    img.onerror = function() {
+                        // Photo doesn't exist, skip it
+                    };
+                }
+                
+                // If no photos loaded after a delay, show the waiting message
+                setTimeout(() => {
+                    if (!photosLoaded && photoGrid.children.length === 0) {
+                        photoGrid.innerHTML = `
+                            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #718096;">
+                                <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">📷 No photos yet</p>
+                                <p style="font-size: 0.9rem;">Add photos to <strong>images/photos/</strong> or configure your Google Photos album</p>
+                            </div>
+                        `;
+                    }
+                }, 2000);
+            }
+            
+            // Load photos when Photos tab is clicked
+            document.querySelector('[data-tab="photos"]').addEventListener('click', function() {
+                setTimeout(() => {
+                    if (!window.photosLoaded) {
+                        loadPhotos();
+                        window.photosLoaded = true;
+                    }
+                }, 100);
             });
         });
     </script>
