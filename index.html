@@ -769,30 +769,78 @@
             }
             .calendar-container {
                 padding: 0.5rem;
+                overflow-x: auto;
             }
             .calendar-month-header h3 {
                 font-size: 1.3rem;
             }
             .calendar-grid {
                 gap: 2px;
+                min-width: 100%;
             }
             .calendar-weekday {
-                padding: 0.4rem 0.2rem;
+                padding: 0.4rem 0.1rem;
                 font-size: 0.65rem;
             }
             .calendar-cell {
-                min-height: 60px;
-                padding: 0.25rem;
+                min-height: 55px;
+                padding: 0.2rem;
+                aspect-ratio: 1;
             }
             .cell-date {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
+                margin-bottom: 0.1rem;
             }
             .cell-badge {
-                font-size: 0.55rem;
-                padding: 0.1rem 0.3rem;
+                font-size: 0.5rem;
+                padding: 0.1rem 0.25rem;
+                margin-bottom: 0.1rem;
             }
             .cell-loc {
-                font-size: 0.5rem;
+                font-size: 0.48rem;
+                line-height: 1.1;
+            }
+            .cell-activity-count {
+                font-size: 0.45rem;
+            }
+        }
+        
+        /* Extra small mobile */
+        @media (max-width: 480px) {
+            .calendar-container {
+                padding: 0.25rem;
+            }
+            .calendar-month-header h3 {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+            .calendar-grid {
+                gap: 1px;
+            }
+            .calendar-weekday {
+                padding: 0.3rem 0.05rem;
+                font-size: 0.6rem;
+            }
+            .calendar-cell {
+                min-height: 48px;
+                padding: 0.15rem;
+            }
+            .cell-date {
+                font-size: 0.75rem;
+            }
+            .cell-badge {
+                font-size: 0.45rem;
+                padding: 0.08rem 0.2rem;
+            }
+            .cell-loc {
+                font-size: 0.45rem;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .cell-activity-count {
+                font-size: 0.42rem;
             }
         }
     </style>
