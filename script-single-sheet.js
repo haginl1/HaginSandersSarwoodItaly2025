@@ -1076,140 +1076,224 @@ function updateArrivalFlights(itinerary) {
 
 // Create calendar view of the trip
 function createTripCalendar(itinerary) {
+  console.log('Creating trip calendar with itinerary:', itinerary);
   const calendarContainer = document.getElementById('trip-calendar');
-  if (!calendarContainer || !itinerary || itinerary.length === 0) return;
-
-  // Parse dates and create calendar entries
-  const calendarDays = [];
-  const tripStartDate = new Date('2025-11-19');
-  const tripEndDate = new Date('2025-11-28');
+  if (!calendarContainer) {
+    console.error('Calendar container not found!');
+    return;
+  }
   
-  // Create a map of locations by date range
+  if (!itinerary || itinerary.length === 0) {
+    console.error('No itinerary data for calendar!');
+    calendarContainer.innerHTML = '<div style="padding: 2rem; text-align: center; color: #718096;">No itinerary data available.</div>';
+    return;
+  }
+
+  // Parse dates and create a map of trip data by date
+  const tripDataMap = new Map();
+  let tripDayCounter = 1;
+  
   itinerary.forEach(location => {
+    console.log('Processing location:', location.name, 'Dates:', location.dates);
     if (location.dates) {
-      const dates = location.dates.split('-').map(d => d.trim());
-      if (dates.length >= 1) {
-        const startDate = dates[0];
-        const endDate = dates.length > 1 ? dates[1] : dates[0];
-        
-        // Parse the dates (assuming format like "Nov 20" or "November 20")
-        const startDateObj = parseShortDate(startDate, 2025);
-        const endDateObj = parseShortDate(endDate, 2025);
-        
-        if (startDateObj && endDateObj) {
-          // Add entry for each day in the range
-          let currentDate = new Date(startDateObj);
-          while (currentDate <= endDateObj) {
-            calendarDays.push({
-              date: new Date(currentDate),
-              location: location.name,
-              hotel: location.accommodation,
-              hotelConfirmation: location.hotelConfirmation,
-              activities: location.activities,
-              activityLinks: location.activityLinks
-            });
-            currentDate.setDate(currentDate.getDate() + 1);
+      let startDateStr, endDateStr;
+      
+      // Check if format is "Nov 19-22" (no spaces around dash, no repeated month)
+      if (location.dates.includes('-') && !location.dates.match(/[a-zA-Z]+\s*-\s*[a-zA-Z]+/)) {
+        const parts = location.dates.split('-');
+        if (parts.length === 2) {
+          startDateStr = parts[0].trim();
+          const monthMatch = startDateStr.match(/([a-zA-Z]+)/);
+          if (monthMatch) {
+            const month = monthMatch[1];
+            const endDay = parts[1].trim();
+            endDateStr = `${month} ${endDay}`;
           }
+        }
+      } else {
+        const dates = location.dates.split('-').map(d => d.trim());
+        startDateStr = dates[0];
+        endDateStr = dates.length > 1 ? dates[1] : dates[0];
+      }
+      
+      const startDateObj = parseShortDate(startDateStr, 2025);
+      const endDateObj = parseShortDate(endDateStr, 2025);
+      
+      if (startDateObj && endDateObj) {
+        let currentDate = new Date(startDateObj);
+        while (currentDate <= endDateObj) {
+          const dateKey = currentDate.toISOString().split('T')[0];
+          tripDataMap.set(dateKey, {
+            date: new Date(currentDate),
+            location: location.name,
+            hotel: location.accommodation,
+            hotelConfirmation: location.hotelConfirmation,
+            activities: location.activities,
+            activityLinks: location.activityLinks,
+            dayNumber: tripDayCounter
+          });
+          tripDayCounter++;
+          currentDate.setDate(currentDate.getDate() + 1);
         }
       }
     }
   });
   
-  // Sort by date
-  calendarDays.sort((a, b) => a.date - b.date);
+  if (tripDataMap.size === 0) {
+    console.warn('No calendar days - calendar will be empty');
+    calendarContainer.innerHTML = '<div style="padding: 2rem; text-align: center; color: #718096;">No calendar data available.</div>';
+    return;
+  }
   
-  // Group consecutive days at same location
-  const groupedDays = [];
-  let currentGroup = null;
+  // Get the month/year to display (November 2025)
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const month = 10; // November
+  const year = 2025;
   
-  calendarDays.forEach(day => {
-    if (!currentGroup || currentGroup.location !== day.location) {
-      if (currentGroup) groupedDays.push(currentGroup);
-      currentGroup = {
-        location: day.location,
-        hotel: day.hotel,
-        hotelConfirmation: day.hotelConfirmation,
-        startDate: day.date,
-        endDate: day.date,
-        days: 1,
-        activities: day.activities,
-        activityLinks: day.activityLinks
-      };
-    } else {
-      currentGroup.endDate = day.date;
-      currentGroup.days++;
-    }
-  });
-  if (currentGroup) groupedDays.push(currentGroup);
+  // Get calendar boundaries
+  const firstDayOfMonth = new Date(year, month, 1);
+  const lastDayOfMonth = new Date(year, month + 1, 0);
+  const startingDayOfWeek = firstDayOfMonth.getDay();
   
-  // Render calendar
-  calendarContainer.innerHTML = '';
-  let dayCounter = 1;
+  // Build calendar HTML
+  let html = `
+    <div class="calendar-month-header">
+      <h3>${monthNames[month]} ${year}</h3>
+    </div>
+    <div class="calendar-grid">
+      <div class="calendar-weekday">S</div>
+      <div class="calendar-weekday">M</div>
+      <div class="calendar-weekday">T</div>
+      <div class="calendar-weekday">W</div>
+      <div class="calendar-weekday">T</div>
+      <div class="calendar-weekday">F</div>
+      <div class="calendar-weekday">S</div>
+  `;
   
-  groupedDays.forEach(group => {
-    const dayElement = document.createElement('div');
-    dayElement.className = 'calendar-day';
+  // Add empty cells before the 1st
+  for (let i = 0; i < startingDayOfWeek; i++) {
+    html += '<div class="calendar-cell empty"></div>';
+  }
+  
+  // Add cells for each day of the month
+  for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+    const currentDate = new Date(year, month, day);
+    const dateKey = currentDate.toISOString().split('T')[0];
+    const tripData = tripDataMap.get(dateKey);
     
-    const startDateStr = formatDate(group.startDate);
-    const endDateStr = group.days > 1 ? formatDate(group.endDate) : '';
-    const dateRange = endDateStr ? `${startDateStr} - ${endDateStr}` : startDateStr;
-    const nightsText = group.days > 1 ? `${group.days} nights` : '1 night';
-    
-    let html = `
-      <div class="calendar-day-header">
-        <div class="calendar-date">${dateRange}</div>
-        <div class="calendar-day-number">Day ${dayCounter}${group.days > 1 ? `-${dayCounter + group.days - 1}` : ''}</div>
-      </div>
-      <div class="calendar-location">
-        📍 ${group.location}
-        <span style="font-size: 0.9rem; color: #718096; font-weight: normal;">(${nightsText})</span>
-      </div>
-    `;
-    
-    if (group.hotel) {
+    if (tripData) {
+      const activities = tripData.activities ? tripData.activities.split('\n').filter(a => a.trim()) : [];
+      const links = tripData.activityLinks ? tripData.activityLinks.split('\n').filter(l => l.trim()) : [];
+      const dayOfWeek = dayNames[currentDate.getDay()];
+      
+      // This is a trip day - make it clickable
       html += `
-        <div class="calendar-hotel">
-          <div class="calendar-hotel-name">🏨 ${group.hotel}</div>
-          ${group.hotelConfirmation ? `<div style="font-size: 0.85rem; color: #718096;">Confirmation: ${group.hotelConfirmation}</div>` : ''}
+        <div class="calendar-cell trip-day" onclick="showDayDetails('${dateKey}')">
+          <div class="cell-date">${day}</div>
+          <div class="cell-badge">D${tripData.dayNumber}</div>
+          <div class="cell-loc">${tripData.location}</div>
+          ${activities.length > 0 ? `<div class="cell-activity-count">${activities.length} activities</div>` : ''}
         </div>
       `;
-    }
-    
-    if (group.activities) {
-      const activities = group.activities.split('\n').filter(a => a.trim());
-      const links = group.activityLinks ? group.activityLinks.split('\n').filter(l => l.trim()) : [];
       
-      if (activities.length > 0) {
-        html += '<div class="calendar-activities">';
-        activities.forEach((activity, index) => {
-          // Try to parse time from activity (looking for patterns like "10:00 AM", "2:30 PM", etc.)
-          const timeMatch = activity.match(/(\d{1,2}:\d{2}\s*(?:AM|PM|am|pm))/);
-          const time = timeMatch ? timeMatch[1] : '';
-          const activityName = time ? activity.replace(time, '').trim() : activity.trim();
-          const link = links[index] || '';
-          
-          html += `
-            <div class="calendar-activity">
-              ${time ? `<div class="calendar-activity-time">🕐 ${time}</div>` : ''}
-              <div class="calendar-activity-name">
-                ${link ? `<a href="${link}" target="_blank" style="color: #4299e1; text-decoration: none;">${activityName} 🔗</a>` : activityName}
-              </div>
-            </div>
-          `;
-        });
-        html += '</div>';
-      }
+      // Store data for modal
+      window.tripDayData = window.tripDayData || {};
+      window.tripDayData[dateKey] = {
+        dayNumber: tripData.dayNumber,
+        dayOfWeek: dayOfWeek,
+        date: `${monthNames[month]} ${day}, ${year}`,
+        location: tripData.location,
+        hotel: tripData.hotel,
+        hotelConfirmation: tripData.hotelConfirmation,
+        activities: activities,
+        activityLinks: links
+      };
+    } else {
+      // Regular non-trip day
+      html += `<div class="calendar-cell"><div class="cell-date">${day}</div></div>`;
     }
-    
-    dayElement.innerHTML = html;
-    calendarContainer.appendChild(dayElement);
-    
-    dayCounter += group.days;
-  });
+  }
+  
+  html += '</div>';
+  
+  // Add modal for day details
+  html += `
+    <div id="day-details-modal" class="modal" onclick="closeDayDetails(event)">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeDayDetails()">&times;</span>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+  `;
+  
+  calendarContainer.innerHTML = html;
 }
 
-// Helper function to parse short dates like "Nov 20" or "November 20"
+// Show day details in modal
+function showDayDetails(dateKey) {
+  const data = window.tripDayData[dateKey];
+  if (!data) return;
+  
+  const modal = document.getElementById('day-details-modal');
+  const modalBody = document.getElementById('modal-body');
+  
+  let html = `
+    <h2 style="color: #ed8936; margin: 0 0 0.5rem 0;">Day ${data.dayNumber}</h2>
+    <h3 style="color: #2d3748; margin: 0 0 1rem 0;">${data.dayOfWeek}, ${data.date}</h3>
+    <div style="border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1rem;">
+      <div style="font-size: 1.3rem; font-weight: 700; color: #4299e1; margin-bottom: 0.5rem;">
+        📍 ${data.location}
+      </div>
+      ${data.hotel ? `
+        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; margin-top: 0.75rem;">
+          <div style="font-weight: 600; color: #2d3748;">🏨 ${data.hotel}</div>
+          ${data.hotelConfirmation ? `<div style="font-size: 0.9rem; color: #718096; margin-top: 0.25rem;">Confirmation: ${data.hotelConfirmation}</div>` : ''}
+        </div>
+      ` : ''}
+    </div>
+  `;
+  
+  if (data.activities.length > 0) {
+    html += '<h4 style="color: #2d3748; margin-bottom: 1rem;">📋 Activities</h4>';
+    html += '<div style="display: flex; flex-direction: column; gap: 0.75rem;">';
+    
+    data.activities.forEach((activity, index) => {
+      const timeMatch = activity.match(/(\d{1,2}:\d{2}\s*(?:AM|PM|am|pm))/);
+      const time = timeMatch ? timeMatch[1] : '';
+      const activityName = time ? activity.replace(time, '').trim() : activity.trim();
+      const link = data.activityLinks[index] || '';
+      
+      html += `
+        <div style="background: linear-gradient(135deg, #fff5f0 0%, #ffe4d6 100%); padding: 1rem; border-radius: 8px; border-left: 4px solid #ed8936;">
+          ${time ? `<div style="font-weight: 700; color: #ed8936; margin-bottom: 0.5rem;">⏰ ${time}</div>` : ''}
+          <div style="color: #2d3748; font-size: 1.05rem;">
+            ${link ? `<a href="${link}" target="_blank" style="color: #4299e1; text-decoration: none; font-weight: 600;">${activityName} 🔗</a>` : activityName}
+          </div>
+        </div>
+      `;
+    });
+    
+    html += '</div>';
+  }
+  
+  modalBody.innerHTML = html;
+  modal.style.display = 'block';
+}
+
+function closeDayDetails(event) {
+  const modal = document.getElementById('day-details-modal');
+  modal.style.display = 'none';
+}
+
+// Helper function to parse short dates like "Nov 20", "November 20", "11/20", etc.
 function parseShortDate(dateStr, year) {
+  if (!dateStr || !dateStr.trim()) return null;
+  
+  const cleaned = dateStr.trim().toLowerCase();
+  console.log('Parsing date:', cleaned);
+  
   const months = {
     'jan': 0, 'january': 0,
     'feb': 1, 'february': 1,
@@ -1219,20 +1303,35 @@ function parseShortDate(dateStr, year) {
     'jun': 5, 'june': 5,
     'jul': 6, 'july': 6,
     'aug': 7, 'august': 7,
-    'sep': 8, 'september': 8,
+    'sep': 8, 'sept': 8, 'september': 8,
     'oct': 9, 'october': 9,
     'nov': 10, 'november': 10,
     'dec': 11, 'december': 11
   };
   
-  const parts = dateStr.trim().toLowerCase().match(/([a-z]+)\s+(\d+)/);
+  // Try format: "Nov 20" or "November 20"
+  let parts = cleaned.match(/([a-z]+)\s+(\d+)/);
   if (parts && parts.length === 3) {
     const month = months[parts[1]];
     const day = parseInt(parts[2]);
     if (month !== undefined && day) {
+      console.log('Parsed date:', year, month, day);
       return new Date(year, month, day);
     }
   }
+  
+  // Try format: "11/20" or "11-20"
+  parts = cleaned.match(/(\d+)[\/\-](\d+)/);
+  if (parts && parts.length === 3) {
+    const month = parseInt(parts[1]) - 1; // Month is 0-indexed
+    const day = parseInt(parts[2]);
+    if (month >= 0 && month <= 11 && day >= 1 && day <= 31) {
+      console.log('Parsed date:', year, month, day);
+      return new Date(year, month, day);
+    }
+  }
+  
+  console.warn('Could not parse date:', dateStr);
   return null;
 }
 

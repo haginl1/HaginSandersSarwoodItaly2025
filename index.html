@@ -481,92 +481,248 @@
             color: #234e52;
         }
         
-        /* Calendar Styles */
+        /* Tabs Styles */
+        .tabs-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .tabs-header {
+            display: flex;
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 1.2rem 1.5rem;
+            background: transparent;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-button:hover {
+            background: #edf2f7;
+            color: #4299e1;
+        }
+        
+        .tab-button.active {
+            color: #4299e1;
+            background: white;
+            border-bottom: 3px solid #4299e1;
+        }
+        
+        .tabs-content {
+            padding: 2rem;
+        }
+        
+        .tab-panel {
+            display: none;
+        }
+        
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Calendar Styles - Compact Grid View */
         .calendar-container {
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            padding: 2rem;
+            padding: 1rem;
             margin-bottom: 2rem;
-        }
-        .calendar-grid {
-            display: grid;
-            gap: 1rem;
-        }
-        .calendar-day {
-            background: #f7fafc;
-            border-left: 4px solid #4299e1;
-            border-radius: 8px;
-            padding: 1.25rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .calendar-day:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .calendar-day-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        .calendar-date {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #2d3748;
-        }
-        .calendar-day-number {
-            background: #4299e1;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        .calendar-location {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #4299e1;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .calendar-hotel {
-            background: white;
-            padding: 0.75rem;
-            border-radius: 6px;
-            margin-bottom: 0.75rem;
-            border: 1px solid #e2e8f0;
-        }
-        .calendar-hotel-name {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 0.25rem;
-        }
-        .calendar-activities {
-            margin-top: 0.75rem;
-        }
-        .calendar-activity {
-            background: white;
-            padding: 0.75rem;
-            border-radius: 6px;
-            margin-bottom: 0.5rem;
-            border-left: 3px solid #ed8936;
-        }
-        .calendar-activity-time {
-            font-weight: 600;
-            color: #ed8936;
-            font-size: 0.9rem;
-        }
-        .calendar-activity-name {
-            color: #2d3748;
-            margin-top: 0.25rem;
+            overflow-x: auto;
         }
         
-        /* Responsive */
+        .calendar-month-header {
+            text-align: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid #4299e1;
+        }
+        
+        .calendar-month-header h3 {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            width: 100%;
+            min-width: 100%;
+        }
+        
+        .calendar-weekday {
+            background: #4299e1;
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+        
+        .calendar-cell {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            min-height: 70px;
+            padding: 0.3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            aspect-ratio: 1;
+        }
+        
+        .calendar-cell.empty {
+            background: transparent;
+            border: none;
+        }
+        
+        .calendar-cell.trip-day {
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe4d6 100%);
+            border: 2px solid #ed8936;
+            box-shadow: 0 1px 4px rgba(237, 137, 54, 0.2);
+        }
+        
+        .cell-date {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.15rem;
+        }
+        
+        .cell-badge {
+            background: #4299e1;
+            color: white;
+            padding: 0.15rem 0.4rem;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+        
+        .cell-loc {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #ed8936;
+            line-height: 1.1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .cell-activity-count {
+            font-size: 0.55rem;
+            color: #4299e1;
+            margin-top: 0.15rem;
+            font-weight: 600;
+        }
+        
+        .calendar-cell.trip-day {
+            cursor: pointer;
+        }
+        
+        .calendar-cell.trip-day:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(237, 137, 54, 0.4);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-close {
+            color: #718096;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: #2d3748;
+        }
+        
+        /* Desktop: Larger cells */
+        @media (min-width: 769px) {
+            .calendar-container {
+                padding: 2rem;
+            }
+            .calendar-month-header h3 {
+                font-size: 2rem;
+            }
+            .calendar-grid {
+                gap: 8px;
+            }
+            .calendar-weekday {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+            .calendar-cell {
+                min-height: 100px;
+                padding: 0.5rem;
+            }
+            .cell-date {
+                font-size: 1.3rem;
+            }
+            .cell-badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+            .cell-loc {
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Mobile: Compact but readable */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -581,7 +737,31 @@
                 font-size: 1.6rem;
             }
             .calendar-container {
-                padding: 1rem;
+                padding: 0.5rem;
+            }
+            .calendar-month-header h3 {
+                font-size: 1.3rem;
+            }
+            .calendar-grid {
+                gap: 2px;
+            }
+            .calendar-weekday {
+                padding: 0.4rem 0.2rem;
+                font-size: 0.65rem;
+            }
+            .calendar-cell {
+                min-height: 60px;
+                padding: 0.25rem;
+            }
+            .cell-date {
+                font-size: 0.85rem;
+            }
+            .cell-badge {
+                font-size: 0.55rem;
+                padding: 0.1rem 0.3rem;
+            }
+            .cell-loc {
+                font-size: 0.5rem;
             }
         }
     </style>
@@ -690,236 +870,276 @@
         </div>
     </div>
 
-    <!-- Trip Calendar -->
+    <!-- Tabbed Interface -->
     <div class="section">
-        <h2 class="section-title">📅 Daily Itinerary Calendar</h2>
-        <p class="section-subtitle">Hotels, stays, and scheduled activities</p>
+        <h2 class="section-title"> Trip Overview</h2>
+        <p class="section-subtitle">Explore your itinerary by calendar or destinations</p>
         
-        <div class="calendar-container">
-            <div class="calendar-grid" id="trip-calendar"></div>
-        </div>
-    </div>
-
-    <!-- Shared Italy Itinerary -->
-    <div class="section">
-        <h2 class="section-title">🗺️ Our Italy Itinerary</h2>
-        <p class="section-subtitle">Traveling together through beautiful Italy</p>
-        
-        <div class="map-card">
-            <h3>Italy Travel Route - All Together!</h3>
-            <div id="italy-itinerary-map"></div>
-        </div>
-
-        <!-- Detailed Itinerary Cards -->
-        <div id="itinerary-cards" style="margin-top: 3rem;">
-            <h3 style="text-align: center; color: #2d3748; font-size: 1.8rem; margin-bottom: 1.5rem;">📍 Destination Details</h3>
-            <div id="destination-cards-container"></div>
-        </div>
-
-        <!-- Hotel Information Cards -->
-        <div id="hotel-cards" style="margin-top: 3rem;">
-            <h3 style="text-align: center; color: #2d3748; font-size: 1.8rem; margin-bottom: 1.5rem;">🏨 Hotel Information</h3>
-            <div id="hotel-cards-container"></div>
-        </div>
-    </div>
-
-    <!-- Transportation & Logistics Section -->
-    <div class="section" style="background: #f7fafc; padding: 2rem 1rem;">
-        <h2 class="section-title">🚂 Transportation & Travel Logistics</h2>
-        <p class="section-subtitle">Train tickets, rental car, and departure flights</p>
-        
-        <!-- Train Tickets -->
-        <div class="transport-section">
-            <h3 class="transport-heading">🎫 Italo Train Tickets</h3>
-            <div class="transport-cards">
-                <div class="transport-card">
-                    <div class="route-header">Rome → Verona</div>
-                    <div class="passenger-list">
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Mary</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Lisa</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Keo</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Karen</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-button active" data-tab="itinerary">📍 Destinations</button>
+                <button class="tab-button" data-tab="calendar">📅 Calendar View</button>
+                <button class="tab-button" data-tab="hotels">🏨 Hotels</button>
+                <button class="tab-button" data-tab="transportation">🚂 Transportation</button>
+                <button class="tab-button" data-tab="rental">🚗 Rental Car</button>
+            </div>
+            
+            <div class="tabs-content">
+                <!-- Itinerary Tab -->
+                <div class="tab-panel active" id="itinerary-tab">
+                    <div class="map-card">
+                        <h3>Italy Travel Route - All Together!</h3>
+                        <div id="italy-itinerary-map"></div>
                     </div>
-                    <div class="route-details">Date: Nov 22, 2025 | Duration: ~1h 30min</div>
+
+                    <!-- Detailed Itinerary Cards -->
+                    <div id="itinerary-cards" style="margin-top: 3rem;">
+                        <h3 style="text-align: center; color: #2d3748; font-size: 1.8rem; margin-bottom: 1.5rem;">📍 Destination Details</h3>
+                        <div id="destination-cards-container"></div>
+        </div>
+                </div>
+                
+                <!-- Calendar Tab -->
+                <div class="tab-panel" id="calendar-tab">
+                    <div class="calendar-container">
+                        <div id="trip-calendar"></div>
+                    </div>
+                </div>
+                
+                <!-- Hotels Tab -->
+                <div class="tab-panel" id="hotels-tab">
+                    <div id="hotel-cards" style="margin-top: 1rem;">
+                        <h3 style="text-align: center; color: #2d3748; font-size: 1.8rem; margin-bottom: 1.5rem;">🏨 Hotel Information</h3>
+                        <div id="hotel-cards-container"></div>
+                    </div>
                 </div>
 
-                <div class="transport-card">
-                    <div class="route-header">Verona → Florence</div>
-                    <div class="passenger-list">
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Mary</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Lisa</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Keo</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Karen</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
+                <!-- Transportation Tab -->
+                <div class="tab-panel" id="transportation-tab">
+                    <h2 class="section-title" style="text-align: center; color: #2d3748; font-size: 1.8rem; margin-bottom: 0.5rem;">🚂 Transportation & Travel Logistics</h2>
+                    <p class="section-subtitle" style="text-align: center; color: #4a5568; margin-bottom: 2rem;">Train tickets and departure flights</p>
+                    
+                    <!-- Train Tickets -->
+                    <div class="transport-section">
+                        <h3 class="transport-heading">🎫 Italo Train Tickets</h3>
+                        <div class="transport-cards">
+                            <div class="transport-card">
+                                <div class="route-header">Rome → Verona</div>
+                                <div class="passenger-list">
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Mary</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Lisa</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Keo</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Karen</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                </div>
+                                <div class="route-details">Date: Nov 22, 2025 | Duration: ~1h 30min</div>
+                            </div>
+
+                            <div class="transport-card">
+                                <div class="route-header">Verona → Florence</div>
+                                <div class="passenger-list">
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Mary</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Lisa</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Keo</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Karen</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                </div>
+                                <div class="route-details">Date: Nov 25, 2025 | Duration: ~1h 30min</div>
+                            </div>
+
+                            <div class="transport-card">
+                                <div class="route-header">Florence → Milan</div>
+                                <div class="passenger-list">
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Mary</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Lisa</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Keo</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Karen</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                </div>
+                                <div class="route-details">Date: Nov 27, 2025 | Duration: ~2h 45min</div>
+                            </div>
+
+                            <div class="transport-card">
+                                <div class="route-header">Milan → Airport</div>
+                                <div class="passenger-list">
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Mary</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Lisa</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Keo</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                    <div class="passenger-item">
+                                        <span class="passenger-name">👤 Karen</span>
+                                        <span class="ticket-info">Ticket #: TBD</span>
+                                        <span class="seat-info">Seat: TBD</span>
+                                    </div>
+                                </div>
+                                <div class="route-details">Date: Nov 28, 2025 | Duration: ~30min</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="route-details">Date: Nov 25, 2025 | Duration: ~1h 30min</div>
+
+                    <!-- Departure Flights -->
+                    <div class="transport-section" style="margin-top: 2rem;">
+                        <h3 class="transport-heading">✈️ Departure Flights</h3>
+                        <div class="transport-cards">
+                            <div class="transport-card flight-card-mary-lisa">
+                                <div class="route-header">🧡 Mary & Lisa: Milan → Atlanta</div>
+                                <div class="flight-info">
+                                    <div class="flight-detail">
+                                        <strong>📅 Date:</strong> Nov 28, 2025
+                                    </div>
+                                    <div class="flight-detail">
+                                        <strong>✈️ Flight #:</strong> TBD
+                                    </div>
+                                    <div class="flight-detail">
+                                        <strong>🕐 Departure:</strong> TBD
+                                    </div>
+                                    <div class="flight-detail">
+                                        <strong>🏠 Destination:</strong> Atlanta, GA
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="transport-card flight-card-keo-karen">
+                                <div class="route-header">💜 Keo & Karen: Milan → Sarasota</div>
+                                <div class="flight-info">
+                                    <div class="flight-detail">
+                                        <strong>📅 Date:</strong> Nov 28, 2025
+                                    </div>
+                                    <div class="flight-detail">
+                                        <strong>✈️ Flight #:</strong> TBD (likely via connection)
+                                    </div>
+                                    <div class="flight-detail">
+                                        <strong>🕐 Departure:</strong> TBD
+                                    </div>
+                                    <div class="flight-detail">
+                                        <strong>🏠 Destination:</strong> Sarasota, FL
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="transport-card">
-                    <div class="route-header">Florence → Milan</div>
-                    <div class="passenger-list">
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Mary</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Lisa</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Keo</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Karen</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                    </div>
-                    <div class="route-details">Date: Nov 27, 2025 | Duration: ~2h 45min</div>
-                </div>
-
-                <div class="transport-card">
-                    <div class="route-header">Milan → Airport</div>
-                    <div class="passenger-list">
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Mary</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Lisa</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Keo</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
-                        </div>
-                        <div class="passenger-item">
-                            <span class="passenger-name">👤 Karen</span>
-                            <span class="ticket-info">Ticket #: TBD</span>
-                            <span class="seat-info">Seat: TBD</span>
+            <!-- Rental Car Tab -->
+            <div class="tab-panel" id="rental-tab">
+                <h2 class="section-title" style="text-align: center; color: #2d3748; font-size: 1.8rem; margin-bottom: 0.5rem;">🚗 Rental Car Information</h2>
+                <p class="section-subtitle" style="text-align: center; color: #4a5568; margin-bottom: 2rem;">Lake Garda rental car details</p>
+                
+                <div class="transport-section">
+                    <div class="transport-cards">
+                        <div class="transport-card rental-car">
+                            <div class="route-header">Verona → Sirmione (Lake Garda) → Verona</div>
+                            <div class="rental-info">
+                                <div class="rental-detail">
+                                    <strong>📍 Pickup:</strong> Verona (after train arrival)
+                                </div>
+                                <div class="rental-detail">
+                                    <strong>📅 Pickup Date:</strong> Nov 22, 2025
+                                </div>
+                                <div class="rental-detail">
+                                    <strong>🏞️ Destination:</strong> Sirmione, Lake Garda
+                                </div>
+                                <div class="rental-detail">
+                                    <strong>📍 Drop-off:</strong> Verona (before train to Florence)
+                                </div>
+                                <div class="rental-detail">
+                                    <strong>📅 Drop-off Date:</strong> Nov 25, 2025
+                                </div>
+                                <div class="rental-detail">
+                                    <strong>🚙 Company:</strong> TBD (Recommendation: SIXT or Hertz)
+                                </div>
+                                <div class="rental-detail">
+                                    <strong>👥 All Passengers:</strong> Mary, Lisa, Keo, Karen
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="route-details">Date: Nov 28, 2025 | Duration: ~30min</div>
                 </div>
             </div>
         </div>
-
-        <!-- Rental Car -->
-        <div class="transport-section" style="margin-top: 2rem;">
-            <h3 class="transport-heading">🚗 Rental Car Information</h3>
-            <div class="transport-cards">
-                <div class="transport-card rental-car">
-                    <div class="route-header">Verona → Sirmione (Lake Garda) → Verona</div>
-                    <div class="rental-info">
-                        <div class="rental-detail">
-                            <strong>📍 Pickup:</strong> Verona (after train arrival)
-                        </div>
-                        <div class="rental-detail">
-                            <strong>📅 Pickup Date:</strong> Nov 22, 2025
-                        </div>
-                        <div class="rental-detail">
-                            <strong>🏞️ Destination:</strong> Sirmione, Lake Garda
-                        </div>
-                        <div class="rental-detail">
-                            <strong>📍 Drop-off:</strong> Verona (before train to Florence)
-                        </div>
-                        <div class="rental-detail">
-                            <strong>📅 Drop-off Date:</strong> Nov 25, 2025
-                        </div>
-                        <div class="rental-detail">
-                            <strong>🚙 Company:</strong> TBD (Recommendation: SIXT or Hertz)
-                        </div>
-                        <div class="rental-detail">
-                            <strong>👥 All Passengers:</strong> Mary, Lisa, Keo, Karen
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Return Flights -->
-        <div class="transport-section" style="margin-top: 2rem;">
-            <h3 class="transport-heading">✈️ Departure Flights</h3>
-            <div class="transport-cards">
-                <div class="transport-card flight-card-mary-lisa">
-                    <div class="route-header">🧡 Mary & Lisa: Milan → Atlanta</div>
-                    <div class="flight-info">
-                        <div class="flight-detail">
-                            <strong>📅 Date:</strong> Nov 28, 2025
-                        </div>
-                        <div class="flight-detail">
-                            <strong>✈️ Flight #:</strong> TBD
-                        </div>
-                        <div class="flight-detail">
-                            <strong>🕐 Departure:</strong> TBD
-                        </div>
-                        <div class="flight-detail">
-                            <strong>🏠 Destination:</strong> Atlanta, GA
-                        </div>
-                    </div>
-                </div>
-
-                <div class="transport-card flight-card-keo-karen">
-                    <div class="route-header">💜 Keo & Karen: Milan → Sarasota</div>
-                    <div class="flight-info">
-                        <div class="flight-detail">
-                            <strong>📅 Date:</strong> Nov 28, 2025
-                        </div>
-                        <div class="flight-detail">
-                            <strong>✈️ Flight #:</strong> TBD (likely via connection)
-                        </div>
-                        <div class="flight-detail">
-                            <strong>🕐 Departure:</strong> TBD
-                        </div>
-                        <div class="flight-detail">
-                            <strong>🏠 Destination:</strong> Sarasota, FL
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
 
     <!-- Load Leaflet first, then our script -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="script-single-sheet.js" defer></script>
+    
+    <script>
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and panels
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanels.forEach(panel => panel.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding panel
+                    this.classList.add('active');
+                    document.getElementById(targetTab + '-tab').classList.add('active');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
