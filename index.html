@@ -1310,7 +1310,8 @@
     </div>
 </div>
 
-    <!-- Load Leaflet first, then our script -->
+    <!-- Load configuration and scripts -->
+    <script src="config.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="script-single-sheet.js" defer></script>
     
@@ -1365,20 +1366,25 @@
                 const photoGrid = document.getElementById('photo-grid');
                 
                 // Check if Google Photos album URL is configured in config.js
-                if (window.GOOGLE_PHOTOS_CONFIG && window.GOOGLE_PHOTOS_CONFIG.albumUrl) {
+                if (window.GOOGLE_PHOTOS_CONFIG && window.GOOGLE_PHOTOS_CONFIG.albumUrl && 
+                    window.GOOGLE_PHOTOS_CONFIG.albumUrl !== 'YOUR_ALBUM_URL_HERE') {
                     photoGrid.innerHTML = `
                         <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                            <iframe src="${window.GOOGLE_PHOTOS_CONFIG.albumUrl}" 
-                                    width="100%" 
-                                    height="600" 
-                                    frameborder="0"
-                                    style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                            </iframe>
-                            <p style="margin-top: 1rem; color: #718096; font-size: 0.9rem;">
-                                <a href="${window.GOOGLE_PHOTOS_CONFIG.albumUrl}" target="_blank" style="color: #4299e1; text-decoration: none;">
-                                    📱 Open in Google Photos →
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem; border-radius: 16px; color: white; max-width: 600px; margin: 0 auto;">
+                                <div style="font-size: 4rem; margin-bottom: 1rem;">📸</div>
+                                <h3 style="margin: 0 0 1rem 0; font-size: 1.8rem;">Italy Trip Photos</h3>
+                                <p style="font-size: 1.1rem; margin-bottom: 2rem; line-height: 1.6;">
+                                    View all our trip photos in our shared Google Photos album!
+                                </p>
+                                <a href="${window.GOOGLE_PHOTOS_CONFIG.albumUrl}" 
+                                   target="_blank" 
+                                   style="display: inline-block; background: white; color: #667eea; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: transform 0.2s;">
+                                    🌍 Open Photo Album →
                                 </a>
-                            </p>
+                                <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.9;">
+                                    💡 Anyone can add photos to this shared album during our trip!
+                                </p>
+                            </div>
                         </div>
                     `;
                     return;
