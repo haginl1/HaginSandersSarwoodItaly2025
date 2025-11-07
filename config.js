@@ -1,7 +1,7 @@
 // Configuration file for Google Sheets Integration
 // Replace the URLs below with your published Google Sheets URLs
 
-export const GOOGLE_SHEETS_CONFIG = {
+window.GOOGLE_SHEETS_CONFIG = {
   // Hagin-Sanders Family Sheet URL
   // Get this from: File → Share → Publish to web → Copy link
   haginSandersSheetUrl: 'YOUR_HAGIN_SANDERS_SHEET_URL',
@@ -24,7 +24,7 @@ export const GOOGLE_SHEETS_CONFIG = {
 // 3. Get the shareable link: Open album → Share → Create link → Copy
 // 4. Paste the link below
 window.GOOGLE_PHOTOS_CONFIG = {
-  albumUrl: '' // Paste your Google Photos album share link here
+  albumUrl: 'https://photos.app.goo.gl/zfWpnkSRrKjrRT416' // Paste your Google Photos album share link here
   // Example: 'https://photos.app.goo.gl/yourAlbumLinkHere'
 };
 
