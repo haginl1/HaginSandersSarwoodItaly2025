@@ -466,6 +466,8 @@ function createIndividualFlightMap(mapId, travelerGroup) {
   if (allCoordinates.length > 0) {
     map.fitBounds(allCoordinates, { padding: [50, 50] });
   }
+  
+  return map;
 }
 
 // Create shared Italy itinerary map
@@ -647,6 +649,8 @@ function createItineraryMap(mapId, itinerary) {
   if (routeCoordinates.length > 0) {
     map.fitBounds(routeCoordinates, { padding: [40, 40] });
   }
+  
+  return map;
 }
 
 // Create destination cards from itinerary data
@@ -1355,15 +1359,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('Loading Italy trip data...');
     
     // Create individual flight maps for each group
-    createIndividualFlightMap('mary-lisa-flight-map', 'maryLisa');
+    window.maryLisaFlightMap = createIndividualFlightMap('mary-lisa-flight-map', 'maryLisa');
     console.log('Mary & Lisa flight map loaded');
     
-    createIndividualFlightMap('keo-karen-flight-map', 'keoKaren');
+    window.keoKarenFlightMap = createIndividualFlightMap('keo-karen-flight-map', 'keoKaren');
     console.log('Keo & Karen flight map loaded');
     
     // Fetch and create shared itinerary map
     const itinerary = await fetchItineraryData(GOOGLE_SHEETS_CONFIG.itinerarySheetUrl);
-    createItineraryMap('italy-itinerary-map', itinerary);
+    window.itineraryMap = createItineraryMap('italy-itinerary-map', itinerary);
     console.log('Italy itinerary map loaded');
     
     // Create destination cards
