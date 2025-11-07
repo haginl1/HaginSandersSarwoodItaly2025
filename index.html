@@ -1365,9 +1365,15 @@
             async function loadPhotos() {
                 const photoGrid = document.getElementById('photo-grid');
                 
+                console.log('loadPhotos called');
+                console.log('GOOGLE_PHOTOS_CONFIG:', window.GOOGLE_PHOTOS_CONFIG);
+                
                 // Check if Google Photos album URL is configured in config.js
-                if (window.GOOGLE_PHOTOS_CONFIG && window.GOOGLE_PHOTOS_CONFIG.albumUrl && 
-                    window.GOOGLE_PHOTOS_CONFIG.albumUrl !== 'YOUR_ALBUM_URL_HERE') {
+                if (window.GOOGLE_PHOTOS_CONFIG && 
+                    window.GOOGLE_PHOTOS_CONFIG.albumUrl && 
+                    window.GOOGLE_PHOTOS_CONFIG.albumUrl.startsWith('https://')) {
+                    
+                    console.log('Displaying Google Photos album button');
                     photoGrid.innerHTML = `
                         <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
                             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem; border-radius: 16px; color: white; max-width: 600px; margin: 0 auto;">
