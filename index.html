@@ -1126,6 +1126,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabPanels = document.querySelectorAll('.tab-panel');
+            let flightMapsCreated = false;
             
             tabButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -1138,6 +1139,18 @@
                     // Add active class to clicked button and corresponding panel
                     this.classList.add('active');
                     document.getElementById(targetTab + '-tab').classList.add('active');
+                    
+                    // Create flight maps on first click of Flights tab
+                    if (targetTab === 'flights' && !flightMapsCreated) {
+                        setTimeout(() => {
+                            if (typeof createIndividualFlightMap === 'function') {
+                                window.maryLisaFlightMap = createIndividualFlightMap('mary-lisa-flight-map', 'maryLisa');
+                                window.keoKarenFlightMap = createIndividualFlightMap('keo-karen-flight-map', 'keoKaren');
+                                console.log('Flight maps created');
+                                flightMapsCreated = true;
+                            }
+                        }, 100);
+                    }
                     
                     // Fix map rendering when tab becomes visible
                     setTimeout(() => {

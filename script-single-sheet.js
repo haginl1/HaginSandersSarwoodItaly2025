@@ -1358,15 +1358,10 @@ document.addEventListener('DOMContentLoaded', async function() {
   try {
     console.log('Loading Italy trip data...');
     
-    // Create individual flight maps for each group
-    window.maryLisaFlightMap = createIndividualFlightMap('mary-lisa-flight-map', 'maryLisa');
-    console.log('Mary & Lisa flight map loaded');
-    
-    window.keoKarenFlightMap = createIndividualFlightMap('keo-karen-flight-map', 'keoKaren');
-    console.log('Keo & Karen flight map loaded');
-    
-    // Fetch and create shared itinerary map
+    // Fetch itinerary data first
     const itinerary = await fetchItineraryData(GOOGLE_SHEETS_CONFIG.itinerarySheetUrl);
+    
+    // Create itinerary map (in active/visible tab)
     window.itineraryMap = createItineraryMap('italy-itinerary-map', itinerary);
     console.log('Italy itinerary map loaded');
     
