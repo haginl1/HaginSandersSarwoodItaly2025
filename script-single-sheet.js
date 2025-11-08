@@ -1188,7 +1188,16 @@ function createTripCalendar(itinerary) {
     const tripData = tripDataMap.get(dateKey);
     
     if (tripData) {
-      const activities = tripData.activities ? tripData.activities.split('\n').filter(a => a.trim()) : [];
+      // Split activities by newline or comma
+      let activities = [];
+      if (tripData.activities) {
+        if (tripData.activities.includes('\n')) {
+          activities = tripData.activities.split('\n').filter(a => a.trim());
+        } else {
+          activities = tripData.activities.split(',').filter(a => a.trim());
+        }
+      }
+      
       const links = tripData.activityLinks ? tripData.activityLinks.split('\n').filter(l => l.trim()) : [];
       const dayOfWeek = dayNames[currentDate.getDay()];
       
