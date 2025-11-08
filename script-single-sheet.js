@@ -865,10 +865,7 @@ function createDestinationCards(itinerary) {
     }
     
     card.innerHTML = `
-      <h4>
-        ${destination.name}
-        <span class="order-badge">Stop ${destination.order}</span>
-      </h4>
+      <h4>${destination.name}</h4>
       <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
       
       ${destination.accommodation ? `
