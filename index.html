@@ -612,14 +612,15 @@
         .calendar-cell {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
-            min-height: 70px;
-            padding: 0.3rem;
+            min-height: 55px;
+            padding: 0.2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             text-align: center;
             aspect-ratio: 1;
+            font-size: 0.75rem;
         }
         
         .calendar-cell.empty {
@@ -634,31 +635,31 @@
         }
         
         .cell-date {
-            font-size: 1rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: #2d3748;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.1rem;
         }
         
         .cell-badge {
             background: #4299e1;
             color: white;
-            padding: 0.15rem 0.4rem;
-            border-radius: 8px;
-            font-size: 0.6rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 6px;
+            font-size: 0.5rem;
             font-weight: 600;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.1rem;
         }
         
         .cell-loc {
-            font-size: 0.6rem;
+            font-size: 0.5rem;
             font-weight: 600;
             color: #ed8936;
             line-height: 1.1;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
         }
         
@@ -670,19 +671,21 @@
         }
         
         .cell-activities {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             color: #2d3748;
-            margin-top: 0.15rem;
-            line-height: 1.2;
+            margin-top: 0.1rem;
+            line-height: 1.1;
             width: 100%;
             text-align: left;
+            max-height: 1.8rem;
+            overflow: hidden;
         }
         
         .activity-item {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding: 0.05rem 0;
+            padding: 0.02rem 0;
         }
         
         .calendar-cell.trip-day {
