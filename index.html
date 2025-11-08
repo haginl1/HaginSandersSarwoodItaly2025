@@ -820,6 +820,80 @@
             font-size: 0.9rem;
         }
         
+        /* Resource Cards Styles */
+        .resource-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .resource-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .resource-header h4 {
+            margin: 0;
+            color: #2d3748;
+            font-size: 1.2rem;
+        }
+        
+        .resource-badge {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .resource-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            padding: 0.5rem 1.25rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .resource-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .resource-card {
+                padding: 1.25rem;
+            }
+            
+            .resource-header h4 {
+                font-size: 1.1rem;
+            }
+            
+            .resource-badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
+            }
+        }
+        
         @media (max-width: 768px) {
             .photo-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -1005,6 +1079,7 @@
                 <button class="tab-button" data-tab="hotels">🏨 Hotels</button>
                 <button class="tab-button" data-tab="transportation">🚂 Transportation</button>
                 <button class="tab-button" data-tab="rental">🚗 Rental Car</button>
+                <button class="tab-button" data-tab="resources">🔗 Resources</button>
                 <button class="tab-button" data-tab="photos">📸 Photos</button>
             </div>
             
@@ -1314,6 +1389,96 @@
                                     <strong>👥 All Passengers:</strong> Mary, Lisa, Keo, Karen
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Tab -->
+            <div class="tab-panel" id="resources-tab">
+                <h2 class="section-title" style="text-align: center; color: #2d3748; font-size: 1.8rem; margin-bottom: 0.5rem;">🔗 Travel Resources</h2>
+                <p class="section-subtitle" style="text-align: center; color: #4a5568; margin-bottom: 2rem;">Essential links and information for your Italy trip</p>
+                
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <!-- Medical Resources -->
+                    <div class="resource-section">
+                        <h3 style="color: #ed8936; margin-bottom: 1rem; font-size: 1.4rem;">🏥 Medical & Emergency</h3>
+                        <div class="resource-card">
+                            <div class="resource-header">
+                                <h4>Doctors in Italy</h4>
+                                <span class="resource-badge">Emergency</span>
+                            </div>
+                            <p style="color: #718096; margin: 0.5rem 0;">Find English-speaking doctors throughout Italy</p>
+                            <a href="https://www.doctorsinitaly.com/" target="_blank" class="resource-link" rel="noopener noreferrer">
+                                Visit Website →
+                            </a>
+                        </div>
+                        
+                        <div class="resource-card">
+                            <div class="resource-header">
+                                <h4>Emergency Numbers</h4>
+                                <span class="resource-badge">Important</span>
+                            </div>
+                            <div style="background: #fff5f0; padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+                                <div style="margin-bottom: 0.5rem;"><strong>🚨 Emergency:</strong> 112 (General Emergency)</div>
+                                <div style="margin-bottom: 0.5rem;"><strong>🚑 Ambulance:</strong> 118</div>
+                                <div style="margin-bottom: 0.5rem;"><strong>👮 Police:</strong> 113</div>
+                                <div><strong>🔥 Fire:</strong> 115</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Travel & Transportation -->
+                    <div class="resource-section">
+                        <h3 style="color: #4299e1; margin-bottom: 1rem; font-size: 1.4rem;">🚆 Travel & Transportation</h3>
+                        <div class="resource-card">
+                            <div class="resource-header">
+                                <h4>Trenitalia (Italian Railways)</h4>
+                            </div>
+                            <p style="color: #718096; margin: 0.5rem 0;">Book trains, check schedules, and manage tickets</p>
+                            <a href="https://www.trenitalia.com/en.html" target="_blank" class="resource-link" rel="noopener noreferrer">
+                                Visit Website →
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Tourist Information -->
+                    <div class="resource-section">
+                        <h3 style="color: #48bb78; margin-bottom: 1rem; font-size: 1.4rem;">ℹ️ Tourist Information</h3>
+                        <div class="resource-card">
+                            <div class="resource-header">
+                                <h4>Italy Travel Guide</h4>
+                            </div>
+                            <p style="color: #718096; margin: 0.5rem 0;">Official tourism website for Italy</p>
+                            <a href="https://www.italia.it/en" target="_blank" class="resource-link" rel="noopener noreferrer">
+                                Visit Website →
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Useful Apps -->
+                    <div class="resource-section">
+                        <h3 style="color: #9f7aea; margin-bottom: 1rem; font-size: 1.4rem;">📱 Recommended Apps</h3>
+                        <div class="resource-card">
+                            <div class="resource-header">
+                                <h4>Google Translate</h4>
+                            </div>
+                            <p style="color: #718096; margin: 0.5rem 0;">Download Italian for offline translation</p>
+                            <div style="display: flex; gap: 1rem; margin-top: 0.75rem;">
+                                <a href="https://apps.apple.com/app/google-translate/id414706506" target="_blank" class="resource-link" rel="noopener noreferrer">
+                                    iOS →
+                                </a>
+                                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.translate" target="_blank" class="resource-link" rel="noopener noreferrer">
+                                    Android →
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-card">
+                            <div class="resource-header">
+                                <h4>Google Maps</h4>
+                            </div>
+                            <p style="color: #718096; margin: 0.5rem 0;">Download offline maps for Italy before your trip</p>
                         </div>
                     </div>
                 </div>
