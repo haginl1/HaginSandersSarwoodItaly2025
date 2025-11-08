@@ -1010,7 +1010,59 @@ function createHotelCards(itinerary) {
   
   container.innerHTML = ''; // Clear existing cards
   
-  itinerary.forEach(destination => {
+  // Group hotels by unique accommodation to avoid duplicates on travel days
+  const hotelMap = new Map();
+  
+  itinerary.forEach((destination, index) => {
+    if (destination.accommodation) {
+      const hotelKey = destination.accommodation + destination.name; // Hotel + City combination
+      
+      if (!hotelMap.has(hotelKey)) {
+        // Parse dates to get check-in and check-out
+        let checkInDate = '';
+        let checkOutDate = '';
+        
+        if (destination.dates) {
+          if (destination.dates.includes('-')) {
+            const parts = destination.dates.split('-').map(d => d.trim());
+            checkInDate = parts[0];
+            
+            // Check-out is the day after the last date
+            const lastDateStr = parts.length > 1 ? parts[1] : parts[0];
+            const lastDate = parseShortDate(lastDateStr, 2025);
+            if (lastDate) {
+              lastDate.setDate(lastDate.getDate() + 1);
+              const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+              checkOutDate = `${monthNames[lastDate.getMonth()]} ${lastDate.getDate()}`;
+            }
+          } else {
+            checkInDate = destination.dates;
+            const checkInDateObj = parseShortDate(destination.dates, 2025);
+            if (checkInDateObj) {
+              checkInDateObj.setDate(checkInDateObj.getDate() + 1);
+              const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+              checkOutDate = `${monthNames[checkInDateObj.getMonth()]} ${checkInDateObj.getDate()}`;
+            }
+          }
+        }
+        
+        // Check if this is a travel day arrival (next hotel on same date)
+        const nextDestination = itinerary[index + 1];
+        const isArrivalDay = nextDestination && 
+                            nextDestination.dates === destination.dates && 
+                            nextDestination.accommodation !== destination.accommodation;
+        
+        hotelMap.set(hotelKey, {
+          ...destination,
+          checkInDate,
+          checkOutDate,
+          isArrivalDay
+        });
+      }
+    }
+  });
+  
+  hotelMap.forEach((destination) => {
     const card = document.createElement('div');
     card.className = 'hotel-card-detail';
     
@@ -1027,8 +1079,15 @@ function createHotelCards(itinerary) {
       </h4>
       <div class="hotel-city-badge">${destination.name}</div>
       
-      <div class="hotel-info-item">
-        <strong>📅 Dates:</strong> ${destination.dates || 'Dates TBD'}
+      <div class="hotel-info-item" style="background: #f0f9ff; padding: 0.75rem; border-radius: 6px; margin: 0.5rem 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="flex: 1; min-width: 140px;">
+            <strong>� Check-In:</strong> ${destination.checkInDate || 'TBD'}
+          </div>
+          <div style="flex: 1; min-width: 140px;">
+            <strong>📤 Check-Out:</strong> ${destination.checkOutDate || 'TBD'}
+          </div>
+        </div>
       </div>
       
       ${hotelAddress !== 'Address TBD' ? `
