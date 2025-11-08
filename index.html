@@ -411,47 +411,56 @@
         @media (max-width: 768px) {
             /* Show collapsible header on mobile */
             .card-header-mobile {
-                display: block;
+                display: block !important;
             }
             
             /* Hide the default h4 and dates on mobile - they're in the header now */
             .destination-card > h4,
             .destination-card > .dates {
-                display: none;
+                display: none !important;
             }
             
             .card-header-mobile .dates {
-                display: block;
+                display: block !important;
                 margin-top: 0.5rem;
             }
             
             /* Card details - collapsed by default on mobile */
-            .card-details {
-                max-height: 0;
-                overflow: hidden;
+            .destination-card .card-details {
+                max-height: 0 !important;
+                overflow: hidden !important;
                 transition: max-height 0.3s ease-out;
+                padding-top: 0;
             }
             
-            .card-details.expanded {
-                max-height: 2000px;
+            .destination-card .card-details.expanded {
+                max-height: 2000px !important;
+                overflow: visible !important;
                 transition: max-height 0.5s ease-in;
                 margin-top: 1rem;
+                padding-top: 0;
             }
         }
         
         @media (min-width: 769px) {
             /* On desktop, always show details and hide toggle button */
             .collapse-toggle {
-                display: none;
+                display: none !important;
             }
             
-            .card-details {
+            .destination-card .card-details {
                 max-height: none !important;
                 overflow: visible !important;
             }
             
             .card-header-mobile {
                 display: none !important;
+            }
+            
+            /* Show the default h4 and dates on desktop */
+            .destination-card > h4,
+            .destination-card > .dates {
+                display: block !important;
             }
         }
         
