@@ -563,32 +563,82 @@ function createItineraryMap(mapId, itinerary) {
 
   const routeCoordinates = [];
   const mainColor = '#4299e1';
-
+  
+  // Consolidate itinerary by city - group multiple days into one marker per city
+  const citiesMap = new Map();
   itinerary.forEach(location => {
+    if (!citiesMap.has(location.name)) {
+      citiesMap.set(location.name, {
+        name: location.name,
+        lat: location.lat,
+        lng: location.lng,
+        order: location.order,
+        dates: [location.dates],
+        accommodation: location.accommodation,
+        activities: location.activities ? [location.activities] : [],
+        notes: location.notes ? [location.notes] : [],
+        hotelAddress: location.hotelAddress,
+        hotelPhone: location.hotelPhone,
+        hotelWebsite: location.hotelWebsite,
+        hotelConfirmation: location.hotelConfirmation,
+        activityLocations: location.activityLocations,
+        activityLinks: location.activityLinks
+      });
+    } else {
+      // Add to existing city
+      const city = citiesMap.get(location.name);
+      if (location.dates) city.dates.push(location.dates);
+      if (location.activities) city.activities.push(location.activities);
+      if (location.notes) city.notes.push(location.notes);
+      // Update accommodation if not TBD
+      if (location.accommodation && location.accommodation !== 'TBD') {
+        city.accommodation = location.accommodation;
+      }
+      // Update hotel details if provided
+      if (location.hotelAddress) city.hotelAddress = location.hotelAddress;
+      if (location.hotelPhone) city.hotelPhone = location.hotelPhone;
+      if (location.hotelWebsite) city.hotelWebsite = location.hotelWebsite;
+      if (location.hotelConfirmation) city.hotelConfirmation = location.hotelConfirmation;
+    }
+  });
+  
+  // Convert map to array and process
+  const uniqueCities = Array.from(citiesMap.values());
+
+  uniqueCities.forEach((location, index) => {
     routeCoordinates.push([location.lat, location.lng]);
+    
+    // Combine dates into range
+    const dateRange = location.dates.length > 1 
+      ? `${location.dates[0]} - ${location.dates[location.dates.length - 1]}`
+      : location.dates[0];
     
     // Destination popup content
     let popupContent = `<div style="min-width: 220px;">
       <strong style="font-size: 18px; color: ${mainColor};">${location.name}</strong>`;
     
-    if (location.dates) {
-      popupContent += `<br><span style="color: #666;">📅 ${location.dates}</span>`;
+    if (dateRange) {
+      popupContent += `<br><span style="color: #666;">📅 ${dateRange}</span>`;
     }
     if (location.accommodation) {
       popupContent += `<br><span style="color: #666;">🏨 ${location.accommodation}</span>`;
     }
-    if (location.activities) {
-      popupContent += `<br><br><strong style="color: #4299e1;">Activities:</strong><br><span style="color: #555; font-size: 14px;">${location.activities}</span>`;
+    if (location.activities.length > 0) {
+      const allActivities = location.activities.join(', ');
+      popupContent += `<br><br><strong style="color: #4299e1;">Activities:</strong><br><span style="color: #555; font-size: 14px;">${allActivities}</span>`;
     }
-    if (location.notes) {
-      popupContent += `<br><br><em style="font-size: 13px; color: #718096;">${location.notes}</em>`;
+    if (location.notes.length > 0) {
+      const allNotes = location.notes.filter(n => n).join(' | ');
+      if (allNotes) {
+        popupContent += `<br><br><em style="font-size: 13px; color: #718096;">${allNotes}</em>`;
+      }
     }
     popupContent += `</div>`;
     
     // Add numbered destination marker
     const marker = L.marker([location.lat, location.lng], {
       icon: L.divIcon({
-        html: `<div style="background: linear-gradient(135deg, ${mainColor} 0%, #3182ce 100%); color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);">${location.order}</div>`,
+        html: `<div style="background: linear-gradient(135deg, ${mainColor} 0%, #3182ce 100%); color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);">${index + 1}</div>`,
         className: 'custom-div-icon',
         iconSize: [36, 36],
         iconAnchor: [18, 18]
