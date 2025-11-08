@@ -696,7 +696,16 @@ function createItineraryMap(mapId, itinerary) {
     
     // Add activity location markers if available
     if (location.activityLocations) {
-      const activities = (location.activities || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0);
+      // Handle activities - could be string or array depending on consolidation
+      let activities = [];
+      if (Array.isArray(location.activities)) {
+        // Already an array from consolidation - join and split
+        activities = location.activities.join(',').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0);
+      } else {
+        // String - split normally
+        activities = (location.activities || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0);
+      }
+      
       const activityLocations = (location.activityLocations || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0);
       const activityLinks = (location.activityLinks || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0);
       
