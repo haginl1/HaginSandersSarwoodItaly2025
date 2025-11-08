@@ -6,7 +6,7 @@ const GOOGLE_SHEETS_CONFIG = {
   // Single sheet with all Italy destinations
   itinerarySheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmSqiviOP7ift7QOMW1b4vOiRv0NKuAhBLgnbcQLRPLWikDFfOsjcBlA-m8gcObWoTtHSnd9_aYljl/pub?gid=1110183056&single=true&output=csv',
   // Set to true to use fallback data for testing
-  useFallbackData: false
+  useFallbackData: true  // Temporarily using fallback to see the structure
 };
 
 // Flight routes (hardcoded - these don't change)
