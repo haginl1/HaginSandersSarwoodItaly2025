@@ -812,99 +812,195 @@ function createDestinationCards(itinerary) {
   
   container.innerHTML = ''; // Clear existing cards
   
-  itinerary.forEach(destination => {
+  let i = 0;
+  while (i < itinerary.length) {
+    const destination = itinerary[i];
+    const nextDestination = itinerary[i + 1];
+    
     const card = document.createElement('div');
     card.className = 'destination-card';
     
-    // Split activities by semicolon or comma
-    const activities = (destination.activities || '')
-      .split(/[;,]/)
-      .map(a => a.trim())
-      .filter(a => a.length > 0);
+    // Check if this is a travel day (same date, different cities)
+    const isTravelDay = nextDestination && 
+                        destination.dates === nextDestination.dates && 
+                        destination.name !== nextDestination.name;
     
-    // Split activity links and locations (same delimiter)
-    const activityLinks = (destination.activityLinks || '')
-      .split(/[;,]/)
-      .map(a => a.trim())
-      .filter(a => a.length > 0);
-    
-    const activityLocations = (destination.activityLocations || '')
-      .split(/[;,]/)
-      .map(a => a.trim())
-      .filter(a => a.length > 0);
-    
-    // Create activities HTML with optional links and locations
-    let activitiesHTML = '';
-    if (activities.length > 0) {
-      activitiesHTML = '<ul class="activities-list">';
-      activities.forEach((activity, index) => {
-        const link = activityLinks[index] || '';
-        const location = activityLocations[index] || '';
+    if (isTravelDay) {
+      // Combined travel day card
+      const departCity = destination.name;
+      const arriveCity = nextDestination.name;
+      
+      // Combine activities from both
+      const allActivities = [
+        ...(destination.activities || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0),
+        ...(nextDestination.activities || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0)
+      ];
+      
+      const allActivityLinks = [
+        ...(destination.activityLinks || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0),
+        ...(nextDestination.activityLinks || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0)
+      ];
+      
+      const allActivityLocations = [
+        ...(destination.activityLocations || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0),
+        ...(nextDestination.activityLocations || '').split(/[;,]/).map(a => a.trim()).filter(a => a.length > 0)
+      ];
+      
+      // Create activities HTML
+      let activitiesHTML = '';
+      if (allActivities.length > 0) {
+        activitiesHTML = '<ul class="activities-list">';
+        allActivities.forEach((activity, index) => {
+          const link = allActivityLinks[index] || '';
+          const location = allActivityLocations[index] || '';
+          
+          let activityItem = '';
+          if (link) {
+            activityItem = `<a href="${link}" target="_blank" class="activity-link" rel="noopener noreferrer">${activity}</a>`;
+          } else {
+            activityItem = activity;
+          }
+          
+          if (location) {
+            const encodedLocation = encodeURIComponent(location);
+            const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+            activityItem += `<br><small class="activity-location">📍 <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer">${location}</a></small>`;
+          }
+          
+          activitiesHTML += `<li>${activityItem}</li>`;
+        });
+        activitiesHTML += '</ul>';
+      }
+      
+      card.innerHTML = `
+        <h4>🚂 Travel Day: ${departCity} → ${arriveCity}</h4>
+        <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
         
-        let activityItem = '';
+        <div class="info-section">
+          <div class="info-label">🏨 Where You're Staying Tonight</div>
+          <div class="info-content"><strong>${nextDestination.accommodation || 'Hotel TBD'}</strong></div>
+        </div>
         
-        // If there's a link, make the activity name clickable
-        if (link) {
-          activityItem = `<a href="${link}" target="_blank" class="activity-link" rel="noopener noreferrer">${activity}</a>`;
-        } else {
-          activityItem = activity;
-        }
+        ${nextDestination.rentalCar || destination.rentalCar ? `
+          <div class="info-section">
+            <div class="info-label">🚗 Transportation</div>
+            <div class="info-content">${nextDestination.rentalCar || destination.rentalCar}</div>
+          </div>
+        ` : ''}
         
-        // Add location with Google Maps link if available
-        if (location) {
-          const encodedLocation = encodeURIComponent(location);
-          const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
-          activityItem += `<br><small class="activity-location">📍 <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer">${location}</a></small>`;
-        }
+        ${nextDestination.trainInfo || destination.trainInfo ? `
+          <div class="info-section">
+            <div class="info-label">🚆 Train Details</div>
+            <div class="info-content">${nextDestination.trainInfo || destination.trainInfo}</div>
+          </div>
+        ` : ''}
         
-        activitiesHTML += `<li>${activityItem}</li>`;
-      });
-      activitiesHTML += '</ul>';
+        ${allActivities.length > 0 ? `
+          <div class="info-section">
+            <div class="info-label">✨ Activities & Plans</div>
+            ${activitiesHTML}
+          </div>
+        ` : ''}
+        
+        ${nextDestination.notes || destination.notes ? `
+          <div class="notes">
+            💡 ${nextDestination.notes || destination.notes}
+          </div>
+        ` : ''}
+      `;
+      
+      container.appendChild(card);
+      i += 2; // Skip both entries since we combined them
+      
     } else {
-      activitiesHTML = '<p class="info-content">No activities listed yet</p>';
+      // Regular destination card
+      const activities = (destination.activities || '')
+        .split(/[;,]/)
+        .map(a => a.trim())
+        .filter(a => a.length > 0);
+      
+      const activityLinks = (destination.activityLinks || '')
+        .split(/[;,]/)
+        .map(a => a.trim())
+        .filter(a => a.length > 0);
+      
+      const activityLocations = (destination.activityLocations || '')
+        .split(/[;,]/)
+        .map(a => a.trim())
+        .filter(a => a.length > 0);
+      
+      // Create activities HTML with optional links and locations
+      let activitiesHTML = '';
+      if (activities.length > 0) {
+        activitiesHTML = '<ul class="activities-list">';
+        activities.forEach((activity, index) => {
+          const link = activityLinks[index] || '';
+          const location = activityLocations[index] || '';
+          
+          let activityItem = '';
+          
+          if (link) {
+            activityItem = `<a href="${link}" target="_blank" class="activity-link" rel="noopener noreferrer">${activity}</a>`;
+          } else {
+            activityItem = activity;
+          }
+          
+          if (location) {
+            const encodedLocation = encodeURIComponent(location);
+            const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+            activityItem += `<br><small class="activity-location">📍 <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer">${location}</a></small>`;
+          }
+          
+          activitiesHTML += `<li>${activityItem}</li>`;
+        });
+        activitiesHTML += '</ul>';
+      } else {
+        activitiesHTML = '<p class="info-content">No activities listed yet</p>';
+      }
+      
+      card.innerHTML = `
+        <h4>${destination.name}</h4>
+        <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
+        
+        ${destination.accommodation ? `
+          <div class="info-section">
+            <div class="info-label">🏨 Where You're Staying</div>
+            <div class="info-content"><strong>${destination.accommodation}</strong></div>
+          </div>
+        ` : ''}
+        
+        ${destination.rentalCar ? `
+          <div class="info-section">
+            <div class="info-label">🚗 Transportation</div>
+            <div class="info-content">${destination.rentalCar}</div>
+          </div>
+        ` : ''}
+        
+        ${destination.trainInfo ? `
+          <div class="info-section">
+            <div class="info-label">🚆 Train Details</div>
+            <div class="info-content">${destination.trainInfo}</div>
+          </div>
+        ` : ''}
+        
+        ${activities.length > 0 ? `
+          <div class="info-section">
+            <div class="info-label">✨ Activities & Plans</div>
+            ${activitiesHTML}
+          </div>
+        ` : ''}
+        
+        ${destination.notes ? `
+          <div class="notes">
+            💡 ${destination.notes}
+          </div>
+        ` : ''}
+      `;
+      
+      container.appendChild(card);
+      i++; // Move to next entry
     }
-    
-    card.innerHTML = `
-      <h4>${destination.name}</h4>
-      <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
-      
-      ${destination.accommodation ? `
-        <div class="info-section">
-          <div class="info-label">🏨 Where You're Staying</div>
-          <div class="info-content"><strong>${destination.accommodation}</strong></div>
-        </div>
-      ` : ''}
-      
-      ${destination.rentalCar ? `
-        <div class="info-section">
-          <div class="info-label">🚗 Transportation</div>
-          <div class="info-content">${destination.rentalCar}</div>
-        </div>
-      ` : ''}
-      
-      ${destination.trainInfo ? `
-        <div class="info-section">
-          <div class="info-label">🚆 Train Details</div>
-          <div class="info-content">${destination.trainInfo}</div>
-        </div>
-      ` : ''}
-      
-      ${activities.length > 0 ? `
-        <div class="info-section">
-          <div class="info-label">✨ Activities & Plans</div>
-          ${activitiesHTML}
-        </div>
-      ` : ''}
-      
-      ${destination.notes ? `
-        <div class="notes">
-          💡 ${destination.notes}
-        </div>
-      ` : ''}
-    `;
-    
-    container.appendChild(card);
-  });
+  }
 }
 
 // Create hotel information cards
