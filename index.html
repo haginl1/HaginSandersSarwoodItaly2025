@@ -569,14 +569,13 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Calendar Styles - Compact Grid View */
+        /* Calendar Styles - Mobile-First Design */
         .calendar-container {
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             padding: 1rem;
             margin-bottom: 2rem;
-            overflow-x: auto;
         }
         
         .calendar-month-header {
@@ -587,7 +586,7 @@
         }
         
         .calendar-month-header h3 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #2d3748;
             margin: 0;
             font-weight: 700;
@@ -596,32 +595,31 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
+            gap: 6px;
             width: 100%;
-            min-width: 100%;
         }
         
         .calendar-weekday {
             background: #4299e1;
             color: white;
             text-align: center;
-            padding: 0.5rem;
+            padding: 0.6rem;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
+            border-radius: 4px;
         }
         
         .calendar-cell {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
-            min-height: 45px;
-            padding: 0.15rem;
+            min-height: 90px;
+            padding: 0.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             text-align: center;
-            aspect-ratio: 1;
-            font-size: 0.85rem;
+            border-radius: 6px;
         }
         
         .calendar-cell.empty {
@@ -632,69 +630,62 @@
         .calendar-cell.trip-day {
             background: linear-gradient(135deg, #fff5f0 0%, #ffe4d6 100%);
             border: 2px solid #ed8936;
-            box-shadow: 0 1px 4px rgba(237, 137, 54, 0.2);
+            box-shadow: 0 2px 6px rgba(237, 137, 54, 0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .calendar-cell.trip-day:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(237, 137, 54, 0.5);
         }
         
         .cell-date {
-            font-size: 0.95rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #2d3748;
-            margin-bottom: 0.1rem;
+            margin-bottom: 0.3rem;
         }
         
         .cell-badge {
             background: #4299e1;
             color: white;
-            padding: 0.1rem 0.3rem;
-            border-radius: 4px;
-            font-size: 0.6rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 0.1rem;
+            margin-bottom: 0.3rem;
         }
         
         .cell-loc {
-            font-size: 0.65rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: #ed8936;
-            line-height: 1.1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            width: 100%;
+            line-height: 1.2;
+            margin-bottom: 0.2rem;
         }
         
         .cell-activity-count {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             color: #4299e1;
-            margin-top: 0.1rem;
+            margin-top: 0.2rem;
             font-weight: 600;
         }
         
         .cell-activities {
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             color: #2d3748;
-            margin-top: 0.1rem;
-            line-height: 1.2;
+            margin-top: 0.2rem;
+            line-height: 1.3;
             width: 100%;
-            text-align: left;
-            max-height: 2rem;
-            overflow: hidden;
+            text-align: center;
         }
         
         .activity-item {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding: 0.02rem 0;
-        }
-        
-        .calendar-cell.trip-day {
-            cursor: pointer;
-        }
-        
-        .calendar-cell.trip-day:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(237, 137, 54, 0.4);
+            padding: 0.1rem 0;
         }
         
         /* Modal Styles */
@@ -883,87 +874,78 @@
                 font-size: 1.6rem;
             }
             .calendar-container {
-                padding: 0.5rem;
-                overflow-x: auto;
+                padding: 0.75rem;
             }
             .calendar-month-header h3 {
-                font-size: 1.3rem;
+                font-size: 1.5rem;
             }
             .calendar-grid {
                 gap: 4px;
-                min-width: 100%;
             }
             .calendar-weekday {
-                padding: 0.5rem 0.2rem;
-                font-size: 0.7rem;
+                padding: 0.5rem;
+                font-size: 0.75rem;
             }
             .calendar-cell {
-                min-height: 85px;
-                padding: 0.35rem;
-                aspect-ratio: 1;
+                min-height: 75px;
+                padding: 0.4rem;
             }
             .cell-date {
-                font-size: 1.1rem;
-                margin-bottom: 0.15rem;
+                font-size: 1.2rem;
+                margin-bottom: 0.2rem;
             }
             .cell-badge {
-                font-size: 0.65rem;
-                padding: 0.15rem 0.35rem;
-                margin-bottom: 0.15rem;
+                font-size: 0.7rem;
+                padding: 0.15rem 0.4rem;
+                margin-bottom: 0.2rem;
             }
             .cell-loc {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
                 line-height: 1.2;
             }
             .cell-activity-count {
-                font-size: 0.65rem;
+                font-size: 0.7rem;
             }
             .cell-activities {
                 font-size: 0.65rem;
-                max-height: 2.2rem;
             }
         }
         
         /* Extra small mobile */
         @media (max-width: 480px) {
             .calendar-container {
-                padding: 0.25rem;
+                padding: 0.5rem;
             }
             .calendar-month-header h3 {
-                font-size: 1.1rem;
+                font-size: 1.3rem;
                 margin-bottom: 0.5rem;
             }
             .calendar-grid {
-                gap: 2px;
+                gap: 3px;
             }
             .calendar-weekday {
-                padding: 0.4rem 0.1rem;
-                font-size: 0.65rem;
+                padding: 0.4rem;
+                font-size: 0.7rem;
             }
             .calendar-cell {
-                min-height: 80px;
+                min-height: 70px;
                 padding: 0.3rem;
             }
             .cell-date {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
             .cell-badge {
-                font-size: 0.6rem;
-                padding: 0.12rem 0.28rem;
+                font-size: 0.65rem;
+                padding: 0.12rem 0.35rem;
             }
             .cell-loc {
-                font-size: 0.65rem;
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
+                font-size: 0.7rem;
             }
             .cell-activity-count {
-                font-size: 0.6rem;
+                font-size: 0.65rem;
             }
             .cell-activities {
                 font-size: 0.6rem;
-                max-height: 2rem;
             }
         }
     </style>
