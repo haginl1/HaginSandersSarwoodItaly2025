@@ -1163,6 +1163,7 @@
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+            max-width: 100%;
         }
         
         .photo-scroll-wrapper::-webkit-scrollbar {
@@ -1238,6 +1239,12 @@
             white-space: normal;
         }
         
+        /* Google Photos iframe responsive styles */
+        .photo-scroll-track iframe {
+            display: block;
+            margin: 0 auto;
+        }
+        
         @media (max-width: 768px) {
             .photo-scroll-header h3 {
                 font-size: 1.5rem;
@@ -1246,6 +1253,11 @@
             .photo-scroll-item {
                 width: 220px;
                 height: 160px;
+            }
+            
+            .photo-scroll-track iframe {
+                min-width: 100% !important;
+                height: 350px !important;
             }
         }
         
@@ -1256,6 +1268,10 @@
             
             .photo-scroll-header h3 {
                 font-size: 1.3rem;
+            }
+            
+            .photo-scroll-track iframe {
+                height: 300px !important;
             }
             
             .photo-scroll-item {
@@ -2087,20 +2103,23 @@
                     window.GOOGLE_PHOTOS_CONFIG.albumUrl && 
                     window.GOOGLE_PHOTOS_CONFIG.albumUrl.startsWith('https://')) {
                     
-                    console.log('Google Photos configured, showing placeholder with link');
+                    console.log('Google Photos configured, embedding album');
+                    
+                    // Extract album ID from URL and create embed URL
+                    const albumUrl = window.GOOGLE_PHOTOS_CONFIG.albumUrl;
+                    
+                    // Google Photos embed - use iframe with the album URL
                     photoScrollTrack.innerHTML = `
-                        <div class="photo-scroll-item">
-                            <div class="photo-scroll-placeholder">
-                                <div style="font-size: 3rem;">📸</div>
-                                <p style="font-weight: 600; margin-top: 0.5rem;">View Album</p>
-                            </div>
+                        <div style="width: 100%; height: 400px; min-width: 100%; display: flex; align-items: center; justify-content: center;">
+                            <iframe src="${albumUrl}" 
+                                    width="100%" 
+                                    height="400" 
+                                    frameborder="0" 
+                                    allowfullscreen
+                                    style="border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); background: white; min-width: 800px;">
+                            </iframe>
                         </div>
                     `;
-                    
-                    // Make it clickable to open the album
-                    photoScrollTrack.querySelector('.photo-scroll-item').onclick = function() {
-                        window.open(window.GOOGLE_PHOTOS_CONFIG.albumUrl, '_blank');
-                    };
                     
                     return;
                 }
