@@ -873,14 +873,28 @@ function createDestinationCards(itinerary) {
       
       ${destination.accommodation ? `
         <div class="info-section">
-          <div class="info-label">🏨 Accommodation</div>
-          <div class="info-content">${destination.accommodation}</div>
+          <div class="info-label">🏨 Where You're Staying</div>
+          <div class="info-content"><strong>${destination.accommodation}</strong></div>
+        </div>
+      ` : ''}
+      
+      ${destination.rentalCar ? `
+        <div class="info-section">
+          <div class="info-label">🚗 Transportation</div>
+          <div class="info-content">${destination.rentalCar}</div>
+        </div>
+      ` : ''}
+      
+      ${destination.trainInfo ? `
+        <div class="info-section">
+          <div class="info-label">🚆 Train Details</div>
+          <div class="info-content">${destination.trainInfo}</div>
         </div>
       ` : ''}
       
       ${activities.length > 0 ? `
         <div class="info-section">
-          <div class="info-label">✨ Activities</div>
+          <div class="info-label">✨ Activities & Plans</div>
           ${activitiesHTML}
         </div>
       ` : ''}
