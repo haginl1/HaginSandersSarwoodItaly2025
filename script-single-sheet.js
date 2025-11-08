@@ -561,6 +561,7 @@ function createIndividualFlightMap(mapId, travelerGroup) {
 
 // Create shared Italy itinerary map
 function createItineraryMap(mapId, itinerary) {
+  console.log('Creating itinerary map - v2.0');  // Version check
   const map = L.map(mapId).setView([43.0, 12.0], 6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
