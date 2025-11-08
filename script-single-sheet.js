@@ -564,15 +564,17 @@ function createItineraryMap(mapId, itinerary) {
   const routeCoordinates = [];
   const mainColor = '#4299e1';
   
-  // Consolidate itinerary by city - group multiple days into one marker per city
+  // Consolidate itinerary by city for map display only
   const citiesMap = new Map();
+  const cityOrder = [];
+  
   itinerary.forEach(location => {
     if (!citiesMap.has(location.name)) {
       citiesMap.set(location.name, {
         name: location.name,
         lat: location.lat,
         lng: location.lng,
-        order: location.order,
+        firstOrder: location.order,
         dates: [location.dates],
         accommodation: location.accommodation,
         activities: location.activities ? [location.activities] : [],
@@ -584,6 +586,7 @@ function createItineraryMap(mapId, itinerary) {
         activityLocations: location.activityLocations,
         activityLinks: location.activityLinks
       });
+      cityOrder.push(location.name);
     } else {
       // Add to existing city
       const city = citiesMap.get(location.name);
@@ -602,10 +605,9 @@ function createItineraryMap(mapId, itinerary) {
     }
   });
   
-  // Convert map to array and process
-  const uniqueCities = Array.from(citiesMap.values());
-
-  uniqueCities.forEach((location, index) => {
+  // Process cities in order they first appeared
+  cityOrder.forEach((cityName, index) => {
+    const location = citiesMap.get(cityName);
     routeCoordinates.push([location.lat, location.lng]);
     
     // Combine dates into range
@@ -624,11 +626,12 @@ function createItineraryMap(mapId, itinerary) {
       popupContent += `<br><span style="color: #666;">🏨 ${location.accommodation}</span>`;
     }
     if (location.activities.length > 0) {
-      const allActivities = location.activities.join(', ');
-      popupContent += `<br><br><strong style="color: #4299e1;">Activities:</strong><br><span style="color: #555; font-size: 14px;">${allActivities}</span>`;
+      // Remove duplicates and join
+      const uniqueActivities = [...new Set(location.activities)].join(', ');
+      popupContent += `<br><br><strong style="color: #4299e1;">Activities:</strong><br><span style="color: #555; font-size: 14px;">${uniqueActivities}</span>`;
     }
     if (location.notes.length > 0) {
-      const allNotes = location.notes.filter(n => n).join(' | ');
+      const allNotes = [...new Set(location.notes.filter(n => n))].join(' | ');
       if (allNotes) {
         popupContent += `<br><br><em style="font-size: 13px; color: #718096;">${allNotes}</em>`;
       }
