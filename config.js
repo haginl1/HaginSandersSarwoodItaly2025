@@ -24,8 +24,19 @@ window.GOOGLE_SHEETS_CONFIG = {
 // 3. Get the shareable link: Open album → Share → Create link → Copy
 // 4. Paste the link below
 window.GOOGLE_PHOTOS_CONFIG = {
-  albumUrl: 'https://photos.app.goo.gl/zfWpnkSRrKjrRT416' // Paste your Google Photos album share link here
-  // Example: 'https://photos.app.goo.gl/yourAlbumLinkHere'
+  albumUrl: 'https://photos.app.goo.gl/zfWpnkSRrKjrRT416', // Paste your Google Photos album share link here
+  
+  // PHOTO URLS - Add direct image URLs here for the scrolling gallery
+  // To get direct URLs from Google Photos:
+  // 1. Open a photo in Google Photos
+  // 2. Click the 3-dot menu → "Download" or right-click → "Open image in new tab"
+  // 3. Copy the image URL from the new tab
+  // 4. Add it to the array below
+  photoUrls: [
+    // Example: 'https://lh3.googleusercontent.com/...',
+    // Add your photo URLs here - they will appear in the scrolling gallery at the bottom of the page
+    // You can also use any other image hosting service (Imgur, Cloudinary, etc.)
+  ]
 };
 
 /* 
