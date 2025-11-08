@@ -331,6 +331,7 @@ async function fetchItineraryData(url) {
   }
 
   try {
+    console.log('Fetching Google Sheet data from:', url);
     let csvUrl = url;
     if (url.includes('/edit')) {
       csvUrl = url.replace('/edit#gid=', '/export?format=csv&gid=');
@@ -342,8 +343,12 @@ async function fetchItineraryData(url) {
     if (!response.ok) throw new Error('Failed to fetch sheet data');
     
     const csvData = await response.text();
+    console.log('Received CSV data, length:', csvData.length);
     const parsedData = parseCSV(csvData);
+    console.log('Parsed CSV rows:', parsedData.length);
     const itinerary = convertToItinerary(parsedData);
+    console.log('Converted to itinerary entries:', itinerary.length);
+    console.log('First itinerary entry:', itinerary[0]);
     
     if (itinerary.length === 0) {
       console.log('No valid data in sheet, using fallback');
