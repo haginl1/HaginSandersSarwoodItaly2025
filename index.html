@@ -283,6 +283,82 @@
             color: #7d6608;
         }
         
+        /* Mobile styles for destination cards */
+        @media (max-width: 768px) {
+            .destination-cards {
+                gap: 1rem;
+            }
+            
+            .destination-card {
+                padding: 1rem;
+                border-left-width: 4px;
+            }
+            
+            .destination-card h4 {
+                font-size: 1.3rem;
+            }
+            
+            .destination-card .order-badge {
+                display: block;
+                margin: 0.5rem 0;
+                width: fit-content;
+            }
+            
+            .destination-card .dates {
+                font-size: 1rem;
+            }
+            
+            .destination-card .info-label {
+                font-size: 0.9rem;
+                font-weight: 700;
+                color: #2d3748;
+            }
+            
+            .destination-card .info-content {
+                font-size: 0.95rem;
+            }
+            
+            .destination-card .activities-list li {
+                padding: 0.35rem 0;
+                font-size: 0.95rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .destination-card {
+                padding: 0.85rem;
+                border-radius: 8px;
+            }
+            
+            .destination-card h4 {
+                font-size: 1.2rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .destination-card .info-section {
+                margin-bottom: 0.85rem;
+            }
+            
+            .destination-card .info-label {
+                font-size: 0.85rem;
+                margin-bottom: 0.35rem;
+            }
+            
+            .destination-card .info-content {
+                font-size: 0.9rem;
+            }
+            
+            .destination-card .activities-list li {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            
+            .destination-card .notes {
+                font-size: 0.9rem;
+                padding: 0.65rem;
+            }
+        }
+        
         /* Transportation Section */
         .transport-section {
             margin-bottom: 2rem;
@@ -1119,22 +1195,6 @@
         <p>Our Italian Adventure - Together in Italy!</p>
     </div>
 
-    <!-- Trip Dates -->
-    <div class="section">
-        <div class="trip-info">
-            <h3>📅 Trip Dates</h3>
-            <div class="dates">November 19 - November 28, 2025</div>
-            <div class="duration">8 amazing days exploring Italy together!</div>
-            <div style="margin-top: 1rem; text-align: center;">
-                <a href="https://docs.google.com/spreadsheets/d/1JwjqEVzij-edkrSp-30JlByLcGDIJwCgXH60tODMoBU/edit?usp=sharing" 
-                   target="_blank" 
-                   style="display: inline-block; background: #4299e1; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3); transition: background 0.2s;">
-                    📝 Edit Trip Details in Google Sheets
-                </a>
-            </div>
-        </div>
-    </div>
-
     <!-- Tabbed Interface -->
     <div class="section">
         <h2 class="section-title"> Trip Overview</h2>
@@ -1773,5 +1833,21 @@
             });
         });
     </script>
+    
+    <!-- Trip Dates - Footer Section -->
+    <div class="section" style="margin-top: 3rem; margin-bottom: 2rem;">
+        <div class="trip-info">
+            <h3>📅 Trip Dates</h3>
+            <div class="dates">November 19 - November 28, 2025</div>
+            <div class="duration">8 amazing days exploring Italy together!</div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <a href="https://docs.google.com/spreadsheets/d/1JwjqEVzij-edkrSp-30JlByLcGDIJwCgXH60tODMoBU/edit?usp=sharing" 
+                   target="_blank" 
+                   style="display: inline-block; background: #4299e1; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3); transition: background 0.2s;">
+                    📝 Edit Trip Details in Google Sheets
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
