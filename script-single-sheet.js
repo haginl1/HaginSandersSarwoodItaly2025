@@ -56,45 +56,129 @@ const flightRoutes = {
 
 // Fallback Italy itinerary (used if Google Sheets not configured)
 const fallbackItinerary = [
+  // Rome - Nov 20-22 (3 days)
   { 
     name: 'Rome', 
     lat: 41.9028, 
     lng: 12.4964, 
     order: 1, 
-    dates: 'Sept 23-26', 
+    dates: 'Nov 20', 
     accommodation: 'TBD',
-    activities: 'Colosseum, Vatican, Trevi Fountain',
-    notes: 'Arrival city - everyone meets here!'
+    activities: 'Arrival Day, Check-in, Evening walk',
+    notes: 'Arrival day - everyone meets here!'
+  },
+  { 
+    name: 'Rome', 
+    lat: 41.9028, 
+    lng: 12.4964, 
+    order: 2, 
+    dates: 'Nov 21', 
+    accommodation: 'TBD',
+    activities: 'Colosseum, Roman Forum, Trevi Fountain',
+    notes: 'Ancient Rome day'
+  },
+  { 
+    name: 'Rome', 
+    lat: 41.9028, 
+    lng: 12.4964, 
+    order: 3, 
+    dates: 'Nov 22', 
+    accommodation: 'TBD',
+    activities: 'Vatican Museums, Sistine Chapel, St Peters',
+    notes: 'Vatican day - then train to Verona'
+  },
+  // Verona - Nov 22-25 (3 days)
+  { 
+    name: 'Verona', 
+    lat: 45.4384, 
+    lng: 10.9916, 
+    order: 4, 
+    dates: 'Nov 22', 
+    accommodation: 'TBD',
+    activities: 'Arrive from Rome, Evening in Verona',
+    notes: 'Train from Rome'
+  },
+  { 
+    name: 'Verona', 
+    lat: 45.4384, 
+    lng: 10.9916, 
+    order: 5, 
+    dates: 'Nov 23', 
+    accommodation: 'TBD',
+    activities: 'Juliets House, Arena di Verona, Piazza delle Erbe',
+    notes: 'Romeo and Juliet city'
+  },
+  { 
+    name: 'Verona', 
+    lat: 45.4384, 
+    lng: 10.9916, 
+    order: 6, 
+    dates: 'Nov 24', 
+    accommodation: 'TBD',
+    activities: 'Lake Garda day trip, Sirmione',
+    notes: 'Beautiful lake town'
+  },
+  { 
+    name: 'Verona', 
+    lat: 45.4384, 
+    lng: 10.9916, 
+    order: 7, 
+    dates: 'Nov 25', 
+    accommodation: 'TBD',
+    activities: 'Morning in Verona, Train to Florence',
+    notes: 'Travel day to Florence'
+  },
+  // Florence - Nov 25-27 (2.5 days)
+  { 
+    name: 'Florence', 
+    lat: 43.7696, 
+    lng: 11.2558, 
+    order: 8, 
+    dates: 'Nov 25', 
+    accommodation: 'TBD',
+    activities: 'Arrive from Verona, Evening walk, Ponte Vecchio',
+    notes: 'Arrival afternoon'
   },
   { 
     name: 'Florence', 
     lat: 43.7696, 
     lng: 11.2558, 
-    order: 2, 
-    dates: 'Sept 26-29', 
+    order: 9, 
+    dates: 'Nov 26', 
     accommodation: 'TBD',
-    activities: 'Uffizi Gallery, Duomo, Ponte Vecchio',
-    notes: 'Book Uffizi tickets in advance'
+    activities: 'Uffizi Gallery, Duomo, Baptistry',
+    notes: 'Book Uffizi in advance'
   },
   { 
-    name: 'Venice', 
-    lat: 45.4408, 
-    lng: 12.3155, 
-    order: 3, 
-    dates: 'Sept 29-Oct 2', 
+    name: 'Florence', 
+    lat: 43.7696, 
+    lng: 11.2558, 
+    order: 10, 
+    dates: 'Nov 27', 
     accommodation: 'TBD',
-    activities: 'Gondola rides, St Marks, Rialto Market',
-    notes: 'No cars allowed - water taxis only'
+    activities: 'Accademia Gallery, Morning shopping, Train to Milan',
+    notes: 'See David statue, then to Milan'
+  },
+  // Milan - Nov 27-28 (1.5 days)
+  { 
+    name: 'Milan', 
+    lat: 45.4642, 
+    lng: 9.1900, 
+    order: 11, 
+    dates: 'Nov 27', 
+    accommodation: 'TBD',
+    activities: 'Arrive from Florence, Evening Duomo visit',
+    notes: 'Arrival evening'
   },
   { 
-    name: 'Tuscany', 
-    lat: 43.4667, 
-    lng: 11.3000, 
-    order: 4, 
-    dates: 'Oct 2-4', 
+    name: 'Milan', 
+    lat: 45.4642, 
+    lng: 9.1900, 
+    order: 12, 
+    dates: 'Nov 28', 
     accommodation: 'TBD',
-    activities: 'Wine tasting, Hill towns, Cooking class',
-    notes: 'Consider renting a car'
+    activities: 'Last da Vinci, Galleria, Departure to airport',
+    notes: 'Departure day'
   }
 ];
 
