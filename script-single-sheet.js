@@ -136,8 +136,8 @@ const fallbackItinerary = [
     order: 8, 
     dates: 'Nov 25', 
     accommodation: 'TBD',
-    activities: 'Arrive from Verona, Evening walk, Ponte Vecchio',
-    notes: 'Arrival afternoon'
+    activities: 'Arrive from Verona, Dinner Tour 6pm',
+    notes: 'Florence Dinner Tour - Booking #320270636'
   },
   { 
     name: 'Florence', 
