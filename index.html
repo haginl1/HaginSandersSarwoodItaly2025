@@ -612,15 +612,15 @@
         .calendar-cell {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
-            min-height: 55px;
-            padding: 0.2rem;
+            min-height: 45px;
+            padding: 0.15rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             text-align: center;
             aspect-ratio: 1;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
         
         .calendar-cell.empty {
@@ -635,49 +635,48 @@
         }
         
         .cell-date {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: #2d3748;
-            margin-bottom: 0.1rem;
+            margin-bottom: 0.05rem;
         }
         
         .cell-badge {
             background: #4299e1;
             color: white;
-            padding: 0.1rem 0.3rem;
-            border-radius: 6px;
-            font-size: 0.5rem;
+            padding: 0.05rem 0.25rem;
+            border-radius: 4px;
+            font-size: 0.45rem;
             font-weight: 600;
-            margin-bottom: 0.1rem;
+            margin-bottom: 0.05rem;
         }
         
         .cell-loc {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 600;
             color: #ed8936;
-            line-height: 1.1;
+            line-height: 1;
             overflow: hidden;
             text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
+            white-space: nowrap;
+            width: 100%;
         }
         
         .cell-activity-count {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             color: #4299e1;
-            margin-top: 0.15rem;
+            margin-top: 0.1rem;
             font-weight: 600;
         }
         
         .cell-activities {
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             color: #2d3748;
-            margin-top: 0.1rem;
-            line-height: 1.1;
+            margin-top: 0.05rem;
+            line-height: 1;
             width: 100%;
             text-align: left;
-            max-height: 1.8rem;
+            max-height: 1.5rem;
             overflow: hidden;
         }
         
@@ -685,7 +684,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding: 0.02rem 0;
+            padding: 0.01rem 0;
         }
         
         .calendar-cell.trip-day {
@@ -890,33 +889,37 @@
                 font-size: 1.3rem;
             }
             .calendar-grid {
-                gap: 2px;
+                gap: 4px;
                 min-width: 100%;
             }
             .calendar-weekday {
-                padding: 0.4rem 0.1rem;
-                font-size: 0.65rem;
+                padding: 0.5rem 0.2rem;
+                font-size: 0.7rem;
             }
             .calendar-cell {
-                min-height: 55px;
-                padding: 0.2rem;
+                min-height: 75px;
+                padding: 0.3rem;
                 aspect-ratio: 1;
             }
             .cell-date {
-                font-size: 0.8rem;
-                margin-bottom: 0.1rem;
+                font-size: 0.9rem;
+                margin-bottom: 0.15rem;
             }
             .cell-badge {
-                font-size: 0.5rem;
-                padding: 0.1rem 0.25rem;
-                margin-bottom: 0.1rem;
+                font-size: 0.55rem;
+                padding: 0.15rem 0.3rem;
+                margin-bottom: 0.15rem;
             }
             .cell-loc {
-                font-size: 0.48rem;
+                font-size: 0.55rem;
                 line-height: 1.1;
             }
             .cell-activity-count {
-                font-size: 0.45rem;
+                font-size: 0.5rem;
+            }
+            .cell-activities {
+                font-size: 0.5rem;
+                max-height: 2rem;
             }
         }
         
@@ -930,32 +933,36 @@
                 margin-bottom: 0.5rem;
             }
             .calendar-grid {
-                gap: 1px;
+                gap: 2px;
             }
             .calendar-weekday {
-                padding: 0.3rem 0.05rem;
-                font-size: 0.6rem;
+                padding: 0.4rem 0.1rem;
+                font-size: 0.65rem;
             }
             .calendar-cell {
-                min-height: 48px;
-                padding: 0.15rem;
+                min-height: 70px;
+                padding: 0.25rem;
             }
             .cell-date {
-                font-size: 0.75rem;
+                font-size: 0.85rem;
             }
             .cell-badge {
-                font-size: 0.45rem;
-                padding: 0.08rem 0.2rem;
+                font-size: 0.5rem;
+                padding: 0.12rem 0.25rem;
             }
             .cell-loc {
-                font-size: 0.45rem;
+                font-size: 0.52rem;
                 display: -webkit-box;
                 -webkit-line-clamp: 1;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
             }
             .cell-activity-count {
-                font-size: 0.42rem;
+                font-size: 0.48rem;
+            }
+            .cell-activities {
+                font-size: 0.48rem;
+                max-height: 1.8rem;
             }
         }
     </style>
