@@ -2098,107 +2098,156 @@
                 
                 console.log('loadPhotoScroll called');
                 
-                // Check if photo URLs are configured
-                if (window.GOOGLE_PHOTOS_CONFIG && 
-                    window.GOOGLE_PHOTOS_CONFIG.photoUrls && 
-                    window.GOOGLE_PHOTOS_CONFIG.photoUrls.length > 0) {
-                    
-                    console.log('Photo URLs configured, loading images');
-                    photoScrollTrack.innerHTML = ''; // Clear loading message
-                    
-                    // Load each photo URL
-                    window.GOOGLE_PHOTOS_CONFIG.photoUrls.forEach((photoUrl, index) => {
-                        const photoItem = document.createElement('div');
-                        photoItem.className = 'photo-scroll-item';
-                        photoItem.innerHTML = `
-                            <img src="${photoUrl}" 
-                                 alt="Italy Trip Photo ${index + 1}"
-                                 onerror="this.parentElement.style.display='none'">
-                        `;
-                        photoItem.onclick = function() {
-                            window.open(photoUrl, '_blank');
-                        };
-                        photoScrollTrack.appendChild(photoItem);
+                // Priority 1: Check for images in images/photos folder
+                // Common image filenames to check
+                const possiblePhotos = [];
+                
+                // Generate possible filenames (you can add more as needed)
+                const prefixes = ['photo', 'img', 'image', 'trip', 'italy', 'rome', 'venice', 'florence', 'milan', 'verona'];
+                const numbers = Array.from({length: 50}, (_, i) => i + 1); // Check for photo1 through photo50
+                
+                // Common naming patterns
+                prefixes.forEach(prefix => {
+                    numbers.forEach(num => {
+                        possiblePhotos.push(`${prefix}${num}.jpg`);
+                        possiblePhotos.push(`${prefix}${num}.jpeg`);
+                        possiblePhotos.push(`${prefix}${num}.png`);
+                        possiblePhotos.push(`${prefix}-${num}.jpg`);
+                        possiblePhotos.push(`${prefix}-${num}.jpeg`);
+                        possiblePhotos.push(`${prefix}-${num}.png`);
+                        possiblePhotos.push(`${prefix}_${num}.jpg`);
+                        possiblePhotos.push(`${prefix}_${num}.jpeg`);
+                        possiblePhotos.push(`${prefix}_${num}.png`);
                     });
-                    
-                    return;
-                }
+                });
                 
-                // Check if Google Photos album URL is configured (show link to album)
-                if (window.GOOGLE_PHOTOS_CONFIG && 
-                    window.GOOGLE_PHOTOS_CONFIG.albumUrl && 
-                    window.GOOGLE_PHOTOS_CONFIG.albumUrl.startsWith('https://')) {
-                    
-                    console.log('Google Photos album configured, showing link');
-                    photoScrollTrack.innerHTML = `
-                        <div class="photo-scroll-empty">
-                            <div style="max-width: 600px; margin: 0 auto; text-align: center;">
-                                <div style="font-size: 3rem; margin-bottom: 1rem;">📸</div>
-                                <h4 style="margin: 0 0 1rem 0; font-size: 1.3rem;">View Our Photo Album</h4>
-                                <p style="font-size: 1rem; margin-bottom: 1.5rem; opacity: 0.95;">
-                                    Click below to see all our Italy trip photos!
-                                </p>
-                                <a href="${window.GOOGLE_PHOTOS_CONFIG.albumUrl}" 
-                                   target="_blank"
-                                   style="display: inline-block; background: white; color: #667eea; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: transform 0.2s;"
-                                   onmouseover="this.style.transform='scale(1.05)'"
-                                   onmouseout="this.style.transform='scale(1)'">
-                                    🌍 Open Photo Album →
-                                </a>
-                                <p style="margin-top: 1.5rem; font-size: 0.9rem; opacity: 0.85;">
-                                    💡 To show photos here, add image URLs to config.js
-                                </p>
-                            </div>
-                        </div>
-                    `;
-                    
-                    return;
-                }
+                // Also check for simple numbered files
+                numbers.forEach(num => {
+                    possiblePhotos.push(`${num}.jpg`);
+                    possiblePhotos.push(`${num}.jpeg`);
+                    possiblePhotos.push(`${num}.png`);
+                });
                 
-                // Try to load from local images/photos folder
-                const photoFileNames = [
-                    'rome-1.jpg', 'rome-2.jpg', 'rome-3.jpg',
-                    'lake-garda-1.jpg', 'lake-garda-2.jpg',
-                    'florence-1.jpg', 'florence-2.jpg',
-                    'milan-1.jpg', 'milan-2.jpg'
-                ];
+                let localPhotosLoaded = false;
+                const loadedPhotos = [];
                 
-                let photosLoaded = false;
-                photoScrollTrack.innerHTML = ''; // Clear loading message
+                // Clear loading message
+                photoScrollTrack.innerHTML = '<div class="photo-scroll-empty"><p>🔍 Scanning for photos...</p></div>';
                 
-                for (const fileName of photoFileNames) {
-                    const img = new Image();
-                    img.src = `images/photos/${fileName}`;
-                    
-                    img.onload = function() {
-                        photosLoaded = true;
-                        const photoItem = document.createElement('div');
-                        photoItem.className = 'photo-scroll-item';
-                        photoItem.innerHTML = `
-                            <img src="images/photos/${fileName}" alt="${fileName.replace(/\.[^/.]+$/, '').replace(/-/g, ' ')}">
-                        `;
-                        photoItem.onclick = function() {
-                            window.open(`images/photos/${fileName}`, '_blank');
+                // Try to load each possible photo
+                const checkPromises = possiblePhotos.map(fileName => {
+                    return new Promise((resolve) => {
+                        const img = new Image();
+                        img.src = `images/photos/${fileName}`;
+                        
+                        img.onload = function() {
+                            localPhotosLoaded = true;
+                            loadedPhotos.push(fileName);
+                            resolve(fileName);
                         };
-                        photoScrollTrack.appendChild(photoItem);
-                    };
-                    
-                    img.onerror = function() {
-                        // Photo doesn't exist, skip it
-                    };
-                }
+                        
+                        img.onerror = function() {
+                            resolve(null);
+                        };
+                    });
+                });
                 
-                // If no photos loaded after a delay, show placeholder
-                setTimeout(() => {
-                    if (!photosLoaded && photoScrollTrack.children.length === 0) {
+                // Wait a bit for images to load
+                setTimeout(async () => {
+                    await Promise.all(checkPromises);
+                    
+                    if (loadedPhotos.length > 0) {
+                        console.log(`Found ${loadedPhotos.length} photos in images/photos/`);
+                        photoScrollTrack.innerHTML = ''; // Clear scanning message
+                        
+                        // Sort photos by filename
+                        loadedPhotos.sort();
+                        
+                        // Display each photo
+                        loadedPhotos.forEach(fileName => {
+                            const photoItem = document.createElement('div');
+                            photoItem.className = 'photo-scroll-item';
+                            photoItem.innerHTML = `
+                                <img src="images/photos/${fileName}" 
+                                     alt="${fileName.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ')}"
+                                     loading="lazy">
+                            `;
+                            photoItem.onclick = function() {
+                                window.open(`images/photos/${fileName}`, '_blank');
+                            };
+                            photoScrollTrack.appendChild(photoItem);
+                        });
+                        
+                        return; // Exit if we found local photos
+                    }
+                    
+                    // Priority 2: Check if photo URLs are configured in config.js
+                    if (window.GOOGLE_PHOTOS_CONFIG && 
+                        window.GOOGLE_PHOTOS_CONFIG.photoUrls && 
+                        window.GOOGLE_PHOTOS_CONFIG.photoUrls.length > 0) {
+                        
+                        console.log('Photo URLs configured, loading images');
+                        photoScrollTrack.innerHTML = ''; // Clear loading message
+                        
+                        // Load each photo URL
+                        window.GOOGLE_PHOTOS_CONFIG.photoUrls.forEach((photoUrl, index) => {
+                            const photoItem = document.createElement('div');
+                            photoItem.className = 'photo-scroll-item';
+                            photoItem.innerHTML = `
+                                <img src="${photoUrl}" 
+                                     alt="Italy Trip Photo ${index + 1}"
+                                     loading="lazy"
+                                     onerror="this.parentElement.style.display='none'">
+                            `;
+                            photoItem.onclick = function() {
+                                window.open(photoUrl, '_blank');
+                            };
+                            photoScrollTrack.appendChild(photoItem);
+                        });
+                        
+                        return;
+                    }
+                    
+                    // Priority 3: Show Google Photos album link
+                    if (window.GOOGLE_PHOTOS_CONFIG && 
+                        window.GOOGLE_PHOTOS_CONFIG.albumUrl && 
+                        window.GOOGLE_PHOTOS_CONFIG.albumUrl.startsWith('https://')) {
+                        
+                        console.log('Google Photos album configured, showing link');
                         photoScrollTrack.innerHTML = `
                             <div class="photo-scroll-empty">
-                                <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">📷 No photos yet</p>
-                                <p style="font-size: 0.95rem; opacity: 0.9;">Add image URLs to config.js to display photos here</p>
+                                <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">📸</div>
+                                    <h4 style="margin: 0 0 1rem 0; font-size: 1.3rem;">View Our Photo Album</h4>
+                                    <p style="font-size: 1rem; margin-bottom: 1.5rem; opacity: 0.95;">
+                                        Click below to see all our Italy trip photos!
+                                    </p>
+                                    <a href="${window.GOOGLE_PHOTOS_CONFIG.albumUrl}" 
+                                       target="_blank"
+                                       style="display: inline-block; background: white; color: #667eea; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: transform 0.2s;"
+                                       onmouseover="this.style.transform='scale(1.05)'"
+                                       onmouseout="this.style.transform='scale(1)'">
+                                        🌍 Open Photo Album →
+                                    </a>
+                                    <p style="margin-top: 1.5rem; font-size: 0.9rem; opacity: 0.85;">
+                                        💡 To show photos here, drop image files into the <strong>images/photos/</strong> folder
+                                    </p>
+                                </div>
                             </div>
                         `;
+                        
+                        return;
                     }
-                }, 2000);
+                    
+                    // No photos found anywhere
+                    photoScrollTrack.innerHTML = `
+                        <div class="photo-scroll-empty">
+                            <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">📷 No photos yet</p>
+                            <p style="font-size: 0.95rem; opacity: 0.9;">Drop image files into the <strong>images/photos/</strong> folder to display them here</p>
+                            <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 1rem;">Supported formats: JPG, JPEG, PNG</p>
+                        </div>
+                    `;
+                }, 1500); // Give images time to load
             }
             
             // Load horizontal photo scroll on page load

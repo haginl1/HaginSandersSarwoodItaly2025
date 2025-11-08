@@ -1,6 +1,34 @@
 # Trip Photos
 
-## 📱 Easy Option: Google Photos (Recommended for Trip)
+## �️ Auto-Scrolling Gallery (EASIEST!)
+
+**Drop photos here and they automatically appear in the scrolling gallery at the bottom of your website!**
+
+### How to Add Photos:
+
+1. **Simply drop image files into this folder** (`images/photos/`)
+2. **Name them with any of these patterns:**
+   - `photo1.jpg`, `photo2.jpg`, `photo3.jpg`, etc.
+   - `img1.jpg`, `img2.png`, `img3.jpeg`, etc.
+   - `trip-1.jpg`, `italy-1.jpg`, `rome-1.jpg`, etc.
+   - Or just simple numbers: `1.jpg`, `2.jpg`, `3.jpg`, etc.
+
+3. **Supported formats:** JPG, JPEG, PNG
+
+4. **That's it!** The photos will automatically appear in the horizontal scrolling gallery
+
+### Naming Examples:
+```
+images/photos/photo1.jpg
+images/photos/photo2.jpg
+images/photos/rome-colosseum.jpg
+images/photos/venice-1.png
+images/photos/trip_day1.jpeg
+```
+
+---
+
+## 📱 Alternative: Google Photos (For Mobile Uploads)
 
 **Perfect for uploading photos during your trip without GitHub access!**
 
