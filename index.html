@@ -1129,6 +1129,145 @@
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         
+        /* Horizontal Photo Scroll Gallery */
+        .photo-scroll-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .photo-scroll-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+        
+        .photo-scroll-header h3 {
+            font-size: 1.8rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 600;
+        }
+        
+        .photo-scroll-header p {
+            font-size: 1rem;
+            margin: 0;
+            opacity: 0.95;
+        }
+        
+        .photo-scroll-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding: 1rem 1rem 1.5rem 1rem;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+        }
+        
+        .photo-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .photo-scroll-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        .photo-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+        }
+        
+        .photo-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .photo-scroll-track {
+            display: inline-flex;
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+        
+        .photo-scroll-item {
+            display: inline-block;
+            width: 280px;
+            height: 200px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            background: white;
+        }
+        
+        .photo-scroll-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .photo-scroll-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .photo-scroll-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .photo-scroll-placeholder p {
+            margin: 0.5rem 0 0 0;
+            font-size: 0.9rem;
+        }
+        
+        .photo-scroll-empty {
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            font-size: 1rem;
+            white-space: normal;
+        }
+        
+        @media (max-width: 768px) {
+            .photo-scroll-header h3 {
+                font-size: 1.5rem;
+            }
+            
+            .photo-scroll-item {
+                width: 220px;
+                height: 160px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .photo-scroll-container {
+                padding: 1.5rem 0;
+            }
+            
+            .photo-scroll-header h3 {
+                font-size: 1.3rem;
+            }
+            
+            .photo-scroll-item {
+                width: 180px;
+                height: 130px;
+            }
+            
+            .photo-scroll-track {
+                gap: 0.75rem;
+            }
+        }
+        
         @media (max-width: 768px) {
             .resource-card {
                 padding: 1.25rem;
@@ -1936,8 +2075,103 @@
                     }
                 }, 100);
             });
+            
+            // Load photos into horizontal scroll gallery
+            async function loadPhotoScroll() {
+                const photoScrollTrack = document.getElementById('photo-scroll-track');
+                
+                console.log('loadPhotoScroll called');
+                
+                // Check if Google Photos album URL is configured
+                if (window.GOOGLE_PHOTOS_CONFIG && 
+                    window.GOOGLE_PHOTOS_CONFIG.albumUrl && 
+                    window.GOOGLE_PHOTOS_CONFIG.albumUrl.startsWith('https://')) {
+                    
+                    console.log('Google Photos configured, showing placeholder with link');
+                    photoScrollTrack.innerHTML = `
+                        <div class="photo-scroll-item">
+                            <div class="photo-scroll-placeholder">
+                                <div style="font-size: 3rem;">📸</div>
+                                <p style="font-weight: 600; margin-top: 0.5rem;">View Album</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Make it clickable to open the album
+                    photoScrollTrack.querySelector('.photo-scroll-item').onclick = function() {
+                        window.open(window.GOOGLE_PHOTOS_CONFIG.albumUrl, '_blank');
+                    };
+                    
+                    return;
+                }
+                
+                // Try to load from local images/photos folder
+                const photoFileNames = [
+                    'rome-1.jpg', 'rome-2.jpg', 'rome-3.jpg',
+                    'lake-garda-1.jpg', 'lake-garda-2.jpg',
+                    'florence-1.jpg', 'florence-2.jpg',
+                    'milan-1.jpg', 'milan-2.jpg'
+                ];
+                
+                let photosLoaded = false;
+                photoScrollTrack.innerHTML = ''; // Clear loading message
+                
+                for (const fileName of photoFileNames) {
+                    const img = new Image();
+                    img.src = `images/photos/${fileName}`;
+                    
+                    img.onload = function() {
+                        photosLoaded = true;
+                        const photoItem = document.createElement('div');
+                        photoItem.className = 'photo-scroll-item';
+                        photoItem.innerHTML = `
+                            <img src="images/photos/${fileName}" alt="${fileName.replace(/\.[^/.]+$/, '').replace(/-/g, ' ')}">
+                        `;
+                        photoItem.onclick = function() {
+                            window.open(`images/photos/${fileName}`, '_blank');
+                        };
+                        photoScrollTrack.appendChild(photoItem);
+                    };
+                    
+                    img.onerror = function() {
+                        // Photo doesn't exist, skip it
+                    };
+                }
+                
+                // If no photos loaded after a delay, show placeholder
+                setTimeout(() => {
+                    if (!photosLoaded && photoScrollTrack.children.length === 0) {
+                        photoScrollTrack.innerHTML = `
+                            <div class="photo-scroll-empty">
+                                <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">📷 No photos yet</p>
+                                <p style="font-size: 0.95rem; opacity: 0.9;">Photos will appear here as you add them to your Google Photos album</p>
+                            </div>
+                        `;
+                    }
+                }, 2000);
+            }
+            
+            // Load horizontal photo scroll on page load
+            loadPhotoScroll();
         });
     </script>
+    
+    <!-- Horizontal Photo Scroll Gallery -->
+    <div class="photo-scroll-container">
+        <div class="photo-scroll-header">
+            <h3>📸 Trip Photo Gallery</h3>
+            <p>Swipe to view our Italy adventure moments</p>
+        </div>
+        <div class="photo-scroll-wrapper" id="photo-scroll-wrapper">
+            <div class="photo-scroll-track" id="photo-scroll-track">
+                <!-- Photos will be loaded here dynamically -->
+                <div class="photo-scroll-empty">
+                    <p>🖼️ Photos from your Google Photos album will appear here</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.9;">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Trip Dates - Footer Section -->
     <div class="section" style="margin-top: 3rem; margin-bottom: 2rem;">
