@@ -359,6 +359,102 @@
             }
         }
         
+        /* Collapsible card styles for mobile */
+        .card-header-mobile {
+            display: none;
+        }
+        
+        .card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .card-title-row h4 {
+            flex: 1;
+            margin: 0 !important;
+        }
+        
+        .collapse-toggle {
+            background: #4299e1;
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s, transform 0.2s;
+            font-size: 0.9rem;
+            padding: 0;
+        }
+        
+        .collapse-toggle:hover {
+            background: #3182ce;
+            transform: scale(1.05);
+        }
+        
+        .collapse-toggle:active {
+            transform: scale(0.95);
+        }
+        
+        .toggle-icon {
+            display: block;
+            line-height: 1;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 768px) {
+            /* Show collapsible header on mobile */
+            .card-header-mobile {
+                display: block;
+            }
+            
+            /* Hide the default h4 and dates on mobile - they're in the header now */
+            .destination-card > h4,
+            .destination-card > .dates {
+                display: none;
+            }
+            
+            .card-header-mobile .dates {
+                display: block;
+                margin-top: 0.5rem;
+            }
+            
+            /* Card details - collapsed by default on mobile */
+            .card-details {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+            }
+            
+            .card-details.expanded {
+                max-height: 2000px;
+                transition: max-height 0.5s ease-in;
+                margin-top: 1rem;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            /* On desktop, always show details and hide toggle button */
+            .collapse-toggle {
+                display: none;
+            }
+            
+            .card-details {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            
+            .card-header-mobile {
+                display: none !important;
+            }
+        }
+        
         /* Transportation Section */
         .transport-section {
             margin-bottom: 2rem;

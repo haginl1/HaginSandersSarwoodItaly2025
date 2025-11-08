@@ -873,40 +873,49 @@ function createDestinationCards(itinerary) {
       }
       
       card.innerHTML = `
-        <h4>🚂 Travel Day: ${departCity} → ${arriveCity}</h4>
-        <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
-        
-        <div class="info-section">
-          <div class="info-label">🏨 Where You're Staying Tonight</div>
-          <div class="info-content"><strong>${nextDestination.accommodation || 'Hotel TBD'}</strong></div>
+        <div class="card-header-mobile">
+          <div class="card-title-row">
+            <h4>🚂 Travel Day: ${departCity} → ${arriveCity}</h4>
+            <button class="collapse-toggle" aria-label="Expand details">
+              <span class="toggle-icon">▼</span>
+            </button>
+          </div>
+          <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
         </div>
         
-        ${nextDestination.rentalCar || destination.rentalCar ? `
+        <div class="card-details">
           <div class="info-section">
-            <div class="info-label">🚗 Transportation</div>
-            <div class="info-content">${nextDestination.rentalCar || destination.rentalCar}</div>
+            <div class="info-label">🏨 Where You're Staying Tonight</div>
+            <div class="info-content"><strong>${nextDestination.accommodation || 'Hotel TBD'}</strong></div>
           </div>
-        ` : ''}
-        
-        ${nextDestination.trainInfo || destination.trainInfo ? `
-          <div class="info-section">
-            <div class="info-label">🚆 Train Details</div>
-            <div class="info-content">${nextDestination.trainInfo || destination.trainInfo}</div>
-          </div>
-        ` : ''}
-        
-        ${allActivities.length > 0 ? `
-          <div class="info-section">
-            <div class="info-label">✨ Activities & Plans</div>
-            ${activitiesHTML}
-          </div>
-        ` : ''}
-        
-        ${nextDestination.notes || destination.notes ? `
-          <div class="notes">
-            💡 ${nextDestination.notes || destination.notes}
-          </div>
-        ` : ''}
+          
+          ${nextDestination.rentalCar || destination.rentalCar ? `
+            <div class="info-section">
+              <div class="info-label">🚗 Transportation</div>
+              <div class="info-content">${nextDestination.rentalCar || destination.rentalCar}</div>
+            </div>
+          ` : ''}
+          
+          ${nextDestination.trainInfo || destination.trainInfo ? `
+            <div class="info-section">
+              <div class="info-label">🚆 Train Details</div>
+              <div class="info-content">${nextDestination.trainInfo || destination.trainInfo}</div>
+            </div>
+          ` : ''}
+          
+          ${allActivities.length > 0 ? `
+            <div class="info-section">
+              <div class="info-label">✨ Activities & Plans</div>
+              ${activitiesHTML}
+            </div>
+          ` : ''}
+          
+          ${nextDestination.notes || destination.notes ? `
+            <div class="notes">
+              💡 ${nextDestination.notes || destination.notes}
+            </div>
+          ` : ''}
+        </div>
       `;
       
       container.appendChild(card);
@@ -959,48 +968,86 @@ function createDestinationCards(itinerary) {
       }
       
       card.innerHTML = `
-        <h4>${destination.name}</h4>
-        <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
-        
-        ${destination.accommodation ? `
-          <div class="info-section">
-            <div class="info-label">🏨 Where You're Staying</div>
-            <div class="info-content"><strong>${destination.accommodation}</strong></div>
+        <div class="card-header-mobile">
+          <div class="card-title-row">
+            <h4>${destination.name}</h4>
+            <button class="collapse-toggle" aria-label="Expand details">
+              <span class="toggle-icon">▼</span>
+            </button>
           </div>
-        ` : ''}
+          <div class="dates">📅 ${destination.dates || 'Dates TBD'}</div>
+        </div>
         
-        ${destination.rentalCar ? `
-          <div class="info-section">
-            <div class="info-label">🚗 Transportation</div>
-            <div class="info-content">${destination.rentalCar}</div>
-          </div>
-        ` : ''}
-        
-        ${destination.trainInfo ? `
-          <div class="info-section">
-            <div class="info-label">🚆 Train Details</div>
-            <div class="info-content">${destination.trainInfo}</div>
-          </div>
-        ` : ''}
-        
-        ${activities.length > 0 ? `
-          <div class="info-section">
-            <div class="info-label">✨ Activities & Plans</div>
-            ${activitiesHTML}
-          </div>
-        ` : ''}
-        
-        ${destination.notes ? `
-          <div class="notes">
-            💡 ${destination.notes}
-          </div>
-        ` : ''}
+        <div class="card-details">
+          ${destination.accommodation ? `
+            <div class="info-section">
+              <div class="info-label">🏨 Where You're Staying</div>
+              <div class="info-content"><strong>${destination.accommodation}</strong></div>
+            </div>
+          ` : ''}
+          
+          ${destination.rentalCar ? `
+            <div class="info-section">
+              <div class="info-label">🚗 Transportation</div>
+              <div class="info-content">${destination.rentalCar}</div>
+            </div>
+          ` : ''}
+          
+          ${destination.trainInfo ? `
+            <div class="info-section">
+              <div class="info-label">🚆 Train Details</div>
+              <div class="info-content">${destination.trainInfo}</div>
+            </div>
+          ` : ''}
+          
+          ${activities.length > 0 ? `
+            <div class="info-section">
+              <div class="info-label">✨ Activities & Plans</div>
+              ${activitiesHTML}
+            </div>
+          ` : ''}
+          
+          ${destination.notes ? `
+            <div class="notes">
+              💡 ${destination.notes}
+            </div>
+          ` : ''}
+        </div>
       `;
       
       container.appendChild(card);
       i++; // Move to next entry
     }
   }
+  
+  // Add collapse/expand functionality for mobile
+  addCollapseToggleListeners();
+}
+
+// Add collapse/expand toggle functionality for destination cards
+function addCollapseToggleListeners() {
+  const toggleButtons = document.querySelectorAll('.collapse-toggle');
+  
+  toggleButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const card = this.closest('.destination-card');
+      const details = card.querySelector('.card-details');
+      const icon = this.querySelector('.toggle-icon');
+      
+      if (details.classList.contains('expanded')) {
+        // Collapse
+        details.classList.remove('expanded');
+        icon.textContent = '▼';
+        this.setAttribute('aria-label', 'Expand details');
+      } else {
+        // Expand
+        details.classList.add('expanded');
+        icon.textContent = '▲';
+        this.setAttribute('aria-label', 'Collapse details');
+      }
+    });
+  });
 }
 
 // Create hotel information cards
