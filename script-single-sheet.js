@@ -1356,8 +1356,10 @@ function createTripCalendar(itinerary) {
       // This is a trip day - make it clickable - show up to 2 activities
       html += `
         <div class="calendar-cell trip-day" onclick="showDayDetails('${dateKey}')">
-          <div class="cell-date">${day}</div>
-          <div class="cell-loc">${tripData.location}</div>
+          <div class="cell-header">
+            <div class="cell-loc">${tripData.location}</div>
+            <div class="cell-date">${day}</div>
+          </div>
           ${activities.length > 0 ? `<div class="cell-activities">${activities.slice(0, 2).map(a => `<div class="activity-item">• ${a.trim()}</div>`).join('')}</div>` : ''}
           ${activities.length > 2 ? `<div class="cell-activity-count">+${activities.length - 2} more</div>` : ''}
         </div>
