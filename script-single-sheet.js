@@ -1356,6 +1356,9 @@ function createTripCalendar(itinerary) {
   const tripDataMap = new Map();
   let tripDayCounter = 1;
   
+  // First pass: collect all entries by date to detect travel days
+  const dateEntries = new Map();
+  
   itinerary.forEach(location => {
     console.log('Processing location:', location.name, 'Dates:', location.dates);
     if (location.dates) {
@@ -1386,20 +1389,65 @@ function createTripCalendar(itinerary) {
         let currentDate = new Date(startDateObj);
         while (currentDate <= endDateObj) {
           const dateKey = currentDate.toISOString().split('T')[0];
-          tripDataMap.set(dateKey, {
-            date: new Date(currentDate),
+          
+          // Store all entries for this date
+          if (!dateEntries.has(dateKey)) {
+            dateEntries.set(dateKey, []);
+          }
+          dateEntries.get(dateKey).push({
             location: location.name,
             hotel: location.accommodation,
             hotelConfirmation: location.hotelConfirmation,
             activities: location.activities,
             activityLinks: location.activityLinks,
-            dayNumber: tripDayCounter
+            trainInfo: location.trainInfo,
+            rentalCar: location.rentalCar
           });
-          tripDayCounter++;
+          
           currentDate.setDate(currentDate.getDate() + 1);
         }
       }
     }
+  });
+  
+  // Second pass: create tripDataMap with travel day detection
+  dateEntries.forEach((entries, dateKey) => {
+    if (entries.length > 1) {
+      // Travel day - multiple cities on same date
+      const departCity = entries[0].location;
+      const arriveCity = entries[entries.length - 1].location;
+      
+      tripDataMap.set(dateKey, {
+        date: new Date(dateKey),
+        location: `${departCity} → ${arriveCity}`,
+        isTravelDay: true,
+        departCity: departCity,
+        arriveCity: arriveCity,
+        hotel: entries[entries.length - 1].hotel, // Hotel at arrival city
+        hotelConfirmation: entries[entries.length - 1].hotelConfirmation,
+        activities: entries.map(e => e.activities).filter(a => a).join(', '),
+        activityLinks: entries.map(e => e.activityLinks).filter(a => a).join('\n'),
+        trainInfo: entries.map(e => e.trainInfo).filter(t => t).join(', '),
+        rentalCar: entries.map(e => e.rentalCar).filter(r => r).join(', '),
+        dayNumber: tripDayCounter
+      });
+    } else {
+      // Regular day
+      const entry = entries[0];
+      tripDataMap.set(dateKey, {
+        date: new Date(dateKey),
+        location: entry.location,
+        isTravelDay: false,
+        hotel: entry.hotel,
+        hotelConfirmation: entry.hotelConfirmation,
+        activities: entry.activities,
+        activityLinks: entry.activityLinks,
+        trainInfo: entry.trainInfo,
+        rentalCar: entry.rentalCar,
+        dayNumber: tripDayCounter
+      });
+    }
+    tripDayCounter++;
   });
   
   if (tripDataMap.size === 0) {
@@ -1460,11 +1508,14 @@ function createTripCalendar(itinerary) {
       const links = tripData.activityLinks ? tripData.activityLinks.split('\n').filter(l => l.trim()) : [];
       const dayOfWeek = dayNames[currentDate.getDay()];
       
+      // Check if this is a travel day
+      const travelIcon = tripData.isTravelDay ? '🚂 ' : '';
+      
       // This is a trip day - make it clickable - show up to 2 activities
       html += `
-        <div class="calendar-cell trip-day" onclick="showDayDetails('${dateKey}')">
+        <div class="calendar-cell trip-day ${tripData.isTravelDay ? 'travel-day' : ''}" onclick="showDayDetails('${dateKey}')">
           <div class="cell-header">
-            <div class="cell-loc">${tripData.location}</div>
+            <div class="cell-loc">${travelIcon}${tripData.location}</div>
             <div class="cell-date">${day}</div>
           </div>
           ${activities.length > 0 ? `<div class="cell-activities">${activities.slice(0, 2).map(a => `<div class="activity-item">• ${a.trim()}</div>`).join('')}</div>` : ''}
@@ -1479,10 +1530,15 @@ function createTripCalendar(itinerary) {
         dayOfWeek: dayOfWeek,
         date: `${monthNames[month]} ${day}, ${year}`,
         location: tripData.location,
+        isTravelDay: tripData.isTravelDay,
+        departCity: tripData.departCity,
+        arriveCity: tripData.arriveCity,
         hotel: tripData.hotel,
         hotelConfirmation: tripData.hotelConfirmation,
         activities: activities,
-        activityLinks: links
+        activityLinks: links,
+        trainInfo: tripData.trainInfo,
+        rentalCar: tripData.rentalCar
       };
     } else {
       // Regular non-trip day
@@ -1518,11 +1574,17 @@ function showDayDetails(dateKey) {
     <h3 style="color: #2d3748; margin: 0 0 1rem 0;">${data.dayOfWeek}, ${data.date}</h3>
     <div style="border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1rem;">
       <div style="font-size: 1.3rem; font-weight: 700; color: #4299e1; margin-bottom: 0.5rem;">
-        📍 ${data.location}
+        ${data.isTravelDay ? '� ' : '�📍 '}${data.location}
       </div>
+      ${data.isTravelDay && (data.trainInfo || data.rentalCar) ? `
+        <div style="background: #e6f7ff; padding: 1rem; border-radius: 8px; margin-top: 0.75rem; border-left: 4px solid #4299e1;">
+          ${data.trainInfo ? `<div style="font-weight: 600; color: #2d3748; margin-bottom: 0.5rem;">🚆 ${data.trainInfo}</div>` : ''}
+          ${data.rentalCar ? `<div style="font-weight: 600; color: #2d3748;">🚗 ${data.rentalCar}</div>` : ''}
+        </div>
+      ` : ''}
       ${data.hotel ? `
         <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; margin-top: 0.75rem;">
-          <div style="font-weight: 600; color: #2d3748;">🏨 ${data.hotel}</div>
+          <div style="font-weight: 600; color: #2d3748;">🏨 ${data.isTravelDay ? 'Staying Tonight: ' : ''}${data.hotel}</div>
           ${data.hotelConfirmation ? `<div style="font-size: 0.9rem; color: #718096; margin-top: 0.25rem;">Confirmation: ${data.hotelConfirmation}</div>` : ''}
         </div>
       ` : ''}
