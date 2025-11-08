@@ -1198,7 +1198,7 @@ function createTripCalendar(itinerary) {
           <div class="cell-date">${day}</div>
           <div class="cell-badge">D${tripData.dayNumber}</div>
           <div class="cell-loc">${tripData.location}</div>
-          ${activities.length > 0 ? `<div class="cell-activity-count">${activities.length} activities</div>` : ''}
+          ${activities.length > 0 ? `<div class="cell-activities">${activities.slice(0, 2).map(a => `<div class="activity-item">• ${a.trim()}</div>`).join('')}</div>` : ''}
         </div>
       `;
       
